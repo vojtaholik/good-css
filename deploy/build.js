@@ -18,9 +18,32 @@ const root = join(import.meta.dirname, "..");
 const dist = join(root, "dist");
 const cacheDir = join(root, "node_modules/.vite-build");
 
-/* The "- Source:" lines of PRACTICES.md hold local file paths. This is the
-   only copy of the file the build reads, so they reach nothing public. */
-const practicesMarkdown = (await readFile(join(root, "PRACTICES.md"), "utf8")).replace(/^- Source:.*\n/gm, "");
+/* The "- Source:" lines of PRACTICES.md hold local file paths, so the build
+   reads the file without them. */
+const source = (await readFile(join(root, "PRACTICES.md"), "utf8")).replace(/^- Source:.*\n/gm, "");
+
+/* The site publishes the opening of PRACTICES.md and its numbered sections.
+   Any other `##` section is about the list, for the people who keep it, and
+   is left out. practices.js splits the file at the same headings. */
+const opening = [];
+const entrySections = [];
+let section = opening;
+
+for (const token of marked.lexer(source)) {
+  if (token.type === "heading" && token.depth === 2) {
+    section = /^\d+\./.test(token.text) ? [] : null;
+    if (section) entrySections.push(section);
+  }
+
+  section?.push(token.raw);
+}
+
+/* Each entry as Markdown, in the order of the entries. */
+const entryMarkdown = entrySections.map((raw) => raw.join("").trim() + "\n");
+
+/* This is the only copy of the file the site is built from, so what it leaves
+   out reaches nothing public. */
+const practicesMarkdown = [opening.join("").trim() + "\n", ...entryMarkdown].join("\n");
 
 const publicPractices = () => ({
   name: "public-practices",
@@ -74,17 +97,6 @@ const entries = practices.entries.map((entry) => ({
   markdown: `${origin}/specimen/${entry.slug}.md`,
   specimen: demos[entry.slug] ? `${origin}/specimen/${entry.slug}` : null,
 }));
-
-/* Each numbered section of PRACTICES.md as Markdown, in the order of the
-   entries. practices.js splits the file at the same headings. */
-const entrySections = [];
-
-for (const token of marked.lexer(practicesMarkdown)) {
-  if (token.type === "heading" && token.depth === 2) entrySections.push(/^\d+\./.test(token.text) ? [] : null);
-  entrySections.at(-1)?.push(token.raw);
-}
-
-const entryMarkdown = entrySections.filter(Boolean).map((raw) => raw.join("").trim() + "\n");
 
 const person = { "@type": "Person", name: author, url: `${origin}/about` };
 

@@ -1,17 +1,20 @@
 import { marked } from "marked";
-import { origin } from "./site.js";
+import { author, authorProfile, origin } from "./site.js";
 
 const attribute = (value) => value.replaceAll("&", "&amp;").replaceAll('"', "&quot;");
 
-/* The links under every page. It reuses the classes of a sheet, so it needs
-   no CSS of its own. */
-export const footer = `<footer class="sheet content-grid">
-      <nav class="prose" aria-label="Site">
-        <p>
-          <a href="/">good-css</a> · <a href="/about">About</a> · <a href="/contact">Contact</a> ·
-          <a href="/privacy">Privacy</a> · <a href="/llms.txt">llms.txt</a>
-        </p>
-      </nav>
+/* What ends every page: who made it, then the site's links, kept quiet. */
+export const footer = `<footer class="footer content-grid">
+      <div class="footer-row">
+        <p>Made by <a href="${authorProfile}">${author}</a></p>
+        <nav aria-label="Site">
+          <a href="/">good-css</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/llms.txt">llms.txt</a>
+        </nav>
+      </div>
     </footer>`;
 
 /* A page in deploy/pages: the heading is its title, the first paragraph its

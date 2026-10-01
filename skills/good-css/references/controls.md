@@ -233,7 +233,7 @@ Rules:
 - It does nothing on a flex or grid container. A button that is `inline-flex` because it holds an icon needs the declaration on the element that wraps the text, as in the second rule of the block.
 - The button gets shorter, because the padding now starts at the letters. With `0.75rem` of padding it went from 48px tall to 35px in Chrome and Safari. Raise the padding to keep the height.
 - Use it for one line. Descenders hang into the bottom padding, which is the intent.
-- Scope it to labels. Never set it on `*`, which "Left out on purpose" covers.
+- Scope it to labels. Never set it on `*`, because it shrinks every text block. A one-line paragraph at 16px/1.5 went from 25px tall to 11px.
 - Write no fallback. Without support the label keeps its normal line box.
 
 Support: Chrome 133, Firefox 154, Safari 18.2.

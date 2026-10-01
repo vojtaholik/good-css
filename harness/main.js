@@ -67,17 +67,6 @@ function sheet(entry) {
   return node;
 }
 
-function note(section) {
-  const node = stamp("note");
-
-  node.firstElementChild.id = section.slug;
-  slot(node, "title").innerHTML = section.title;
-  slot(node, "lede").innerHTML = section.lede;
-  slot(node, "body").innerHTML = section.body;
-
-  return node;
-}
-
 function indexItem(entry) {
   const item = document.createElement("li");
   const link = document.createElement("a");
@@ -97,7 +86,7 @@ function indexItem(entry) {
   return item;
 }
 
-const { entries, notes } = practices;
+const { entries } = practices;
 const drawn = entries.filter((entry) => demos[entry.slug]);
 
 slot(document, "title").textContent = practices.title;
@@ -106,6 +95,6 @@ slot(document, "intro").innerHTML = practices.intro;
 slot(document, "entry-count").textContent = `[ ${entries.length} ]`;
 slot(document, "specimen-count").textContent = `[ ${drawn.length} / ${entries.length} ]`;
 slot(document, "index").replaceChildren(...entries.map(indexItem));
-slot(document, "sheets").replaceChildren(...entries.map(sheet), ...notes.map(note));
+slot(document, "sheets").replaceChildren(...entries.map(sheet));
 
 for (const link of document.querySelectorAll('.prose a[href^="http"]')) link.target = "_blank";
