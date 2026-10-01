@@ -315,6 +315,187 @@
           "lacks": "oklch|light-dark"
         }
       ]
+    },
+    {
+      "id": 6,
+      "name": "plain-css-blog",
+      "prompt": "Build a small blog as three files: index.html, post.html and one shared styles.css. Plain HTML and CSS, no framework, no build step. The index lists six posts as cards with a cover image, a title and an excerpt. That content comes from a CMS, so titles run long and the images come in every shape. The post page opens with the title set over a cover image, then the article: headings, paragraphs, a pull quote that sits wider than the text, one image that runs edge to edge, and an author box beside the article that drops below it when there is no room. Going from the index to a post and back should feel smooth.",
+      "expected_output": "index.html, post.html and styles.css",
+      "expectations": [
+        {
+          "text": "The base stylesheet has the reset: min-width: 0 on everything and text-wrap on the root",
+          "has": [
+            "min-(width|inline-size)\\s*:\\s*0",
+            "text-wrap\\s*:\\s*(pretty|balance)"
+          ]
+        },
+        {
+          "text": "The article column is a content grid with named lines for breakouts",
+          "has": "grid-template-columns\\s*:[^;]*\\[[\\w-]+-start\\][^;]*min\\(\\s*100%\\s*-"
+        },
+        {
+          "text": "The hero title is layered over the image with one grid cell, not position: absolute",
+          "has": "grid-area\\s*:\\s*1\\s*/\\s*1"
+        },
+        {
+          "text": "The author box wraps on its own with a large flex-grow on the main side",
+          "has": "flex-grow\\s*:\\s*999|flex\\s*:\\s*999"
+        },
+        {
+          "text": "Pages cross-fade with @view-transition",
+          "has": "@view-transition"
+        },
+        {
+          "text": "Long titles and excerpts are clamped or truncated, and words can break",
+          "has": [
+            "-webkit-line-clamp|line-clamp\\s*:|text-overflow\\s*:\\s*ellipsis",
+            "overflow-wrap\\s*:\\s*(break-word|anywhere)"
+          ]
+        },
+        {
+          "text": "Cover images sit in a box with aspect-ratio and object-fit: cover",
+          "has": [
+            "aspect-ratio\\s*:",
+            "object-fit\\s*:\\s*cover"
+          ]
+        },
+        {
+          "text": "The space between blocks of the article is set by the parent",
+          "has": ">\\s*\\*\\s*\\+\\s*\\*|>\\s*:where\\(\\*\\)\\s*\\+|\\bgap\\s*:"
+        },
+        {
+          "text": "Type and space come from one fluid scale or from clamp() tokens",
+          "has": "clamp\\([^;{}]*(rem\\s*\\+\\s*[\\d.]+\\s*(vw|vi|cqi)|(vw|vi|cqi)\\s*\\+\\s*[\\d.]+\\s*rem|100vw\\s*-)"
+        },
+        {
+          "text": "No width breakpoints",
+          "lacks": "@media[^{]*\\b(min|max)-(width|inline-size)\\b|@media[^{]*\\b(width|inline-size)\\s*[<>]"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "plain-css-chat-shell",
+      "prompt": "Build the shell of a chat app as one file, app.html. Plain HTML and CSS, with only the JavaScript it cannot work without. It should feel like an installed app on a phone and on a laptop. A header with the app name, a 'New chat' button with a plus icon beside its label, and the account link at the far end. A sidebar that lists conversations by name, each with an avatar that carries an unread count. Names can be long. The messages scroll between the header and a composer pinned to the bottom, and the composer's text box grows as you type. Above the messages sits a row of filter tabs (All, Unread, Mentions, Archived) where an underline slides to the active one.",
+      "expected_output": "app.html, one file of plain HTML and CSS with as little JavaScript as the page needs",
+      "expectations": [
+        {
+          "text": "The page does not rubber-band on a desktop trackpad",
+          "has": "overscroll-behavior(-y|-block)?\\s*:\\s*none"
+        },
+        {
+          "text": "Fixed bars are padded by the safe-area insets, with viewport-fit=cover",
+          "has": [
+            "env\\(\\s*safe-area-inset",
+            "viewport-fit=cover"
+          ]
+        },
+        {
+          "text": "The message list is a flex child that scrolls and contains its overscroll",
+          "has": [
+            "overflow(-y|-block)?\\s*:\\s*auto",
+            "overscroll-behavior(-y|-block)?\\s*:\\s*contain"
+          ]
+        },
+        {
+          "text": "The tab underline is positioned with anchor positioning, not a script",
+          "has": [
+            "anchor-name\\s*:",
+            "position-anchor\\s*:"
+          ]
+        },
+        {
+          "text": "The account link is pushed to the end with an auto margin",
+          "has": "margin-inline-start\\s*:\\s*auto"
+        },
+        {
+          "text": "The plus icon is sized by the text beside it",
+          "has": "(block-size|inline-size|height|width)\\s*:\\s*1(cap|em|lh)\\b"
+        },
+        {
+          "text": "The unread count is layered on the avatar with one grid cell",
+          "has": "grid-area\\s*:\\s*1\\s*/\\s*1"
+        },
+        {
+          "text": "Long names are cut with an ellipsis",
+          "has": "text-overflow\\s*:\\s*ellipsis"
+        },
+        {
+          "text": "The composer grows with field-sizing: content",
+          "has": "field-sizing\\s*:\\s*content"
+        },
+        {
+          "text": "Hover styles sit behind @media (hover: hover) and (pointer: fine)",
+          "rule": "hover"
+        },
+        {
+          "text": "Logical properties only, no physical left, right, top or bottom",
+          "rule": "logical"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "plain-css-product-row",
+      "prompt": "One file, products.html, plain HTML and CSS. A row of eight product cards that people swipe through sideways, with a hint at the edge when there is more to scroll. Each card has a rounded image inside a rounded, padded frame, a small 'New' pill, a name, a price and a 'Details' button. When you hover a card its shadow gets deeper, and in the same movement the arrow in its button turns and a thin bar under the image fills. A 'Filters' button above the row opens a panel that unrolls downward over the page. The same card also appears once in a narrow column beside the row, where it should lay itself out for the space it gets.",
+      "expected_output": "products.html, one file of plain HTML and CSS",
+      "expectations": [
+        {
+          "text": "The row is a native scroll container with scroll snap",
+          "has": [
+            "scroll-snap-type\\s*:",
+            "scroll-snap-align\\s*:"
+          ]
+        },
+        {
+          "text": "The edge hint appears only when the row overflows, from a scroll timeline",
+          "has": "animation-timeline\\s*:\\s*scroll\\("
+        },
+        {
+          "text": "The frame's radius is the image's radius plus the padding",
+          "has": "border-radius\\s*:\\s*calc\\("
+        },
+        {
+          "text": "One registered custom property drives the arrow and the bar together",
+          "has": [
+            "@property\\s+--",
+            "transition\\s*:[^;]*--[\\w-]+"
+          ]
+        },
+        {
+          "text": "The shadow change fades two painted shadows and does not transition box-shadow",
+          "has": "::(before|after)[^{]*\\{[^}]*box-shadow",
+          "lacks": "transition(-property)?\\s*:[^;]*box-shadow"
+        },
+        {
+          "text": "The panel unrolls with clip-path",
+          "has": "clip-path\\s*:\\s*inset\\("
+        },
+        {
+          "text": "The card lays itself out with a container query",
+          "has": [
+            "container-type\\s*:",
+            "@container"
+          ]
+        },
+        {
+          "text": "Button and pill labels are centered with text-box",
+          "has": "text-box(-trim)?\\s*:"
+        },
+        {
+          "text": "Prices use tabular numbers",
+          "has": "tabular-nums"
+        },
+        {
+          "text": "Motion is opt-in behind prefers-reduced-motion: no-preference",
+          "rule": "motion",
+          "lacks": "prefers-reduced-motion\\s*:\\s*reduce"
+        },
+        {
+          "text": "No width breakpoints",
+          "lacks": "@media[^{]*\\b(min|max)-(width|inline-size)\\b|@media[^{]*\\b(width|inline-size)\\s*[<>]"
+        }
+      ]
     }
   ]
 }
