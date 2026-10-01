@@ -98,3 +98,12 @@ slot(document, "index").replaceChildren(...entries.map(indexItem));
 slot(document, "sheets").replaceChildren(...entries.map(sheet));
 
 for (const link of document.querySelectorAll('.prose a[href^="http"]')) link.target = "_blank";
+
+/* The button copies the command beside it and says so for a moment. */
+for (const button of document.querySelectorAll("[data-copy]")) {
+  button.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(button.previousElementSibling.textContent);
+    button.textContent = "Copied";
+    setTimeout(() => (button.textContent = "Copy"), 1500);
+  });
+}

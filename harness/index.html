@@ -20,7 +20,23 @@
       <h1 data-slot="title"></h1>
 
       <div class="masthead-body">
-        <p class="masthead-statement" data-slot="statement"></p>
+        <div class="masthead-lead">
+          <p class="masthead-statement" data-slot="statement"></p>
+
+          <div class="install">
+            <p class="label">Install it as an agent skill</p>
+            <div class="install-command">
+              <code>npx skills@latest add vojtaholik/good-css</code>
+              <button type="button" aria-live="polite" data-copy>Copy</button>
+            </div>
+            <p>
+              For Claude Code, Codex, Cursor and any other agent that reads skills. The source and
+              the other ways to install are on
+              <a href="https://github.com/vojtaholik/good-css">GitHub</a>.
+            </p>
+          </div>
+        </div>
+
         <div class="prose" data-slot="intro"></div>
       </div>
 

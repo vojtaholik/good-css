@@ -1,5 +1,5 @@
 import { marked } from "marked";
-import { author, authorProfile, origin } from "./site.js";
+import { author, authorProfile, origin, repository } from "./site.js";
 
 const attribute = (value) => value.replaceAll("&", "&amp;").replaceAll('"', "&quot;");
 
@@ -13,6 +13,7 @@ export const footer = `<footer class="footer content-grid">
           <a href="/contact">Contact</a>
           <a href="/privacy">Privacy</a>
           <a href="/llms.txt">llms.txt</a>
+          <a href="${repository}">GitHub</a>
         </nav>
       </div>
     </footer>`;
