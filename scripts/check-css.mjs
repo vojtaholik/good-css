@@ -129,19 +129,31 @@ function logical(property) {
 
 const reducedMotion = (blocks) => blocks.some((block) => /prefers-reduced-motion\s*:\s*no-preference/.test(block));
 
+/* The elements a declaration styles: the last compound of each selector of
+   its rule, without pseudo-classes. `.card:hover .icon` gives `.icon`. */
+function subjects(blocks) {
+  const selector = blocks
+    .filter((block) => !block.startsWith("@"))
+    .reduce((parent, block) => (block.includes("&") ? block.replaceAll("&", parent) : `${parent} ${block}`), "");
+
+  return split(selector, /,/)
+    .map((part) => (split(part, /[\s>+~]/).at(-1) ?? "").replace(/(?<!:):[\w-]+(\([^)]*\))?/g, ""))
+    .filter(Boolean);
+}
+
+const sameElement = (one, other) => one.startsWith(other) || other.startsWith(one);
+
 /* Returns the violations in a piece of CSS as { line, rule, message }. */
 export function check(css) {
   const found = [];
   const nodes = [...read(css)];
 
   /* Motion is opt-in when the transition or the value it animates sits in
-     the query. So a transition outside it counts only for a property that
-     is also set outside it. */
-  const setForEveryone = new Set(
-    nodes
-      .filter((node) => node.type === "declaration" && moves.includes(node.property) && !reducedMotion(node.blocks))
-      .map((node) => node.property),
-  );
+     the query. So a transition outside it counts only when the same element
+     has the property set outside it too. */
+  const setForEveryone = nodes
+    .filter((node) => node.type === "declaration" && moves.includes(node.property) && !reducedMotion(node.blocks))
+    .map((node) => ({ property: node.property, subjects: subjects(node.blocks) }));
 
   for (const node of nodes) {
     const report = (rule, message) => found.push({ line: node.line, rule, message });
@@ -185,7 +197,12 @@ export function check(css) {
 
     if (items.some((item) => item.everything)) report("transition-all", "Name the properties the transition changes, never `all`.");
 
-    const moving = items.flatMap((item) => item.properties).find((name) => setForEveryone.has(name));
+    const own = subjects(node.blocks);
+    const moving = items
+      .flatMap((item) => item.properties)
+      .find((name) =>
+        setForEveryone.some((set) => set.property === name && set.subjects.some((subject) => own.some((mine) => sameElement(mine, subject)))),
+      );
     if (moving && !reducedMotion(node.blocks))
       report("motion", `Put the transition of \`${moving}\` inside \`@media (prefers-reduced-motion: no-preference)\`.`);
 

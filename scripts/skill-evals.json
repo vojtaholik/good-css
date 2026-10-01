@@ -8,20 +8,66 @@
       "expected_output": "pricing.html, one file of plain HTML and CSS",
       "files": [],
       "expectations": [
-        "Hover styles sit behind @media (hover: hover) and (pointer: fine)",
-        "Focus is styled with :focus-visible and outline is never removed",
-        "Pressable elements have an :active state",
-        "Motion is opt-in behind prefers-reduced-motion: no-preference",
-        "No transition: all",
-        "Logical properties only, no physical left, right, top or bottom",
-        "Colors are written in oklch(), with no rgb() or hsl()",
-        "Variants are derived with color-mix(in oklch, ...)",
-        "No width breakpoints",
-        "One set of color tokens with light-dark()",
-        "Fluid sizes use clamp() with a rem + vw preferred value, or the scale derived from six inputs",
-        "Card grid is intrinsic: repeat(auto-fit|auto-fill, minmax(min(100%, ...), 1fr))",
-        "Card parts line up across cards with subgrid",
-        "Prices use tabular numbers"
+        {
+          "text": "Hover styles sit behind @media (hover: hover) and (pointer: fine)",
+          "rule": "hover"
+        },
+        {
+          "text": "Focus is styled with :focus-visible and outline is never removed",
+          "rule": "outline",
+          "has": ":focus-visible"
+        },
+        {
+          "text": "Pressable elements have an :active state",
+          "has": ":active\\b"
+        },
+        {
+          "text": "Motion is opt-in behind prefers-reduced-motion: no-preference",
+          "rule": "motion",
+          "lacks": "prefers-reduced-motion\\s*:\\s*reduce"
+        },
+        {
+          "text": "No transition: all",
+          "rule": "transition-all"
+        },
+        {
+          "text": "Logical properties only, no physical left, right, top or bottom",
+          "rule": "logical"
+        },
+        {
+          "text": "Colors are written in oklch(), with no rgb() or hsl()",
+          "rule": "color",
+          "has": "oklch\\("
+        },
+        {
+          "text": "Variants are derived with color-mix(in oklch, ...)",
+          "has": "color-mix\\(\\s*in\\s+oklch"
+        },
+        {
+          "text": "No width breakpoints",
+          "lacks": "@media[^{]*\\b(min|max)-(width|inline-size)\\b|@media[^{]*\\b(width|inline-size)\\s*[<>]"
+        },
+        {
+          "text": "One set of color tokens with light-dark()",
+          "has": "light-dark\\(",
+          "lacks": "@media[^{]*prefers-color-scheme"
+        },
+        {
+          "text": "Fluid sizes use clamp() with a rem + vw preferred value, or the scale derived from six inputs",
+          "has": "clamp\\([^;{}]*(rem\\s*\\+\\s*[\\d.]+\\s*(vw|vi|cqi)|(vw|vi|cqi)\\s*\\+\\s*[\\d.]+\\s*rem|100vw\\s*-)"
+        },
+        {
+          "text": "Card grid is intrinsic: repeat(auto-fit|auto-fill, minmax(min(100%, ...), 1fr))",
+          "has": "auto-fi(t|ll)[\\s_]*,[\\s_]*minmax\\([\\s_]*min\\([\\s_]*100%"
+        },
+        {
+          "text": "Card parts line up across cards with subgrid",
+          "has": "\\bsubgrid\\b"
+        },
+        {
+          "text": "Prices use tabular numbers",
+          "has": "tabular-nums"
+        }
       ]
     },
     {
@@ -31,20 +77,67 @@
       "expected_output": "ProductGrid.tsx with Tailwind v4 classes, plus app.css if the entry file needs rules",
       "files": [],
       "expectations": [
-        "Hover styles sit behind (hover: hover) and (pointer: fine)",
-        "Focus is styled with focus-visible and outline is never removed",
-        "Pressable elements have an active state",
-        "Motion is opt-in behind prefers-reduced-motion: no-preference",
-        "No transition-all",
-        "Logical utilities only, no physical left, right, top or bottom",
-        "No width breakpoint variants",
-        "Card grid is intrinsic: auto-fit or auto-fill with minmax(min(100%, ...), 1fr)",
-        "Card parts line up across cards with subgrid",
-        "Whole card is clickable from one stretched link, not a wrapping <a>",
-        "Focus ring moves from the link to the card with :has()",
-        "Buttons sit above the stretched link",
-        "Heart button has a hit area of at least 44px",
-        "Price uses tabular numbers"
+        {
+          "text": "Hover styles sit behind (hover: hover) and (pointer: fine)",
+          "has": [
+            "hover\\s*:\\s*hover",
+            "pointer\\s*:\\s*fine"
+          ]
+        },
+        {
+          "text": "Focus is styled with focus-visible and outline is never removed",
+          "has": "focus-visible",
+          "lacks": "\\boutline-none\\b|outline\\s*:\\s*(none|0)\\b|outline-style\\s*:\\s*none"
+        },
+        {
+          "text": "Pressable elements have an active state",
+          "has": "\\bactive:|:active\\b"
+        },
+        {
+          "text": "Motion is opt-in behind prefers-reduced-motion: no-preference",
+          "has": "motion-safe:|prefers-reduced-motion\\s*:\\s*no-preference"
+        },
+        {
+          "text": "No transition-all",
+          "lacks": "\\btransition-all\\b|transition\\s*:\\s*all\\b"
+        },
+        {
+          "text": "Logical utilities only, no physical left, right, top or bottom",
+          "lacks": "(?<![\\w-])-?(m|p|scroll-m|scroll-p)[lrtb]-[\\w\\[]|(?<![\\w-])-?(left|right|top|bottom)-[\\w\\[]|(?<![\\w-])(border|rounded)-(t|b|l|r|tl|tr|bl|br)(-|(?![\\w-]))|(?<![\\w-])text-(left|right)(?![\\w-])"
+        },
+        {
+          "text": "No width breakpoint variants",
+          "lacks": [
+            "(?<![\\w@-])(max-)?(sm|md|lg|xl|2xl):",
+            "@media[^{]*\\b(min|max)-(width|inline-size)\\b|@media[^{]*\\b(width|inline-size)\\s*[<>]"
+          ]
+        },
+        {
+          "text": "Card grid is intrinsic: auto-fit or auto-fill with minmax(min(100%, ...), 1fr)",
+          "has": "auto-fi(t|ll)[\\s_]*,[\\s_]*minmax\\([\\s_]*min\\([\\s_]*100%"
+        },
+        {
+          "text": "Card parts line up across cards with subgrid",
+          "has": "\\bsubgrid\\b"
+        },
+        {
+          "text": "Whole card is clickable from one stretched link, not a wrapping <a>",
+          "has": "(after|before):(absolute|inset-0)|::(after|before)[^}]*inset\\s*:\\s*0"
+        },
+        {
+          "text": "Focus ring moves from the link to the card with :has()",
+          "has": "has-\\[\\S*focus-visible|has-focus-visible|:has\\([^)]*focus-visible"
+        },
+        {
+          "text": "Buttons sit above the stretched link"
+        },
+        {
+          "text": "Heart button has a hit area of at least 44px"
+        },
+        {
+          "text": "Price uses tabular numbers",
+          "has": "tabular-nums"
+        }
       ]
     },
     {
@@ -54,24 +147,95 @@
       "expected_output": "help.html, one file of plain HTML and CSS with as little JavaScript as the page needs",
       "files": [],
       "expectations": [
-        "Hover styles sit behind @media (hover: hover) and (pointer: fine)",
-        "Focus is styled with :focus-visible and outline is never removed",
-        "Pressable elements have an :active state",
-        "Motion is opt-in behind prefers-reduced-motion: no-preference",
-        "No transition: all",
-        "Logical properties only, no physical left, right, top or bottom",
-        "Colors are written in oklch(), with no rgb() or hsl()",
-        "Variants are derived with color-mix(in oklch, ...)",
-        "No width breakpoints",
-        "Accordion is <details> animated with ::details-content and interpolate-size",
-        "Modal is a <dialog> with enter and exit transitions via @starting-style and allow-discrete",
-        "Dropdown is a popover placed with anchor positioning",
-        "In-page links clear the sticky header with scroll-padding-block-start",
-        "Page scroll locks behind the modal with :has(), keeping the scrollbar gutter",
-        "Textarea grows with field-sizing: content",
-        "Form feedback uses :user-invalid",
-        "Tab row handles overflow: safe alignment or an overflow-only edge fade",
-        "Overflow is cut with clip, not hidden, where nothing scrolls"
+        {
+          "text": "Hover styles sit behind @media (hover: hover) and (pointer: fine)",
+          "rule": "hover"
+        },
+        {
+          "text": "Focus is styled with :focus-visible and outline is never removed",
+          "rule": "outline",
+          "has": ":focus-visible"
+        },
+        {
+          "text": "Pressable elements have an :active state",
+          "has": ":active\\b"
+        },
+        {
+          "text": "Motion is opt-in behind prefers-reduced-motion: no-preference",
+          "rule": "motion",
+          "lacks": "prefers-reduced-motion\\s*:\\s*reduce"
+        },
+        {
+          "text": "No transition: all",
+          "rule": "transition-all"
+        },
+        {
+          "text": "Logical properties only, no physical left, right, top or bottom",
+          "rule": "logical"
+        },
+        {
+          "text": "Colors are written in oklch(), with no rgb() or hsl()",
+          "rule": "color",
+          "has": "oklch\\("
+        },
+        {
+          "text": "Variants are derived with color-mix(in oklch, ...)",
+          "has": "color-mix\\(\\s*in\\s+oklch"
+        },
+        {
+          "text": "No width breakpoints",
+          "lacks": "@media[^{]*\\b(min|max)-(width|inline-size)\\b|@media[^{]*\\b(width|inline-size)\\s*[<>]"
+        },
+        {
+          "text": "Accordion is <details> animated with ::details-content and interpolate-size",
+          "has": [
+            "<details",
+            "::details-content",
+            "interpolate-size"
+          ]
+        },
+        {
+          "text": "Modal is a <dialog> with enter and exit transitions via @starting-style and allow-discrete",
+          "has": [
+            "<dialog",
+            "@starting-style",
+            "allow-discrete"
+          ]
+        },
+        {
+          "text": "Dropdown is a popover placed with anchor positioning",
+          "has": [
+            "\\bpopover\\b",
+            "position-anchor|anchor-name|position-area|anchor\\("
+          ]
+        },
+        {
+          "text": "In-page links clear the sticky header with scroll-padding-block-start",
+          "has": "scroll-padding-block(-start)?\\s*:"
+        },
+        {
+          "text": "Page scroll locks behind the modal with :has(), keeping the scrollbar gutter",
+          "has": [
+            ":has\\([^{]*(dialog|\\[open\\]|:modal)",
+            "scrollbar-gutter"
+          ]
+        },
+        {
+          "text": "Textarea grows with field-sizing: content",
+          "has": "field-sizing\\s*:\\s*content"
+        },
+        {
+          "text": "Form feedback uses :user-invalid",
+          "has": ":user-invalid"
+        },
+        {
+          "text": "Tab row handles overflow: safe alignment or an overflow-only edge fade",
+          "has": "(justify-content|justify-items|align-items|align-content|place-content|place-items)\\s*:[^;]*\\bsafe\\b|animation-timeline\\s*:\\s*scroll\\("
+        },
+        {
+          "text": "Overflow is cut with clip, not hidden, where nothing scrolls",
+          "has": "overflow(-x|-y|-inline|-block)?\\s*:\\s*clip"
+        }
       ]
     }
   ]
