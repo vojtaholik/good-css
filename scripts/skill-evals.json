@@ -496,6 +496,30 @@
           "lacks": "@media[^{]*\\b(min|max)-(width|inline-size)\\b|@media[^{]*\\b(width|inline-size)\\s*[<>]"
         }
       ]
+    },
+    {
+      "id": 9,
+      "name": "plain-css-browser-targets",
+      "prompt": "the More button in the header should open a small menu with three links: Changelog, Status and Support. it should sit right under the button and close when you click away. no library.",
+      "expected_output": "A menu added to index.html and styles.css that works in the browsers the project supports, and a reply that says so",
+      "fixtures": [
+        "browser-targets"
+      ],
+      "expectations": [
+        {
+          "text": "The reply names the project's browser targets or where they are set",
+          "where": "reply",
+          "has": "browserslist|package\\.json|Safari\\s*16|Firefox\\s*115|Chrome\\s*111"
+        },
+        {
+          "text": "The menu uses none of popover, anchor positioning or @starting-style, which the targets lack",
+          "lacks": "\\bpopover\\b|anchor-name|position-anchor|position-area|@starting-style"
+        },
+        {
+          "text": "The existing color tokens are not rewritten",
+          "lacks": "prefers-color-scheme|--(surface|text|line)\\s*:"
+        }
+      ]
     }
   ]
 }

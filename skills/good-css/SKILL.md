@@ -13,7 +13,7 @@ Each technique is a set of properties and values, so it works in any authoring s
 
 These need no file.
 
-- Write `inline` and `block` properties in place of left, right, top and bottom.
+- Write `inline` and `block` properties in place of left, right, top and bottom. Tailwind has them too, as in `mbs-`, `pe-` and `inset-bs-`, so never write `mt-`, `pr-` or `top-`.
 - Write colors in `oklch()`, with `none` as the hue of a gray, white or black. Derive a hover, tint or transparent version with `color-mix(in oklch, …)`.
 - Put sizes that grow with the screen in one `clamp()` token.
 - Put every `:hover` rule inside `@media (hover: hover) and (pointer: fine)`.

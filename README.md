@@ -46,7 +46,7 @@ The agent loads the skill in three steps and pays only for the ones a task reach
 | File | Loaded | Lines | Tokens |
 | --- | --- | --- | --- |
 | The description in `SKILL.md` | in every session | 1 | 70 |
-| `SKILL.md` | when a task involves CSS | 49 | 1,020 |
+| `SKILL.md` | when a task involves CSS | 49 | 1,060 |
 | `references/foundation.md` | reset, color tokens, dark mode, fluid sizes and scales | 183 | 2,540 |
 | `references/layout.md` | page and component layout | 320 | 3,010 |
 | `references/controls.md` | buttons, links, cards, inputs, icons | 318 | 2,590 |
