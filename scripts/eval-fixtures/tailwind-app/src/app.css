@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* The theme is a class on <html>, set by the switch in the header. */
+@theme {
+  --color-brand: #4f46e5;
+  --color-brand-hover: #4338ca;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f8fafc;
+  --color-ink: #0f172a;
+  --color-ink-muted: #475569;
+  --color-line: #e2e8f0;
+}
+
+.dark {
+  --color-surface: #0f172a;
+  --color-surface-raised: #1e293b;
+  --color-ink: #f8fafc;
+  --color-ink-muted: #94a3b8;
+  --color-line: #334155;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
