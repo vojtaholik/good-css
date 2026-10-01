@@ -1,0 +1,68 @@
+<template data-specimen data-height="380">
+  Follow the link. The two pages crossfade, the header holds still, and the readout says yes. In Firefox the page changes at once.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block-end: 1rem;
+      border-bottom: 1px solid var(--bp-line);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      display: grid;
+      place-items: center;
+      min-height: 12rem;
+    }
+
+    h1 {
+      font-size: 4rem;
+    }
+
+    .b.page {
+      background: var(--bp-ink);
+      color: var(--bp-paper);
+    }
+
+    [data-page="a"] .b,
+    [data-page="b"] .a {
+      display: none;
+    }
+  }
+</style>
+
+<header>
+  <p>The header is the same on both pages.</p>
+  <a class="a" href="?page=b">Go to page B</a>
+  <a class="b" href="?page=a">Go to page A</a>
+</header>
+
+<div class="hatch page a"><h1>Page A</h1></div>
+<div class="page b"><h1>Page B</h1></div>
+
+<p class="label">This page arrived with a view transition <output>[ no ]</output></p>
+
+<script>
+  /* A view transition needs two documents. Both are this specimen, and the
+     query string picks which page it shows. */
+  document.documentElement.dataset.page = new URLSearchParams(location.search).get("page") ?? "a";
+
+  addEventListener("pagereveal", (event) => {
+    if (event.viewTransition) document.querySelector("output").textContent = "[ yes ]";
+  });
+</script>

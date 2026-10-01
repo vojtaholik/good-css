@@ -1,0 +1,25 @@
+<template data-specimen data-height="320">
+  Change the width. The number of columns follows the frame, and at 360 there is one column and no overflow.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      padding: 1.5rem;
+    }
+
+    .grid > * {
+      display: grid;
+      place-items: center;
+      min-height: 7rem;
+    }
+  }
+</style>
+
+<div class="grid">
+  <div class="hatch label">1</div>
+  <div class="hatch label">2</div>
+  <div class="hatch label">3</div>
+  <div class="hatch label">4</div>
+  <div class="hatch label">5</div>
+</div>

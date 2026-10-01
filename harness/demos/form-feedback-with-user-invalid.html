@@ -1,0 +1,47 @@
+<template data-specimen data-height="260">
+  The field has no color on load. Type three characters and leave it: the border takes the danger color. Eight or more and it takes the success color.
+</template>
+
+<style>
+  @layer demo {
+    /* The entry names these tokens and leaves their values to the project. */
+    :root {
+      --danger: oklch(0.62 0.24 25);
+      --success: oklch(0.7 0.19 150);
+    }
+
+    body {
+      padding: 1.5rem;
+    }
+
+    form {
+      display: grid;
+      justify-items: start;
+      gap: 0.75rem;
+      max-width: 22rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    /* A white field with a thick border, so the two colors read on blue. */
+    input {
+      padding: 0.625rem 0.75rem;
+      border: 4px solid white;
+      background: white;
+      font: inherit;
+      color: oklch(0.25 0 0);
+    }
+  }
+</style>
+
+<form>
+  <label>
+    Password, at least 8 characters
+    <!-- html -->
+  </label>
+  <button>Submit</button>
+</form>

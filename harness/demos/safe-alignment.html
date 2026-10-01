@@ -1,0 +1,37 @@
+<template data-specimen data-height="160">
+  At full width the tabs are centred. At 360 the row scrolls, and you can still reach the first tab.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      padding-block: 1.5rem;
+    }
+
+    .tabs {
+      border-block: 1px solid var(--bp-line);
+    }
+
+    .tabs a {
+      flex: none;
+      padding: 0.875rem 1.25rem;
+      border-inline-end: 1px solid var(--bp-line);
+      color: inherit;
+      text-decoration: none;
+
+      &:first-child {
+        border-inline-start: 1px solid var(--bp-line);
+      }
+    }
+  }
+</style>
+
+<nav class="tabs" aria-label="Sections">
+  <a href="#">First tab</a>
+  <a href="#">Layout</a>
+  <a href="#">Color</a>
+  <a href="#">Typography</a>
+  <a href="#">Motion</a>
+  <a href="#">Forms</a>
+  <a href="#">Last tab</a>
+</nav>

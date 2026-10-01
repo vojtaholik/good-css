@@ -1,0 +1,21 @@
+<template data-specimen data-height="300">
+  Make the frame narrower. When the main side would get less than half the width, it wraps below and both sides fill the row.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      padding: 1.5rem;
+    }
+
+    .with-sidebar > * {
+      min-height: 10rem;
+      padding: 1rem;
+    }
+  }
+</style>
+
+<div class="with-sidebar">
+  <div class="hatch sidebar"><code>.sidebar</code>, 20rem when there is room</div>
+  <div class="box main"><code>.main</code>, the rest, and never less than half</div>
+</div>

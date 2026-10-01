@@ -1,0 +1,64 @@
+<template data-specimen data-height="380">
+  Open and close the menu. It unrolls downward at its full size. Its shadow shows at the sides and the bottom and not along the top edge, and the text under it does not move. While it is closed, its links cannot be clicked or reached with Tab.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+
+    /* The menu lies over the page, hung from the box that holds its trigger. */
+    .anchor {
+      position: relative;
+      justify-self: start;
+    }
+
+    /* Blur plus offset is 2rem, less than the entry's 3rem of room. */
+    .menu {
+      position: absolute;
+      inset-block-start: 100%;
+      inset-inline-start: 0;
+      display: grid;
+      width: 14rem;
+      padding: 0.5rem;
+      border: 1px solid var(--bp-ink);
+      background: var(--bp-panel);
+      box-shadow: 0 0.5rem 1.5rem oklch(0.2 0.1 264 / 0.6);
+
+      & a {
+        padding: 0.5rem 0.75rem;
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+
+    p {
+      max-width: 50ch;
+    }
+  }
+</style>
+
+<div class="anchor">
+  <button aria-expanded="false" aria-controls="menu">Open the menu</button>
+  <div class="menu" id="menu">
+    <a href="#">Rename</a>
+    <a href="#">Duplicate</a>
+    <a href="#">Move to folder</a>
+    <a href="#">Delete</a>
+  </div>
+</div>
+
+<p>This paragraph sits right under the trigger. The menu opens over it. Nothing here moves when it does, because the menu has its full size the whole time.</p>
+
+<script>
+  const trigger = document.querySelector("button");
+  const menu = document.querySelector(".menu");
+
+  trigger.addEventListener("click", () => {
+    trigger.setAttribute("aria-expanded", menu.classList.toggle("is-open"));
+  });
+</script>

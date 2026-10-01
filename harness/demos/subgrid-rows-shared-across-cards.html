@@ -1,0 +1,39 @@
+<template data-specimen data-height="340">
+  Titles, bodies and footers line up across a row, whatever their length. Change the width to reflow the rows.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      padding: 1.5rem;
+    }
+
+    .card {
+      padding: 1rem;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+    }
+  }
+</style>
+
+<div class="cards">
+  <article class="box card">
+    <h2>Short title</h2>
+    <p>A body of one line.</p>
+    <p class="label">Footer</p>
+  </article>
+
+  <article class="box card">
+    <h2>A title long enough to need a second line</h2>
+    <p>A longer body. It runs over a few lines, so in a row of plain cards the footers would end up at different heights.</p>
+    <p class="label">Footer</p>
+  </article>
+
+  <article class="box card">
+    <h2>Medium title here</h2>
+    <p>A body of two lines, more or less, depending on the width.</p>
+    <p class="label">Footer</p>
+  </article>
+</div>

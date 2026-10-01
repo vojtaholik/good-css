@@ -1,0 +1,104 @@
+<template data-specimen data-height="460" data-viewport="viewport-fit=cover">
+  On a desktop every inset is 0px: the readouts say 0px, 0px and 16px, and only the sheet shows a hatched band. Open it in its own tab on a phone with a notch or a home indicator. Wherever an inset is not 0px, a hatched band of that size appears and the text stays clear of it.
+</template>
+
+<style>
+  @layer demo {
+    /* The hatch is each bar's own background, so it shows only in the padding
+       the entry adds. The text sits on a paper box inside. */
+    .app-header,
+    .bottom-bar,
+    .sheet {
+      position: fixed;
+      inset-inline: 0;
+      background: var(--bp-hatch), var(--bp-panel);
+
+      & > * {
+        padding: 1rem 1.5rem;
+        background: var(--bp-paper);
+      }
+    }
+
+    .app-header {
+      inset-block-start: 0;
+      border-bottom: 1px solid var(--bp-line);
+    }
+
+    .bottom-bar,
+    .sheet {
+      inset-block-end: 0;
+      border-top: 1px solid var(--bp-line);
+    }
+
+    .sheet > * {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: 2rem;
+    }
+
+    main {
+      display: grid;
+      justify-items: start;
+      gap: 1.5rem;
+      padding: 5rem 1.5rem;
+    }
+
+    dl {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 0.25rem 1.5rem;
+      margin: 0;
+      font-family: var(--bp-font-mono);
+      font-size: 0.8125rem;
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+</style>
+
+<header class="app-header"><p><code>.app-header</code></p></header>
+
+<main>
+  <dl>
+    <dt>.app-header padding-block-start</dt>
+    <dd data-read=".app-header" data-side="paddingBlockStart"></dd>
+    <dt>.bottom-bar padding-block-end</dt>
+    <dd data-read=".bottom-bar" data-side="paddingBlockEnd"></dd>
+    <dt>.sheet padding-block-end</dt>
+    <dd data-read=".sheet" data-side="paddingBlockEnd"></dd>
+  </dl>
+  <button data-sheet>Show the sheet</button>
+</main>
+
+<footer class="bottom-bar"><p><code>.bottom-bar</code></p></footer>
+
+<div class="sheet" hidden>
+  <div>
+    <p><code>.sheet</code>, with 1rem of its own under the text</p>
+    <button data-sheet>Hide the sheet</button>
+  </div>
+</div>
+
+<script>
+  const sheet = document.querySelector(".sheet");
+
+  /* The readouts are the padding the entry's rules gave each element. */
+  const read = () => {
+    for (const output of document.querySelectorAll("[data-read]")) {
+      const { read, side } = output.dataset;
+      output.textContent = `[ ${getComputedStyle(document.querySelector(read))[side]} ]`;
+    }
+  };
+
+  for (const button of document.querySelectorAll("[data-sheet]")) {
+    button.addEventListener("click", () => (sheet.hidden = !sheet.hidden));
+  }
+
+  addEventListener("resize", read);
+  read();
+</script>

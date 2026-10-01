@@ -1,0 +1,66 @@
+<template data-specimen data-height="380">
+  Open the menu in each corner. It opens 8px under the button, lined up with its start edge. Near an edge it flips to stay inside the frame, and the gap stays on the button's side.
+</template>
+
+<style>
+  @layer demo {
+    /* The trigger and the controls share one grid cell that fills the frame. */
+    body {
+      display: grid;
+      min-height: 100dvh;
+      padding: 1.5rem;
+    }
+
+    body > * {
+      grid-area: 1 / 1;
+    }
+
+    .trigger {
+      place-self: var(--place, start start);
+    }
+
+    .places {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      place-self: center;
+    }
+
+    /* Wider than the trigger, so the right-hand corners force a flip. */
+    [popover] {
+      min-width: 12rem;
+      padding: 0.5rem;
+      border: 1px solid var(--bp-ink);
+      background: var(--bp-paper);
+      color: var(--bp-ink);
+    }
+
+    [popover]:popover-open {
+      display: grid;
+      gap: 0.5rem;
+    }
+  }
+</style>
+
+<div class="trigger">
+  <!-- html -->
+</div>
+
+<div class="places" role="group" aria-label="Where the trigger sits">
+  <button data-place="start start" aria-pressed="true">Top left</button>
+  <button data-place="start end">Top right</button>
+  <button data-place="end start">Bottom left</button>
+  <button data-place="end end">Bottom right</button>
+</div>
+
+<script>
+  const places = document.querySelectorAll("[data-place]");
+
+  for (const button of places) {
+    button.addEventListener("click", () => {
+      document.body.style.setProperty("--place", button.dataset.place);
+      for (const other of places) other.setAttribute("aria-pressed", other === button);
+    });
+  }
+</script>

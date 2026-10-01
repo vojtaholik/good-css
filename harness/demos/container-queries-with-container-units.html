@@ -1,0 +1,64 @@
+<template data-specimen data-height="380">
+  The wide slot lays the card out in two columns with a larger heading. Make the frame narrower until that slot is under 30rem: it becomes the narrow card.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .slot {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .narrow {
+      flex: 0 1 16rem;
+    }
+
+    .wide {
+      flex: 1 1 26rem;
+    }
+
+    .card {
+      display: grid;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .image {
+      min-height: 6rem;
+    }
+
+    .card p {
+      margin-block-start: 0.5rem;
+    }
+  }
+</style>
+
+<div class="slot narrow">
+  <p class="label">A narrow slot</p>
+  <article class="box card">
+    <div class="hatch image"></div>
+    <div>
+      <h2>The same card</h2>
+      <p>It reads the width of its slot, not the width of the frame.</p>
+    </div>
+  </article>
+</div>
+
+<div class="slot wide">
+  <p class="label">A wide slot</p>
+  <article class="box card">
+    <div class="hatch image"></div>
+    <div>
+      <h2>The same card</h2>
+      <p>It reads the width of its slot, not the width of the frame.</p>
+    </div>
+  </article>
+</div>

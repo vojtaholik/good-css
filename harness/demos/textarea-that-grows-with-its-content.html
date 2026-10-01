@@ -1,0 +1,62 @@
+<template data-specimen data-height="420">
+  Type or paste several lines into each. Both start at three lines and stop at twelve. The second one eases to its new height.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      align-items: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    textarea {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--bp-line);
+      background: var(--bp-panel);
+      font: inherit;
+      color: inherit;
+
+      &::placeholder {
+        color: var(--bp-ink-soft);
+      }
+    }
+
+    /* The wrapper carries the border and background. Its textarea is bare. */
+    .field {
+      border: 1px solid var(--bp-line);
+      background: var(--bp-panel);
+
+      & textarea {
+        border: 0;
+        background: none;
+        outline-offset: 0;
+      }
+    }
+  }
+</style>
+
+<section>
+  <p>Textarea alone. The height snaps.</p>
+  <textarea aria-label="Textarea alone" placeholder="Type a few lines"></textarea>
+</section>
+
+<section>
+  <p>Inside <code>.field</code>. The height animates.</p>
+  <!-- html -->
+</section>
+
+<script>
+  const wrapped = document.querySelector(".field textarea");
+  wrapped.placeholder = "Type a few lines";
+  wrapped.setAttribute("aria-label", "Textarea inside .field");
+</script>

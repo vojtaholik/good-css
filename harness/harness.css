@@ -1,0 +1,553 @@
+/* The harness page. It is built with the practices it previews, written out
+   by hand: the reset, the content grid, fluid sizes, color-mix, the animated
+   accordion. Specimens do not use this file. They run the entry's own code. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+:root {
+  --text-display: clamp(5rem, 1rem + 17vw, 17rem);
+  --text-number: clamp(4rem, 2.5rem + 6vw, 8.5rem);
+  --text-title: clamp(2rem, 1.25rem + 3vw, 4rem);
+  --text-statement: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  --text-lede: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --space-sheet: clamp(3rem, 1.5rem + 6vw, 7rem);
+  --space-block: clamp(1.5rem, 1rem + 2vw, 3rem);
+
+  /* Every guide line sits this far outside its column, so text and frames
+     never touch one. A block that should reach the guides uses the same
+     length as a negative margin. */
+  --gutter: clamp(1rem, 0.5rem + 2vw, 2.5rem);
+  --guide-gap: calc(var(--gutter) / 2);
+
+  --title-code: color-mix(in oklch, var(--bp-ink) 16%, var(--bp-paper));
+
+  /* Hover fills stay see-through: they end on a guide and must not hide it. */
+  --hover-fill: color-mix(in oklch, var(--bp-ink) 14%, transparent);
+
+  interpolate-size: allow-keywords;
+  text-wrap: pretty;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  color-scheme: dark;
+  scrollbar-color: var(--bp-scrollbar);
+  scroll-padding-block-start: 1rem;
+  font-family: var(--bp-font-body);
+  line-height: 1.5;
+  color: var(--bp-ink);
+  background: var(--bp-paper);
+}
+
+html {
+  overscroll-behavior-y: none;
+}
+
+@media (any-pointer: coarse) {
+  html {
+    overscroll-behavior-y: auto;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  position: relative;
+  margin: 0;
+  min-height: 100svh;
+}
+
+h1,
+h2,
+p,
+dl,
+dd,
+ol,
+figure {
+  margin: 0;
+}
+
+h1,
+h2,
+.sheet-number {
+  font-family: var(--bp-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  text-wrap: balance;
+  text-box: trim-both cap alphabetic;
+}
+
+a {
+  color: inherit;
+}
+
+code,
+pre,
+.label,
+.title-block,
+.viewport-bar {
+  font-family: var(--bp-font-mono);
+  font-size: 0.8125rem;
+}
+
+/* Code in a title is set in the title's own font, smaller and on a box. */
+:is(h2, .index a) code {
+  padding: 0.08em 0.3em;
+  background: var(--title-code);
+  font: inherit;
+  font-size: 0.8em;
+  box-decoration-break: clone;
+}
+
+::selection {
+  background: var(--bp-ink);
+  color: var(--bp-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--bp-ink);
+  outline-offset: 2px;
+}
+
+/* Content grid ------------------------------------------------------------ */
+
+.content-grid {
+  --content: 64rem;
+  --breakout: 80rem;
+
+  display: grid;
+  grid-template-columns:
+    [full-width-start] minmax(var(--gutter), 1fr)
+    [breakout-start] minmax(0, calc((var(--breakout) - var(--content)) / 2))
+    [content-start] min(100% - var(--gutter) * 2, var(--content)) [content-end]
+    minmax(0, calc((var(--breakout) - var(--content)) / 2)) [breakout-end]
+    minmax(var(--gutter), 1fr) [full-width-end];
+}
+
+:is(.content-grid, .full-width) > * {
+  grid-column: content;
+}
+
+:is(.content-grid, .full-width) > .breakout {
+  grid-column: breakout;
+}
+
+:is(.content-grid, .full-width) > .full-width {
+  grid-column: full-width;
+  display: grid;
+  grid-template-columns: inherit;
+}
+
+/* Construction lines around the breakout column, solid, and the content
+   column, dashed. They are drawn on the page behind everything and scroll
+   with it. */
+.guides {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  & > * {
+    grid-row: 1;
+    margin-inline: calc(var(--guide-gap) * -1);
+    border-inline: 1px dashed var(--bp-line-faint);
+  }
+
+  & > .breakout {
+    border-inline-style: solid;
+  }
+}
+
+/* Masthead ---------------------------------------------------------------- */
+
+.masthead {
+  row-gap: var(--space-block);
+  padding-block: var(--space-sheet);
+
+  & h1 {
+    font-size: var(--text-display);
+    line-height: 0.85;
+    letter-spacing: -0.01em;
+  }
+}
+
+.masthead-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  align-items: start;
+  gap: 1.5rem var(--space-block);
+
+  & .prose {
+    color: var(--bp-ink-soft);
+  }
+}
+
+.masthead-statement {
+  max-width: 28ch;
+  font-size: var(--text-statement);
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+/* The index: a status row, then every entry. Both are laid out in the same
+   columns, and the block reaches the guides on either side. */
+.index {
+  margin-inline: calc(var(--guide-gap) * -1);
+  border-top: 1px solid var(--bp-line-faint);
+
+  & :is(.title-block, ol) {
+    columns: 3 16rem;
+    column-gap: 0;
+    column-rule: 1px dashed var(--bp-line-faint);
+  }
+
+  & ol {
+    padding: 0;
+    list-style: none;
+  }
+
+  & :is(.title-block > div, a) {
+    padding: 0.625rem var(--guide-gap);
+    border-bottom: 1px solid var(--bp-line-faint);
+    break-inside: avoid;
+  }
+
+  & a {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    align-items: baseline;
+    outline-offset: -2px;
+    text-decoration: none;
+  }
+}
+
+/* Every cell of the index is one line, so the rows line up across columns.
+   A title that does not fit is cut short, and the link's tooltip has it whole. */
+.index :is(dt, .index-title) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title-block > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--bp-ink-soft);
+
+  & dd {
+    flex: none;
+    color: var(--bp-ink);
+  }
+}
+
+.index-number {
+  font-family: var(--bp-font-mono);
+  font-size: 0.8125rem;
+  color: var(--bp-ink-soft);
+}
+
+/* An entry with no specimen yet is hatched, here and on its sheet. */
+.index a[data-missing] {
+  background: var(--bp-hatch);
+}
+
+@media (hover: hover) {
+  .index a:hover {
+    background: var(--hover-fill);
+
+    & .index-number {
+      color: var(--bp-ink);
+    }
+  }
+}
+
+/* Sheet ------------------------------------------------------------------- */
+
+.sheet {
+  container-type: inline-size;
+  row-gap: var(--space-block);
+  padding-block: var(--space-sheet);
+  border-top: 1px solid var(--bp-line-faint);
+}
+
+.sheet-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem clamp(1.25rem, 0.5rem + 3vw, 3.5rem);
+
+  & h2 {
+    align-self: start;
+    font-size: var(--text-title);
+    line-height: 1;
+  }
+}
+
+/* A note has no number, so its lede goes under the title. */
+.sheet-head:not(:has(.sheet-number)) {
+  grid-template-columns: 1fr;
+}
+
+.sheet-number {
+  grid-row: span 2;
+  font-size: var(--text-number);
+  line-height: 0.8;
+}
+
+.sheet-lede {
+  grid-column-end: -1;
+  max-width: 60ch;
+  font-size: var(--text-lede);
+  color: var(--bp-ink-soft);
+
+  &:empty {
+    display: none;
+  }
+}
+
+/* On a narrow sheet the lede runs under the number too. */
+@container (width < 48rem) {
+  .sheet-lede {
+    grid-column-start: 1;
+  }
+}
+
+/* Specimen ---------------------------------------------------------------- */
+
+.specimen {
+  row-gap: 1rem;
+}
+
+.check {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0 1rem;
+  max-width: 68ch;
+
+  & .label {
+    color: var(--bp-ink-soft);
+  }
+}
+
+/* The frame is a viewport with its controls in a bar on top. Its corner
+   resizes it, and so do the width buttons. */
+.viewport {
+  --bar: 2.25rem;
+
+  display: grid;
+  grid-template-rows: var(--bar) 1fr;
+  width: 100%;
+  max-width: 100%;
+  min-width: min(100%, 20rem);
+  height: calc(var(--frame-height) + var(--bar) + 2px);
+  min-height: 10rem;
+  border: 1px solid var(--bp-line);
+  overflow: hidden;
+  resize: both;
+
+  /* A grip in the corner of the frame: two strokes on a paper square. */
+  &::-webkit-resizer {
+    border: solid var(--bp-line);
+    border-width: 1px 0 0 1px;
+    background:
+      linear-gradient(
+        135deg,
+        transparent 58%,
+        var(--bp-ink) 58% 65%,
+        transparent 65% 78%,
+        var(--bp-ink) 78% 85%,
+        transparent 85%
+      ),
+      var(--bp-paper);
+  }
+
+  & iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+.viewport-bar {
+  display: flex;
+  border-bottom: 1px solid var(--bp-line);
+  background: var(--bp-panel);
+
+  & :is(button, a) {
+    display: grid;
+    place-items: center;
+    min-width: var(--bar);
+    padding-inline: 0.75rem;
+    border: 0;
+    border-inline-start: 1px solid var(--bp-line);
+    background: none;
+    font: inherit;
+    color: inherit;
+    outline-offset: -3px;
+    cursor: pointer;
+  }
+
+  & a {
+    padding-inline: 0;
+  }
+
+  & [aria-pressed="true"] {
+    background: var(--bp-ink);
+    color: var(--bp-paper);
+    outline-color: var(--bp-paper);
+  }
+}
+
+.viewport-size {
+  flex: 1;
+  align-self: center;
+  padding-inline: 0.75rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.viewport-widths {
+  display: flex;
+}
+
+@media (hover: hover) {
+  .viewport-bar :is(button:not([aria-pressed="true"]), a):hover {
+    background: var(--hover-fill);
+  }
+}
+
+.no-specimen {
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  min-height: 16rem;
+  padding: 1.5rem;
+  border: 1px solid var(--bp-line);
+  background: var(--bp-hatch), var(--bp-panel);
+  text-align: center;
+}
+
+/* Entry text -------------------------------------------------------------- */
+
+.entry {
+  margin-inline: calc(var(--guide-gap) * -1);
+  border-block: 1px solid var(--bp-line-faint);
+
+  &::details-content {
+    height: 0;
+    overflow: clip;
+  }
+
+  &[open]::details-content {
+    height: auto;
+  }
+
+  & summary {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1rem var(--guide-gap);
+    list-style: none;
+    font-weight: 600;
+    outline-offset: -2px;
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      content: "+";
+      font-family: var(--bp-font-mono);
+      font-weight: 400;
+    }
+
+    & .label {
+      font-weight: 400;
+      color: var(--bp-ink-soft);
+    }
+  }
+
+  &[open] summary::after {
+    content: "\2212";
+  }
+
+  & .prose {
+    max-width: calc(68ch + var(--guide-gap) * 2);
+    padding: 0.5rem var(--guide-gap) 2rem;
+  }
+}
+
+@media (hover: hover) {
+  .entry summary:hover {
+    background: var(--hover-fill);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .entry::details-content {
+    transition:
+      height 0.3s ease-out,
+      content-visibility 0.3s allow-discrete;
+  }
+}
+
+.prose {
+  display: grid;
+  gap: 1rem;
+  max-width: 68ch;
+
+  & :is(p, ul, ol, pre) {
+    margin: 0;
+  }
+
+  & :is(ul, ol) {
+    display: grid;
+    gap: 0.5rem;
+    padding-inline-start: 1.25rem;
+  }
+
+  & code {
+    font-size: 0.875em;
+  }
+
+  & :not(pre) > code {
+    padding: 0.0625rem 0.25rem;
+    background: var(--bp-panel);
+    overflow-wrap: anywhere;
+  }
+
+  & pre code {
+    font-size: inherit;
+  }
+
+  & pre {
+    padding: 1rem;
+    border: 1px solid var(--bp-line-faint);
+    background: var(--bp-panel);
+    line-height: 1.6;
+    overflow-x: auto;
+    tab-size: 2;
+  }
+
+  & a {
+    text-underline-offset: 0.2em;
+  }
+}
+
+@media (hover: hover) {
+  .prose a:hover {
+    text-decoration-thickness: 2px;
+  }
+}

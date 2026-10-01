@@ -1,0 +1,2218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Stripe candidates for good-css</title>
+
+<!-- The page itself. Everything here sits in a layer, so the snippets below,
+     which are unlayered, always win inside their demo. -->
+<style>
+@layer chrome, demo;
+
+@layer chrome {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  :root {
+    --bp-paper: oklch(0.54 0.19 264);
+    --bp-ink: oklch(1 0 none);
+    --bp-ink-soft: color-mix(in oklch, var(--bp-ink) 82%, var(--bp-paper));
+    --bp-line: color-mix(in oklch, var(--bp-ink) 60%, transparent);
+    --bp-line-faint: color-mix(in oklch, var(--bp-ink) 24%, transparent);
+    --bp-panel: color-mix(in oklch, var(--bp-ink) 9%, var(--bp-paper));
+    --bp-hatch: repeating-linear-gradient(-45deg, var(--bp-line-faint) 0 1px, transparent 1px 7px);
+    --hover-fill: color-mix(in oklch, var(--bp-ink) 14%, transparent);
+
+    --font-display: "Barlow Condensed", "DIN Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+    --font-body: "Barlow", system-ui, sans-serif;
+    --font-mono: "Paper Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    --text-display: clamp(3.5rem, 1rem + 11vw, 11rem);
+    --text-number: clamp(4rem, 2.5rem + 6vw, 8.5rem);
+    --text-title: clamp(2rem, 1.25rem + 3vw, 3.75rem);
+    --text-statement: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    --text-lede: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    --space-sheet: clamp(3rem, 1.5rem + 6vw, 7rem);
+    --space-block: clamp(1.5rem, 1rem + 2vw, 3rem);
+    --gutter: clamp(1rem, 0.5rem + 2vw, 2.5rem);
+    --guide-gap: calc(var(--gutter) / 2);
+    --tally-bar: 3.25rem;
+
+    color-scheme: dark;
+    scroll-padding-block: 1rem calc(var(--tally-bar) + 1rem);
+    font-family: var(--font-body);
+    line-height: 1.5;
+    color: var(--bp-ink);
+    background: var(--bp-paper);
+    text-wrap: pretty;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+
+  body {
+    position: relative;
+    margin: 0;
+    min-height: 100svh;
+    padding-block-end: var(--tally-bar);
+  }
+
+  h1, h2, h3, p, dl, dd, ol, ul, figure, fieldset, legend { margin: 0; }
+  fieldset { padding: 0; border: 0; }
+  a { color: inherit; }
+
+  h1, h2, .sheet-number {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    text-wrap: balance;
+    text-box: trim-both cap alphabetic;
+  }
+
+  code, pre, .label, .mono { font-family: var(--font-mono); font-size: 0.8125rem; }
+
+  :is(h2, .index a, .summary-list) code {
+    padding: 0.08em 0.3em;
+    background: color-mix(in oklch, var(--bp-ink) 16%, var(--bp-paper));
+    font: inherit;
+    font-size: 0.8em;
+  }
+
+  ::selection { background: var(--bp-ink); color: var(--bp-paper); }
+
+  :focus-visible {
+    outline: 2px solid var(--bp-ink);
+    outline-offset: 2px;
+  }
+
+  /* Content grid */
+  .content-grid {
+    --content: 64rem;
+    --breakout: 80rem;
+    display: grid;
+    grid-template-columns:
+      [full-width-start] minmax(var(--gutter), 1fr)
+      [breakout-start] minmax(0, calc((var(--breakout) - var(--content)) / 2))
+      [content-start] min(100% - var(--gutter) * 2, var(--content)) [content-end]
+      minmax(0, calc((var(--breakout) - var(--content)) / 2)) [breakout-end]
+      minmax(var(--gutter), 1fr) [full-width-end];
+  }
+  .content-grid > * { grid-column: content; }
+  .content-grid > .breakout { grid-column: breakout; }
+
+  .guides {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .guides > * {
+    grid-row: 1;
+    margin-inline: calc(var(--guide-gap) * -1);
+    border-inline: 1px dashed var(--bp-line-faint);
+  }
+  .guides > .breakout { border-inline-style: solid; }
+
+  /* Masthead */
+  .masthead {
+    row-gap: var(--space-block);
+    padding-block: var(--space-sheet);
+  }
+  .masthead h1 {
+    font-size: var(--text-display);
+    line-height: 0.85;
+    letter-spacing: -0.01em;
+  }
+  .masthead-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    align-items: start;
+    gap: 1.5rem var(--space-block);
+  }
+  .masthead-statement {
+    max-width: 28ch;
+    font-size: var(--text-statement);
+    font-weight: 500;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+  .prose { display: grid; gap: 1rem; max-width: 68ch; }
+  .prose-soft { color: var(--bp-ink-soft); }
+  .prose :not(pre) > code,
+  .facts :not(pre) > code,
+  .check code {
+    padding: 0.0625rem 0.25rem;
+    background: var(--bp-panel);
+    font-size: 0.875em;
+    overflow-wrap: anywhere;
+  }
+  .prose :is(ul, ol) { display: grid; gap: 0.5rem; padding-inline-start: 1.25rem; }
+  .prose a, .facts a { text-underline-offset: 0.2em; }
+
+  /* Index */
+  .index {
+    margin-inline: calc(var(--guide-gap) * -1);
+    border-top: 1px solid var(--bp-line-faint);
+  }
+  .index :is(.title-block, ol) {
+    columns: 2 22rem;
+    column-gap: 0;
+    column-rule: 1px dashed var(--bp-line-faint);
+  }
+  .index ol { padding: 0; list-style: none; }
+  .index :is(.title-block > div, a) {
+    padding: 0.625rem var(--guide-gap);
+    border-bottom: 1px solid var(--bp-line-faint);
+    break-inside: avoid;
+  }
+  .index a {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr auto;
+    align-items: baseline;
+    gap: 0 0.75rem;
+    outline-offset: -2px;
+    text-decoration: none;
+  }
+  .index .index-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .index-number { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--bp-ink-soft); }
+  .title-block > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--bp-ink-soft);
+  }
+  .title-block dd { flex: none; color: var(--bp-ink); }
+  @media (hover: hover) {
+    .index a:hover { background: var(--hover-fill); }
+  }
+
+  /* Decision marks, used in the index, the summary and the tally bar */
+  .mark {
+    display: inline-grid;
+    place-items: center;
+    min-width: 4.75rem;
+    padding: 0.0625rem 0.5rem;
+    border: 1px solid var(--bp-line);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .mark[data-choice="yes"] { background: var(--bp-ink); border-color: var(--bp-ink); color: var(--bp-paper); }
+  .mark[data-choice="maybe"] { background: var(--bp-hatch); }
+  .mark[data-choice="no"] { text-decoration: line-through; color: var(--bp-ink-soft); }
+  .mark[data-choice="open"] { border-style: dashed; border-color: var(--bp-line-faint); color: var(--bp-ink-soft); }
+
+  /* Sheet */
+  .sheet {
+    row-gap: var(--space-block);
+    padding-block: var(--space-sheet);
+    border-top: 1px solid var(--bp-line-faint);
+  }
+  .sheet-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem clamp(1.25rem, 0.5rem + 3vw, 3.5rem);
+  }
+  .sheet-head h2 { align-self: start; font-size: var(--text-title); line-height: 1; }
+  .sheet-number { grid-row: span 2; font-size: var(--text-number); line-height: 0.8; }
+  .sheet-lede { max-width: 60ch; font-size: var(--text-lede); color: var(--bp-ink-soft); }
+  @media (width < 48rem) {
+    .sheet-lede { grid-column: 1 / -1; }
+  }
+  .sheet-plain .sheet-head { grid-template-columns: 1fr; }
+
+  .check {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    max-width: 72ch;
+  }
+  .check .label { color: var(--bp-ink-soft); }
+
+  /* Tool buttons that drive a demo from outside it */
+  .tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; grid-column: 2; }
+  .tool {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--bp-line);
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: inherit;
+    cursor: pointer;
+  }
+  .tool[aria-pressed="true"] { background: var(--bp-ink); color: var(--bp-paper); }
+  @media (hover: hover) {
+    .tool:not([aria-pressed="true"]):hover { background: var(--hover-fill); }
+  }
+  .tool-range { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.8125rem; }
+  .tool-range input { inline-size: min(16rem, 50vw); accent-color: var(--bp-ink); }
+  .tool-select { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.8125rem; }
+  .tool-select select { padding: 0.3rem 0.5rem; border: 1px solid var(--bp-line); background: var(--bp-paper); font: inherit; color: inherit; }
+
+  /* Stages: a light sheet of paper for each demo */
+  .stages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    gap: 1rem;
+  }
+  .stage { display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--bp-line); }
+  .stage-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--bp-line);
+    background: var(--bp-panel);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+  .stage-bar span + span { color: var(--bp-ink-soft); }
+  .stage-old .stage-bar { background: var(--bp-hatch), var(--bp-panel); }
+  .stage-body {
+    --ink: oklch(0.27 0.06 264);
+    --muted: oklch(0.5 0.04 264);
+    --rule: oklch(0.87 0.015 264);
+    --paper: oklch(0.965 0.006 264);
+    --accent: oklch(0.54 0.19 264);
+
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+    min-height: 12rem;
+    padding: 1.5rem;
+    background: var(--paper);
+    color: var(--ink);
+    color-scheme: light;
+    font: 1rem/1.5 system-ui, sans-serif;
+  }
+  .stage-body ::selection { background: var(--accent); color: white; }
+  .stage-body :focus-visible { outline-color: var(--ink); }
+  .stage-body .hint { font-size: 0.8125rem; color: var(--muted); }
+  .stage-body .readout { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+
+  /* Shown only where the browser lacks the feature the demo needs */
+  .unsupported {
+    display: none;
+    padding: 0.625rem 0.75rem;
+    border: 1px dashed var(--ink);
+    background: white;
+    font-size: 0.875rem;
+  }
+  @supports not ((anchor-name: --a) and (anchor-scope: --a)) {
+    .unsupported[data-needs="anchor"] { display: block; }
+  }
+  @supports not (animation-timeline: scroll()) {
+    .unsupported[data-needs="scroll"] { display: block; }
+  }
+  @supports not selector(:has(a)) {
+    .unsupported[data-needs="has"] { display: block; }
+  }
+  @supports not (text-box: trim-both cap alphabetic) {
+    .unsupported[data-needs="textbox"] { display: block; }
+  }
+  /* There is no @supports test for an at-rule, so the script sets this class. */
+  .no-property .unsupported[data-needs="property"] { display: block; }
+
+  /* Facts: snippet on one side, the case for and against on the other */
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    align-items: start;
+    gap: var(--space-block);
+  }
+  .code { display: grid; gap: 0.5rem; }
+  .code .label { color: var(--bp-ink-soft); }
+  .code pre {
+    margin: 0;
+    max-height: 30rem;
+    padding: 1rem;
+    border: 1px solid var(--bp-line-faint);
+    background: var(--bp-panel);
+    line-height: 1.6;
+    overflow: auto;
+    tab-size: 2;
+  }
+  .code pre code { font-size: inherit; }
+  .fact-list { display: grid; }
+  .fact-list > div {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 0.25rem 1rem;
+    padding-block: 0.75rem;
+    border-top: 1px solid var(--bp-line-faint);
+  }
+  .fact-list > div:last-child { border-bottom: 1px solid var(--bp-line-faint); }
+  .fact-list dt { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--bp-ink-soft); padding-block-start: 0.15rem; }
+  .fact-list dd { color: var(--bp-ink-soft); }
+  .fact-list dd strong { color: var(--bp-ink); font-weight: 600; }
+  .fact-list .here { display: block; margin-block-start: 0.25rem; font-family: var(--font-mono); font-size: 0.8125rem; color: var(--bp-ink); }
+  .fact-list .here[data-ok="false"] { background: var(--bp-hatch); padding: 0.125rem 0.375rem; }
+  @media (width < 30rem) {
+    .fact-list > div { grid-template-columns: 1fr; }
+  }
+  .call {
+    display: inline-block;
+    margin-inline-end: 0.5rem;
+    padding: 0 0.5rem;
+    border: 1px solid var(--bp-ink);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--bp-ink);
+  }
+  .call[data-call="add"] { background: var(--bp-ink); color: var(--bp-paper); }
+  .call[data-call="maybe"] { background: var(--bp-hatch); }
+
+  .callout {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 72ch;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--bp-line);
+    background: var(--bp-hatch), var(--bp-panel);
+  }
+  .callout .label { color: var(--bp-ink-soft); }
+
+  /* Decision controls */
+  .decide {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: stretch;
+    margin-inline: calc(var(--guide-gap) * -1);
+    border: 1px solid var(--bp-line);
+    background: var(--bp-panel);
+  }
+  .decide legend { float: left; }
+  .decide > .label {
+    display: grid;
+    align-items: center;
+    padding: 0.75rem var(--guide-gap);
+    color: var(--bp-ink);
+  }
+  .seg { display: flex; border-inline: 1px solid var(--bp-line); }
+  .seg label { position: relative; display: grid; cursor: pointer; }
+  .seg label + label { border-inline-start: 1px solid var(--bp-line); }
+  .seg input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+  .seg span {
+    display: grid;
+    place-items: center;
+    min-width: 5rem;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .seg input:checked + span { background: var(--bp-ink); color: var(--bp-paper); }
+  .seg input:focus-visible + span { outline: 2px solid var(--bp-ink); outline-offset: -5px; }
+  .seg input:checked:focus-visible + span { outline-color: var(--bp-paper); }
+  @media (hover: hover) {
+    .seg label:hover input:not(:checked) + span { background: var(--hover-fill); }
+  }
+  .note { display: grid; grid-template-columns: auto 1fr; align-items: center; }
+  .note .label { padding-inline: 1rem 0.5rem; color: var(--bp-ink-soft); }
+  .note input {
+    align-self: stretch;
+    padding: 0.5rem 0.75rem 0.5rem 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    outline-offset: -3px;
+  }
+  .note input::placeholder { color: var(--bp-line); }
+  .clear {
+    padding-inline: 1rem;
+    border: 0;
+    border-inline-start: 1px solid var(--bp-line);
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--bp-ink-soft);
+    cursor: pointer;
+    outline-offset: -3px;
+  }
+  .clear:disabled { color: var(--bp-line-faint); cursor: default; }
+  @media (width < 48rem) {
+    .decide { grid-template-columns: 1fr auto; }
+    .decide > .label { grid-column: 1 / -1; border-bottom: 1px solid var(--bp-line); }
+    .seg { grid-column: 1 / -1; border-inline: 0; border-bottom: 1px solid var(--bp-line); }
+    .seg label { flex: 1; }
+  }
+
+  /* Summary */
+  .summary-list { display: grid; padding: 0; list-style: none; border-top: 1px solid var(--bp-line-faint); }
+  .summary-list li {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 22rem) auto 7.5rem 1fr;
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid var(--bp-line-faint);
+  }
+  .summary-list .summary-note { color: var(--bp-ink-soft); overflow-wrap: anywhere; }
+  .summary-list .summary-call { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--bp-ink-soft); white-space: nowrap; }
+  @media (width < 48rem) {
+    .summary-list li { grid-template-columns: 2.25rem 1fr auto; }
+    .summary-list :is(.summary-call, .summary-note) { grid-column: 2 / -1; }
+    .summary-list .summary-note:empty { display: none; }
+  }
+  .copy-block { display: grid; gap: 0.75rem; }
+  .copy-block textarea {
+    width: 100%;
+    min-height: 13rem;
+    padding: 1rem;
+    border: 1px solid var(--bp-line-faint);
+    background: var(--bp-panel);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: inherit;
+    resize: vertical;
+  }
+  .copy-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; }
+  .button-ink {
+    padding: 0.625rem 1.125rem;
+    border: 1px solid var(--bp-ink);
+    background: var(--bp-ink);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--bp-paper);
+    cursor: pointer;
+  }
+  .button-ink:focus-visible { outline-offset: 3px; }
+  .copy-status { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--bp-ink-soft); }
+
+  /* Tally bar, fixed to the bottom of the window */
+  .tally {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 10;
+    display: flex;
+    align-items: stretch;
+    min-height: var(--tally-bar);
+    border-top: 1px solid var(--bp-line);
+    background: var(--bp-paper);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+  .tally-dots { display: flex; overflow-x: auto; scrollbar-width: none; }
+  .tally-dots a {
+    display: grid;
+    place-items: center;
+    min-width: 2.75rem;
+    border-inline-end: 1px solid var(--bp-line);
+    text-decoration: none;
+    outline-offset: -3px;
+  }
+  .tally-dots a[data-choice="yes"] { background: var(--bp-ink); color: var(--bp-paper); outline-color: var(--bp-paper); }
+  .tally-dots a[data-choice="maybe"] { background: var(--bp-hatch); }
+  .tally-dots a[data-choice="no"] { text-decoration: line-through; color: var(--bp-line); }
+  .tally-dots a[data-choice="open"] { color: var(--bp-ink-soft); }
+  .tally-count { flex: 1; align-self: center; padding-inline: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .tally button {
+    padding-inline: 1.25rem;
+    border: 0;
+    border-inline-start: 1px solid var(--bp-line);
+    background: var(--bp-ink);
+    font: inherit;
+    color: var(--bp-paper);
+    cursor: pointer;
+    outline-offset: -4px;
+    outline-color: var(--bp-paper);
+    white-space: nowrap;
+  }
+  @media (width < 40rem) {
+    .tally-count { display: none; }
+    .tally-dots { flex: 1; }
+    .tally-dots a { min-width: 0; flex: 1; }
+    .tally button { padding-inline: 0.75rem; }
+  }
+
+  /* Collapsed sections at the end */
+  .fold {
+    margin-inline: calc(var(--guide-gap) * -1);
+    border-block: 1px solid var(--bp-line-faint);
+  }
+  .fold + .fold { border-top: 0; }
+  .fold summary {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1rem var(--guide-gap);
+    list-style: none;
+    font-weight: 600;
+    outline-offset: -2px;
+    cursor: pointer;
+  }
+  .fold summary::-webkit-details-marker { display: none; }
+  .fold summary::after { content: "+"; font-family: var(--font-mono); font-weight: 400; }
+  .fold[open] summary::after { content: "\2212"; }
+  .fold .prose { padding: 0.5rem var(--guide-gap) 2rem; }
+  .fold h3 { margin-block-start: 0.5rem; font-size: 1rem; }
+  @media (hover: hover) {
+    .fold summary:hover { background: var(--hover-fill); }
+  }
+  .tail { padding-block: var(--space-sheet); border-top: 1px solid var(--bp-line-faint); }
+}
+
+/* Demo fixtures: layout and looks around each snippet, and the comparison
+   demos. None of this is part of a proposed snippet. */
+@layer demo {
+  /* 1 */
+  :is(#d1, #d1-old) ul { margin: 0; padding: 0; gap: 0.25rem; list-style: none; border-bottom: 1px solid var(--rule); }
+  :is(#d1, #d1-old) a { display: block; padding: 0.5rem 0.75rem; color: var(--muted); text-decoration: none; white-space: nowrap; outline-offset: -2px; }
+  :is(#d1, #d1-old) [aria-current="page"] { color: var(--ink); }
+  :is(#d1, #d1-old).is-big { font-size: 1.3rem; }
+  #d1-old .tabs-js { position: relative; }
+  #d1-old ul { display: flex; }
+  #d1-old .bar {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inline-size: var(--w, 0px);
+    block-size: 2px;
+    background: currentColor;
+    translate: var(--x, 0px) 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    #d1-old .bar { transition: translate 0.25s ease-out, inline-size 0.25s ease-out; }
+  }
+
+  /* 2 */
+  .sizer { display: grid; gap: 0.5rem; inline-size: var(--w, 100%); max-inline-size: 100%; }
+  .sizer > * { min-inline-size: 0; }
+  :is(#d2, #d2-old) :is(.scroller, .scroller-edges, .always) {
+    display: flex;
+    gap: 0.5rem;
+    padding-block: 0.25rem 0.5rem;
+    outline: 1px dashed var(--rule);
+    outline-offset: 2px;
+  }
+  #d2-old .always {
+    overflow-x: auto;
+    mask-image: linear-gradient(to right, transparent, #000 2rem, #000 calc(100% - 2rem), transparent);
+  }
+  .chip {
+    flex: none;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--rule);
+    border-radius: 99rem;
+    background: white;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+  }
+
+  /* 3 */
+  :is(#d3, #d3-old) .card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    max-width: 20rem;
+    padding: 1rem;
+    border: 1px solid var(--rule);
+    border-radius: 0.75rem;
+    background: white;
+  }
+  :is(#d3, #d3-old) .icon { display: inline-block; font-size: 1.25rem; line-height: 1; }
+  :is(#d3, #d3-old) .bar { grid-column: 1 / -1; block-size: 3px; background: var(--accent); transform-origin: 0 50%; }
+  :is(#d3, #d3-old) .more { grid-column: 1 / -1; font-size: 0.9375rem; color: var(--muted); }
+  :is(#d3, #d3-old) button { grid-column: 1 / -1; justify-self: start; font: inherit; font-size: 0.875rem; }
+  /* the same rules on a property nobody registered */
+  #d3-old .card { --raw: 0; }
+  #d3-old .card:focus-within { --raw: 1; }
+  @media (hover: hover) {
+    #d3-old .card:hover { --raw: 1; }
+  }
+  #d3-old .card .icon { rotate: calc(var(--raw) * 90deg); }
+  #d3-old .card .bar { scale: calc(0.25 + var(--raw) * 0.75) 1; }
+  #d3-old .card .more { opacity: var(--raw); }
+  @media (prefers-reduced-motion: no-preference) {
+    #d3-old .card { transition: --raw 0.4s ease-out; }
+  }
+  /* second use: a script writes the pointer position, CSS eases it */
+  .spot {
+    display: grid;
+    place-items: center;
+    min-height: 9rem;
+    border: 1px solid var(--rule);
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--muted);
+    touch-action: none;
+  }
+  #d3-spot .spot {
+    background: radial-gradient(circle 7rem at var(--spot-x) var(--spot-y), oklch(0.8 0.12 264), white);
+  }
+  #d3-spot-old .spot {
+    --raw-x: 50%;
+    --raw-y: 50%;
+    background: radial-gradient(circle 7rem at var(--raw-x) var(--raw-y), oklch(0.8 0.12 264), white);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    #d3-spot .spot { transition: --spot-x 0.6s cubic-bezier(0.16, 1, 0.3, 1), --spot-y 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    #d3-spot-old .spot { transition: --raw-x 0.6s cubic-bezier(0.16, 1, 0.3, 1), --raw-y 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  }
+
+  /* 4 */
+  :is(#d4, #d4-leak, #d4-old) :is(.surface, .u-surface, .n-field) {
+    display: block;
+    inline-size: 100%;
+    max-inline-size: 18rem;
+    padding: 0.625rem 0.75rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: white;
+    font: inherit;
+    color: inherit;
+  }
+  :is(#d4, #d4-leak) .nest { display: grid; gap: 0.625rem; font-size: 0.875rem; }
+  :is(#d4, #d4-leak) .nest > * { font-size: 0.875rem; }
+  @media (prefers-reduced-motion: no-preference) {
+    :is(#d4, #d4-leak, #d4-old) :is(.surface, .u-surface, .n-field) { transition: box-shadow 0.15s ease-out; }
+  }
+  /* the same layers on properties nobody registered */
+  #d4-leak .u-surface {
+    box-shadow:
+      var(--u-keyline, 0 0 0 0 transparent),
+      var(--u-ring, 0 0 0 0 transparent),
+      var(--u-elevation, 0 0 0 0 transparent);
+  }
+  #d4-leak .u-field { --u-keyline: 0 0 0 1px oklch(0.8 0 0); }
+  #d4-leak .u-field:hover { --u-keyline: 0 0 0 1px oklch(0.6 0 0); }
+  #d4-leak .u-field:focus-visible { --u-ring: 0 0 0 4px oklch(0.7 0.15 250 / 0.5); outline: 2px solid transparent; }
+  #d4-leak .u-raised { --u-elevation: 0 4px 12px oklch(0 0 0 / 0.15); }
+  /* one box-shadow per state, the usual way */
+  #d4-old .n-field { box-shadow: 0 0 0 1px oklch(0.8 0 0), 0 4px 12px oklch(0 0 0 / 0.15); }
+  #d4-old .n-field:hover { box-shadow: 0 0 0 1px oklch(0.6 0 0); }
+  #d4-old .n-field:focus-visible { box-shadow: 0 0 0 4px oklch(0.7 0.15 250 / 0.5); outline: 2px solid transparent; }
+
+  /* 5 */
+  :is(#d5, #d5-old) :is(.card, .wrap-card) {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 20rem;
+    padding: 1rem;
+    border: 1px solid var(--rule);
+    border-radius: 0.75rem;
+    background: white;
+    color: inherit;
+    text-decoration: none;
+  }
+  :is(#d5, #d5-old) h3 { margin: 0; font-size: 1.0625rem; }
+  :is(#d5, #d5-old) p { margin: 0; }
+  :is(#d5, #d5-old) :is(.card p, .wrap-card p) { color: var(--muted); }
+  #d5 .card-link { color: inherit; text-underline-offset: 0.2em; }
+  #d5-old .wrap-card h3 { text-decoration: underline; text-underline-offset: 0.2em; }
+  :is(#d5, #d5-old) :is(button, .fake-button) {
+    justify-self: start;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 0.375rem;
+    background: var(--paper);
+    font: inherit;
+    font-size: 0.875rem;
+    color: inherit;
+  }
+  @media (hover: hover) {
+    #d5 .card:hover,
+    #d5-old .wrap-card:hover { border-color: var(--accent); }
+  }
+  .said { font-size: 0.875rem; }
+  .said q { font-style: italic; }
+
+  /* 6 */
+  :is(#d6, #d6-old) { min-height: 17rem; }
+  .dropdown { position: relative; justify-self: start; }
+  .dropdown > button { padding: 0.375rem 0.875rem; font: inherit; }
+  :is(#d6, #d6-old) :is(.menu, .menu-mh) {
+    position: absolute;
+    inset-block-start: 100%;
+    inset-inline-start: 0;
+    z-index: 1;
+    display: grid;
+    inline-size: 13rem;
+    padding: 0.375rem;
+    border-radius: 0 0 0.75rem 0.75rem;
+    background: white;
+    box-shadow: 0 12px 32px oklch(0.27 0.06 264 / 0.28);
+  }
+  :is(#d6, #d6-old) :is(.menu, .menu-mh) a {
+    padding: 0.375rem 0.625rem;
+    border-radius: 0.375rem;
+    color: inherit;
+    text-decoration: none;
+    outline-offset: -2px;
+  }
+  @media (hover: hover) {
+    :is(#d6, #d6-old) :is(.menu, .menu-mh) a:hover { background: var(--paper); }
+  }
+  /* the usual stand-in when the height is not known */
+  #d6-old .menu-mh { max-height: 0; padding-block: 0; overflow: hidden; visibility: hidden; }
+  #d6-old .menu-mh.is-open { max-height: 40rem; padding-block: 0.375rem; visibility: visible; }
+  @media (prefers-reduced-motion: no-preference) {
+    #d6-old .menu-mh { transition: max-height 0.25s ease-out, padding 0.25s ease-out, visibility 0.25s; }
+  }
+
+  /* 7 */
+  :is(#d7, #d7-old) { padding: 2rem; }
+  :is(#d7, #d7-old) :is(.card, .naive) {
+    max-width: 18rem;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    background: white;
+  }
+  :is(#d7, #d7-old) h3 { margin: 0 0 0.25rem; font-size: 1.0625rem; }
+  #d7-old .naive {
+    box-shadow:
+      0 1px 4px oklch(0.3 0.05 250 / 0.1),
+      0 2px 10px oklch(0.3 0.05 250 / 0.08);
+  }
+  #d7-old .naive.is-raised {
+    box-shadow:
+      0 4px 8px oklch(0.3 0.05 250 / 0.06),
+      0 12px 32px oklch(0.3 0.05 250 / 0.16);
+  }
+  @media (hover: hover) {
+    #d7-old .naive:hover {
+      box-shadow:
+        0 4px 8px oklch(0.3 0.05 250 / 0.06),
+        0 12px 32px oklch(0.3 0.05 250 / 0.16);
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    #d7-old .naive { transition: box-shadow 0.3s ease; }
+  }
+  .bars { display: grid; gap: 0.375rem; font-family: var(--font-mono); font-size: 0.75rem; }
+  .bars div { display: grid; grid-template-columns: 9.5rem 1fr 4.5rem; align-items: center; gap: 0.5rem; }
+  .bars i { display: block; block-size: 0.625rem; inline-size: calc(var(--n) / 80 * 100%); background: var(--ink); }
+  .bars.this i { background: var(--accent); }
+  .bars b { font-weight: 400; text-align: end; white-space: nowrap; }
+
+  /* 8 */
+  :is(#d8, #d8-old) { font-size: 1.5rem; font-family: var(--demo-font, system-ui); }
+  :is(#d8, #d8-old) :is(.button, .plain-button, .flex-button, .icon-button) {
+    border: 0;
+    border-radius: 0.5rem;
+    background: var(--ink);
+    font: inherit;
+    color: white;
+    white-space: nowrap;
+  }
+  #d8-old .plain-button { display: inline-block; padding: 0.75rem 1.25rem; }
+  /* the second rule of entry 33 in PRACTICES.md, which stripe.md does not have */
+  #d8 .icon-button { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; }
+  #d8 .icon-button > span { text-box: trim-both cap alphabetic; }
+  #d8 .icon-button svg { inline-size: 0.7em; block-size: 0.7em; }
+  #d8-old .flex-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    text-box: trim-both cap alphabetic;
+  }
+  /* A grid wrapper is exactly as tall as the button, so the bands can sit on its edges. */
+  .measure { position: relative; display: inline-grid; justify-self: start; }
+  .measure .band {
+    position: absolute;
+    inset-inline: 0;
+    background: oklch(0.75 0.17 60 / 0.7);
+    pointer-events: none;
+  }
+  .measure .band-top { inset-block-start: 0; border-radius: 0.5rem 0.5rem 0 0; }
+  .measure .band-bottom { inset-block-end: 0; border-radius: 0 0 0.5rem 0.5rem; }
+  .baseline-marker { display: inline-block; inline-size: 0; block-size: 0; }
+  .sample { display: grid; gap: 0.375rem; }
+  .sample .hint, .sample .readout { font-family: var(--font-mono); font-size: 0.75rem; }
+}
+</style>
+
+<!-- The proposed snippets, as written in research/stripe.md. Each rule is
+     prefixed with its demo's id so the eight can share one page. -->
+<style id="snippet-1">
+#d1 .tabs { anchor-scope: --active; }
+#d1 .tabs ul {
+  position: relative;
+  display: flex;
+}
+#d1 .tabs [aria-current="page"] { anchor-name: --active; }
+#d1 .tabs ul::after {
+  content: "";
+  position: absolute;
+  position-anchor: --active;
+  inset-block-end: 0;
+  inset-inline-start: anchor(start);
+  inline-size: anchor-size(inline);
+  block-size: 2px;
+  background: currentColor;
+}
+@media (prefers-reduced-motion: no-preference) {
+#d1 .tabs ul::after {
+    transition:
+      inset-inline-start 0.25s ease-out,
+      inline-size 0.25s ease-out;
+  }
+}
+</style>
+<style id="snippet-2">
+@keyframes overflowing {
+  from, to { --fade: 2rem; }
+}
+#d2 .scroller {
+  --fade: 0px;
+  overflow-x: auto;
+  animation: overflowing linear;
+  animation-timeline: scroll(self inline);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--fade),
+    #000 calc(100% - var(--fade)),
+    transparent
+  );
+}
+@property --fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@keyframes edges {
+  from { --fade-start: 0px; --fade-end: 2rem; }
+  10%, 90% { --fade-start: 2rem; --fade-end: 2rem; }
+  to { --fade-start: 2rem; --fade-end: 0px; }
+}
+#d2 .scroller-edges {
+  overflow-x: auto;
+  animation: edges linear;
+  animation-timeline: scroll(self inline);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+}
+</style>
+<style id="snippet-3">
+@property --progress {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+#d3 .card:focus-within { --progress: 1; }
+@media (hover: hover) {
+#d3 .card:hover { --progress: 1; }
+}
+#d3 .card .icon { rotate: calc(var(--progress) * 90deg); }
+#d3 .card .bar { scale: calc(0.25 + var(--progress) * 0.75) 1; }
+#d3 .card .more { opacity: var(--progress); }
+@media (prefers-reduced-motion: no-preference) {
+#d3 .card { transition: --progress 0.4s ease-out; }
+}
+</style>
+<style id="snippet-4">
+@property --keyline {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 0 0 transparent;
+}
+@property --ring {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 0 0 transparent;
+}
+@property --elevation {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 0 0 transparent;
+}
+#d4 .surface {
+  box-shadow: var(--keyline), var(--ring), var(--elevation);
+}
+#d4 .field { --keyline: 0 0 0 1px oklch(0.8 0 0); }
+#d4 .field:hover { --keyline: 0 0 0 1px oklch(0.6 0 0); }
+#d4 .field:focus-visible {
+  --ring: 0 0 0 4px oklch(0.7 0.15 250 / 0.5);
+  outline: 2px solid transparent;
+}
+#d4 .raised { --elevation: 0 4px 12px oklch(0 0 0 / 0.15); }
+</style>
+<style id="snippet-5">
+#d5 .card { position: relative; }
+#d5 .card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+#d5 .card-link:focus-visible { outline: none; }
+#d5 .card:has(.card-link:focus-visible) {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+#d5 .card :is(button, a:not(.card-link)) {
+  position: relative;
+  z-index: 1;
+}
+</style>
+<style id="snippet-6">
+#d6 .menu {
+  clip-path: inset(0 -3rem 100%);
+  visibility: hidden;
+}
+#d6 .menu.is-open {
+  clip-path: inset(0 -3rem -3rem);
+  visibility: visible;
+}
+@media (prefers-reduced-motion: no-preference) {
+#d6 .menu {
+    transition:
+      clip-path 0.25s ease-out,
+      visibility 0.25s;
+  }
+}
+</style>
+<style id="snippet-7">
+#d7 .card {
+  position: relative;
+  isolation: isolate;
+}
+#d7 .card::before, #d7 .card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+#d7 .card::before {
+  box-shadow:
+    0 1px 4px oklch(0.3 0.05 250 / 0.1),
+    0 2px 10px oklch(0.3 0.05 250 / 0.08);
+}
+#d7 .card::after {
+  box-shadow:
+    0 4px 8px oklch(0.3 0.05 250 / 0.06),
+    0 12px 32px oklch(0.3 0.05 250 / 0.16);
+  opacity: 0;
+}
+@media (hover: hover) {
+#d7 .card:hover::before { opacity: 0; }
+#d7 .card:hover::after { opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+#d7 .card::before, #d7 .card::after { transition: opacity 0.3s ease; }
+}
+</style>
+<style id="snippet-8">
+#d8 .button {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  text-box: trim-both cap alphabetic;
+}
+</style>
+<!-- Two demo helpers that cannot sit in a layer. Not part of a proposed snippet.
+     The registrations feed the pointer demo under candidate 3. The other two
+     rules let the Raise button apply the same state as hover in candidate 7,
+     and they have to beat the snippet's own opacity. -->
+<style>
+@property --spot-x { syntax: "<length-percentage>"; inherits: false; initial-value: 50%; }
+@property --spot-y { syntax: "<length-percentage>"; inherits: false; initial-value: 50%; }
+#d7 .card.is-raised::before { opacity: 0; }
+#d7 .card.is-raised::after { opacity: 1; }
+</style>
+</head>
+
+<body>
+<div class="guides content-grid" aria-hidden="true"><div class="breakout"></div><div></div></div>
+
+<header class="masthead content-grid">
+  <h1>Stripe candidates</h1>
+  <div class="masthead-body">
+    <p class="masthead-statement">Eight techniques from Stripe's shipped CSS. Try each one, then say yes, maybe or no.</p>
+    <div class="prose prose-soft">
+      <p>Each sheet runs the generic snippet from <a href="stripe.md"><code>research/stripe.md</code></a> next to the thing it replaces. Below the demo are the snippet, the browser support, what Stripe ships, the caveats and my recommendation.</p>
+      <p>Your choices are saved in this browser. When you are done, press <strong>Copy decisions</strong> in the bar at the bottom and paste the text back to the agent.</p>
+      <p id="storage-note" hidden>This browser blocks storage for local files. Your choices last until you close the tab, so copy them before you leave.</p>
+    </div>
+  </div>
+  <nav class="index" aria-label="Candidates">
+    <dl class="title-block mono">
+      <div><dt>Source</dt><dd>[ research/stripe.md ]</dd></div>
+      <div><dt>Decided</dt><dd>[ <span id="index-decided">0</span> / 8 ]</dd></div>
+    </dl>
+    <ol id="index-list"></ol>
+  </nav>
+</header>
+
+<main>
+
+<!-- 1 ------------------------------------------------------------------- -->
+<section class="sheet content-grid" id="c1" data-candidate="1" data-call="add">
+  <header class="sheet-head">
+    <span class="sheet-number" aria-hidden="true">01</span>
+    <h2>Indicator that slides to the active item</h2>
+    <p class="sheet-lede">Use it for the underline on a tab row or the bar beside a side nav. It replaces a script that measures the active item and writes a transform and a width.</p>
+  </header>
+  <div class="check">
+    <span class="label">Try</span>
+    <p>Click a tab in each demo. Then press the two buttons. The CSS bar keeps up with the label and the text size. The scripted bar stays where it was last measured.</p>
+    <div class="tools">
+      <button class="tool" type="button" aria-pressed="false" data-tool="d1-big">Bigger text</button>
+      <button class="tool" type="button" aria-pressed="false" data-tool="d1-long">Shorter label</button>
+    </div>
+  </div>
+  <div class="stages breakout">
+    <figure class="stage">
+      <figcaption class="stage-bar"><span>[ This entry ]</span><span>anchor positioning, no script</span></figcaption>
+      <div class="stage-body" id="d1">
+        <p class="unsupported" data-needs="anchor">This browser has no anchor positioning. The bar has no width here, so only the color marks the active tab. That is the fallback.</p>
+<nav class="tabs">
+  <ul>
+    <li><a href="/overview" aria-current="page">Overview</a></li>
+    <li><a href="/pricing">Pricing and billing</a></li>
+    <li><a href="/docs">Docs</a></li>
+  </ul>
+</nav>
+        <p class="hint">The bar reads its place and its width from the active link.</p>
+      </div>
+    </figure>
+    <figure class="stage stage-old">
+      <figcaption class="stage-bar"><span>[ Replaces ]</span><span>script measures on click</span></figcaption>
+      <div class="stage-body" id="d1-old">
+        <nav class="tabs-js">
+          <ul>
+            <li><a href="/overview" aria-current="page">Overview</a></li>
+            <li><a href="/pricing">Pricing and billing</a></li>
+            <li><a href="/docs">Docs</a></li>
+          </ul>
+          <span class="bar"></span>
+        </nav>
+        <p class="hint">It needs a ResizeObserver as well to survive the two buttons.</p>
+      </div>
+    </figure>
+  </div>
+  <div class="facts">
+    <div class="code">
+      <span class="label">Snippet, HTML then CSS</span>
+      <pre><code>&lt;nav class="tabs"&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="/overview" aria-current="page"&gt;Overview&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/pricing"&gt;Pricing and billing&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/docs"&gt;Docs&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+      <pre><code>.tabs { anchor-scope: --active; }
+
+.tabs ul {
+  position: relative;
+  display: flex;
+}
+
+.tabs [aria-current="page"] { anchor-name: --active; }
+
+.tabs ul::after {
+  content: "";
+  position: absolute;
+  position-anchor: --active;
+  inset-block-end: 0;
+  inset-inline-start: anchor(start);
+  inline-size: anchor-size(inline);
+  block-size: 2px;
+  background: currentColor;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tabs ul::after {
+    transition:
+      inset-inline-start 0.25s ease-out,
+      inline-size 0.25s ease-out;
+  }
+}</code></pre>
+    </div>
+    <dl class="fact-list">
+      <div><dt>Support</dt><dd><strong>Chrome 131 / Firefox 147 / Safari 26.</strong> The limit is <code>anchor-scope</code>. <span class="here" data-feature="anchor"></span></dd></div>
+      <div><dt>Without it</dt><dd>The <code>anchor()</code> declarations are dropped and the bar has no width, so it does not show. The active tab keeps its color. Firefox places the bar but does not slide it, according to MDN.</dd></div>
+      <div><dt>Stripe</dt><dd><code>.hds-side-nav__link[aria-current]{anchor-name:--active-nav}</code> and <code>.hds-side-nav__list:after{inset-block-start:anchor(top);height:anchor-size(height);position-anchor:--active-nav}</code>, in the home page bundle <code>c27cf5158235e02f.css</code>.</dd></div>
+      <div><dt>Caveats</dt><dd>No page I fetched renders that side nav. I saw the rules and not the component running on Stripe. Two navs need <code>anchor-scope</code>, or both bars follow the last active item.</dd></div>
+      <div><dt>My call</dt><dd><span class="call" data-call="add">Add</span>It removes a measuring script, all three engines have it, and it fails to nothing.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- 2 ------------------------------------------------------------------- -->
+<section class="sheet content-grid" id="c2" data-candidate="2" data-call="add">
+  <header class="sheet-head">
+    <span class="sheet-number" aria-hidden="true">02</span>
+    <h2>Styles that apply only when a scroller overflows</h2>
+    <p class="sheet-lede">Use it on any row that may or may not fit, such as tabs, a toolbar or a table wrapper. It replaces a ResizeObserver that compares scrollWidth with clientWidth.</p>
+  </header>
+  <div class="check">
+    <span class="label">Try</span>
+    <p>Drag the slider to make the box narrower. The fade appears when the row stops fitting. Then scroll the second row to either end.</p>
+    <div class="tools">
+      <label class="tool-range">Box width <input type="range" min="30" max="100" value="100" data-tool="d2-width"></label>
+    </div>
+  </div>
+  <div class="stages breakout">
+    <figure class="stage">
+      <figcaption class="stage-bar"><span>[ This entry ]</span><span>a scroll timeline is the switch</span></figcaption>
+      <div class="stage-body" id="d2">
+        <p class="unsupported" data-needs="scroll">This browser has no scroll timelines. Both rows scroll with no fade, which is the fallback.</p>
+        <div class="sizer">
+          <p class="hint">Both edges, on or off</p>
+          <div class="scroller"><span class="chip">Overview</span><span class="chip">Payments</span><span class="chip">Billing</span><span class="chip">Reports</span><span class="chip">Settings</span></div>
+          <p class="readout" data-readout=".scroller"></p>
+          <p class="hint">Per edge</p>
+          <div class="scroller-edges"><span class="chip">Overview</span><span class="chip">Payments</span><span class="chip">Billing</span><span class="chip">Reports</span><span class="chip">Settings</span></div>
+          <p class="readout" data-readout=".scroller-edges"></p>
+        </div>
+      </div>
+    </figure>
+    <figure class="stage stage-old">
+      <figcaption class="stage-bar"><span>[ Without it ]</span><span>the mask is always on</span></figcaption>
+      <div class="stage-body" id="d2-old">
+        <div class="sizer">
+          <p class="hint">Fades the first and last item even when everything fits</p>
+          <div class="always"><span class="chip">Overview</span><span class="chip">Payments</span><span class="chip">Billing</span><span class="chip">Reports</span><span class="chip">Settings</span></div>
+          <p class="readout" data-readout=".always"></p>
+        </div>
+        <p class="hint">The other fix is a script that toggles a class from a ResizeObserver.</p>
+      </div>
+    </figure>
+  </div>
+  <div class="facts">
+    <div class="code">
+      <span class="label">Snippet</span>
+      <pre><code>@keyframes overflowing {
+  from, to { --fade: 2rem; }
+}
+
+.scroller {
+  --fade: 0px;
+  overflow-x: auto;
+  animation: overflowing linear;
+  animation-timeline: scroll(self inline);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--fade),
+    #000 calc(100% - var(--fade)),
+    transparent
+  );
+}
+
+/* Per edge: fade only the side that still has content */
+
+@property --fade-start {
+  syntax: "&lt;length&gt;";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --fade-end {
+  syntax: "&lt;length&gt;";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes edges {
+  from { --fade-start: 0px; --fade-end: 2rem; }
+  10%, 90% { --fade-start: 2rem; --fade-end: 2rem; }
+  to { --fade-start: 2rem; --fade-end: 0px; }
+}
+
+.scroller-edges {
+  overflow-x: auto;
+  animation: edges linear;
+  animation-timeline: scroll(self inline);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+}</code></pre>
+    </div>
+    <dl class="fact-list">
+      <div><dt>Support</dt><dd><strong>Chrome 115 / Firefox Nightly only / Safari 26</strong> for <code>animation-timeline</code>. The mask works everywhere. <span class="here" data-feature="scroll"></span></dd></div>
+      <div><dt>Without it</dt><dd>The row scrolls with no fade.</dd></div>
+      <div><dt>Stripe</dt><dd><code>@keyframes detect-scroll{0%,to{--can-scroll: }}</code> and <code>.navigation-menu{animation:detect-scroll linear;animation-timeline:scroll(inline self)}</code>, in <code>5abff0f798ddf7af.css</code>. Seen live: at 1100px the German home page nav overflows and flips to <code>overflow-x: hidden</code> and <code>flex-direction: row-reverse</code>. The English one fits and does not.</dd></div>
+      <div><dt>Caveats</dt><dd>Firefox is the gap. The scroll-driven reveal under "Next" in <code>PRACTICES.md</code> waits on the same one. Stripe stores an empty value and reads it through a fallback. My version sets real values in the keyframes and tested the same. <code>animation-timeline</code> must come after <code>animation</code>.</dd></div>
+      <div><dt>My call</dt><dd><span class="call" data-call="add">Add</span>The fallback is a plain scroller, and it removes a ResizeObserver.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- 3 ------------------------------------------------------------------- -->
+<section class="sheet content-grid" id="c3" data-candidate="3" data-call="add">
+  <header class="sheet-head">
+    <span class="sheet-number" aria-hidden="true">03</span>
+    <h2>Transition a custom property with <code>@property</code></h2>
+    <p class="sheet-lede">Use it when one state change should drive several values together, or when a script feeds a number such as pointer position into CSS and the result should ease.</p>
+  </header>
+  <div class="check">
+    <span class="label">Try</span>
+    <p>Hover each card, or tap its button. On the left one number eases and the arrow, the bar and the text follow it. On the right the same rules snap. Then move the pointer over the two panels below.</p>
+  </div>
+  <div class="stages breakout">
+    <figure class="stage">
+      <figcaption class="stage-bar"><span>[ This entry ]</span><span>registered as a number</span></figcaption>
+      <div class="stage-body" id="d3">
+        <p class="unsupported" data-needs="property">This browser has no <code>@property</code>. The values flip at once, which is the fallback.</p>
+        <div class="card">
+          <span class="icon" aria-hidden="true">→</span>
+          <strong>Quarterly report</strong>
+          <div class="bar"></div>
+          <p class="more">Revenue grew in every region.</p>
+          <button type="button">Open</button>
+        </div>
+        <p class="readout" data-progress="--progress"></p>
+      </div>
+    </figure>
+    <figure class="stage stage-old">
+      <figcaption class="stage-bar"><span>[ Without it ]</span><span>same rules, not registered</span></figcaption>
+      <div class="stage-body" id="d3-old">
+        <div class="card">
+          <span class="icon" aria-hidden="true">→</span>
+          <strong>Quarterly report</strong>
+          <div class="bar"></div>
+          <p class="more">Revenue grew in every region.</p>
+          <button type="button">Open</button>
+        </div>
+        <p class="readout" data-progress="--raw"></p>
+      </div>
+    </figure>
+  </div>
+  <div class="stages breakout">
+    <figure class="stage">
+      <figcaption class="stage-bar"><span>[ Second use ]</span><span>script writes, CSS eases</span></figcaption>
+      <div class="stage-body" id="d3-spot">
+        <div class="spot" data-spot="--spot-x --spot-y">Move the pointer here</div>
+        <p class="hint">Two registered lengths with a 0.6s transition. This demo is extra. The proposed snippet is the card.</p>
+      </div>
+    </figure>
+    <figure class="stage stage-old">
+      <figcaption class="stage-bar"><span>[ Without it ]</span><span>same script, not registered</span></figcaption>
+      <div class="stage-body" id="d3-spot-old">
+        <div class="spot" data-spot="--raw-x --raw-y">Move the pointer here</div>
+        <p class="hint">The glow sticks to the pointer with no easing.</p>
+      </div>
+    </figure>
+  </div>
+  <div class="facts">
+    <div class="code">
+      <span class="label">Snippet</span>
+      <pre><code>@property --progress {
+  syntax: "&lt;number&gt;";
+  inherits: true;
+  initial-value: 0;
+}
+
+.card:focus-within { --progress: 1; }
+
+@media (hover: hover) {
+  .card:hover { --progress: 1; }
+}
+
+.card .icon { rotate: calc(var(--progress) * 90deg); }
+.card .bar { scale: calc(0.25 + var(--progress) * 0.75) 1; }
+.card .more { opacity: var(--progress); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .card { transition: --progress 0.4s ease-out; }
+}</code></pre>
+    </div>
+    <dl class="fact-list">
+      <div><dt>Support</dt><dd><strong>Chrome 85 / Firefox 128 / Safari 16.4.</strong> <span class="here" data-feature="property"></span></dd></div>
+      <div><dt>Without it</dt><dd>The value flips at once. The end states are the same.</dd></div>
+      <div><dt>Stripe</dt><dd><code>@property --hover-progress{syntax:"&lt;number&gt;";initial-value:0;inherits:true}</code> with <code>transition:--hover-progress .6s</code>, in the home page bundle <code>e5be0f41b7fa7f3f.css</code>. On <code>/contact/sales</code>, <code>--gradient-border-mouse-x</code> is a <code>&lt;length-percentage&gt;</code> that feeds a radial gradient.</dd></div>
+      <div><dt>Caveats</dt><dd>A registration is global, so names must be specific. That a script writes the pointer position on Stripe is my inference. I did not read their script.</dd></div>
+      <div><dt>My call</dt><dd><span class="call" data-call="add">Add</span>All three engines have had it since 2024 and nothing in the list covers it.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- 4 ------------------------------------------------------------------- -->
+<section class="sheet content-grid" id="c4" data-candidate="4" data-call="maybe">
+  <header class="sheet-head">
+    <span class="sheet-number" aria-hidden="true">04</span>
+    <h2>One <code>box-shadow</code> built from independent layers</h2>
+    <p class="sheet-lede">Use it on inputs, buttons and cards that combine a hairline border, a focus ring and elevation. Each state sets its own layer and none of them overwrites another.</p>
+  </header>
+  <div class="check">
+    <span class="label">Try</span>
+    <p>Hover each field, then click into it. On the left the border, the ring and the elevation show together. In the middle the nested box picks up its parent's border and shadow. On the right, focus wipes out the border and the elevation.</p>
+  </div>
+  <div class="stages breakout">
+    <figure class="stage">
+      <figcaption class="stage-bar"><span>[ This entry ]</span><span>three registered layers</span></figcaption>
+      <div class="stage-body" id="d4">
+        <p class="unsupported" data-needs="property">This browser has no <code>@property</code>. The three variables are undefined, so the fields have no border, ring or shadow at all.</p>
+        <input class="surface field raised" type="text" placeholder="Search" aria-label="Search, layered">
+        <div class="surface field raised nest">Outer sets a keyline and elevation
+          <div class="surface">Inner sets nothing and stays bare</div>
+        </div>
+      </div>
+    </figure>
+    <figure class="stage stage-old">
+      <figcaption class="stage-bar"><span>[ Without @property ]</span><span>the layers inherit</span></figcaption>
+      <div class="stage-body" id="d4-leak">
+        <input class="u-surface u-field u-raised" type="text" placeholder="Search" aria-label="Search, unregistered">
+        <div class="u-surface u-field u-raised nest">Outer sets a keyline and elevation
+          <div class="u-surface">Inner sets nothing and gets both</div>
+        </div>
+      </div>
+    </figure>
+    <figure class="stage stage-old">
+      <figcaption class="stage-bar"><span>[ Replaces ]</span><span>one box-shadow per state</span></figcaption>
+      <div class="stage-body" id="d4-old">
+        <input class="n-field" type="text" placeholder="Search" aria-label="Search, one shadow per state">
+        <p class="hint">Each state rewrites the whole property. Hover drops the elevation. Focus drops the border too.</p>
+      </div>
+    </figure>
+  </div>
+  <div class="facts">
+    <div class="code">
+      <span class="label">Snippet</span>
+      <pre><code>@property --keyline {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 0 0 transparent;
+}
+
+@property --ring {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 0 0 transparent;
+}
+
+@property --elevation {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 0 0 transparent;
+}
+
+.surface {
+  box-shadow: var(--keyline), var(--ring), var(--elevation);
+}
+
+.field { --keyline: 0 0 0 1px oklch(0.8 0 0); }
+.field:hover { --keyline: 0 0 0 1px oklch(0.6 0 0); }
+
+.field:focus-visible {
+  --ring: 0 0 0 4px oklch(0.7 0.15 250 / 0.5);
+  outline: 2px solid transparent;
+}
+
+.raised { --elevation: 0 4px 12px oklch(0 0 0 / 0.15); }</code></pre>
+    </div>
+    <dl class="fact-list">
+      <div><dt>Support</dt><dd><strong>Chrome 85 / Firefox 128 / Safari 16.4.</strong> <span class="here" data-feature="property"></span></dd></div>
+      <div><dt>Without it</dt><dd>The variables are undefined and the whole <code>box-shadow</code> drops. I checked this in Chrome by removing the three registrations.</dd></div>
+      <div><dt>Stripe</dt><dd>Inline styles on docs.stripe.com: <code>box-shadow: var(--s--top-shadow), var(--s--keyline) 0 0 0 var(--s--keyline-width), var(--s--focus-ring), var(--s--box-shadow)</code>, with 40 <code>@property</code> rules. Seen live: 35 of 87 links, buttons and inputs computed a four-layer shadow.</dd></div>
+      <div><dt>Caveats</dt><dd>Entry 20 draws the focus ring with <code>outline</code>. This draws it with a shadow and keeps a transparent outline for forced-colors mode. Tailwind's ring and shadow utilities already compose this way, so it adds little there.</dd></div>
+      <div><dt>My call</dt><dd><span class="call" data-call="maybe">Maybe</span>Strong in a hand-written design system, redundant where Tailwind is in use.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- 5 ------------------------------------------------------------------- -->
+<section class="sheet content-grid" id="c5" data-candidate="5" data-call="add">
+  <header class="sheet-head">
+    <span class="sheet-number" aria-hidden="true">05</span>
+    <h2>Whole card clickable from one link</h2>
+    <p class="sheet-lede">Use it for cards, list rows and tiles where the whole area should navigate. It replaces a link wrapped around the card and a click handler on a div.</p>
+  </header>
+  <div class="check">
+    <span class="label">Try</span>
+    <p>Click the text, the corner and the Save button of the left card and watch the line under it. Then press Tab until focus reaches each card. On the left the ring is on the card and Save is its own stop.</p>
+  </div>
+  <div class="stages breakout">
+    <figure class="stage">
+      <figcaption class="stage-bar"><span>[ This entry ]</span><span>the link's ::after covers the card</span></figcaption>
+      <div class="stage-body" id="d5">
+        <p class="unsupported" data-needs="has">This browser has no <code>:has()</code>. The card still works, but the focus ring is missing.</p>
+<article class="card">
+  <h3><a class="card-link" href="/reports/q3">Quarterly report</a></h3>
+  <p>Revenue grew in every region.</p>
+  <button type="button">Save</button>
+</article>
+        <p class="readout" id="d5-log">Nothing clicked yet.</p>
+        <p class="said">A screen reader announces: link, <q id="d5-name"></q></p>
+      </div>
+    </figure>
+    <figure class="stage stage-old">
+      <figcaption class="stage-bar"><span>[ Replaces ]</span><span>a link around everything</span></figcaption>
+      <div class="stage-body" id="d5-old">
+        <a class="wrap-card" href="/reports/q3">
+          <h3>Quarterly report</h3>
+          <p>Revenue grew in every region.</p>
+          <span class="fake-button">Save</span>
+        </a>
+        <p class="readout" id="d5-old-log">Nothing clicked yet.</p>
+        <p class="said">A screen reader announces: link, <q id="d5-old-name"></q></p>
+        <p class="hint">A real button cannot go inside a link, so Save here is only a picture of one.</p>
+      </div>
+    </figure>
+  </div>
+  <div class="facts">
+    <div class="code">
+      <span class="label">Snippet, HTML then CSS</span>
+      <pre><code>&lt;article class="card"&gt;
+  &lt;h3&gt;&lt;a class="card-link" href="/reports/q3"&gt;Quarterly report&lt;/a&gt;&lt;/h3&gt;
+  &lt;p&gt;Revenue grew in every region.&lt;/p&gt;
+  &lt;button type="button"&gt;Save&lt;/button&gt;
+&lt;/article&gt;</code></pre>
+      <pre><code>.card { position: relative; }
+
+.card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.card-link:focus-visible { outline: none; }
+
+.card:has(.card-link:focus-visible) {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.card :is(button, a:not(.card-link)) {
+  position: relative;
+  z-index: 1;
+}</code></pre>
+    </div>
+    <dl class="fact-list">
+      <div><dt>Support</dt><dd><strong>Chrome 105 / Firefox 121 / Safari 15.4</strong>, for <code>:has()</code>. <span class="here" data-feature="has"></span></dd></div>
+      <div><dt>Without it</dt><dd>No current browser lacks <code>:has()</code>. An old one would lose the focus ring, because the link's own outline is switched off.</dd></div>
+      <div><dt>Stripe</dt><dd><code>.hds-resource-card__link{position:absolute;inset:0;z-index:2}</code> and <code>.hds-resource-card:has(.hds-resource-card__link:focus-visible){outline:var(--hds-focus-outline)}</code>, in <code>c27cf5158235e02f.css</code>. Seen live on <code>/billing</code>: the link's box equals the card's, 400 by 215.5px.</dd></div>
+      <div><dt>Caveats</dt><dd>Stripe stretches the link itself. I stretch its <code>::after</code>, Heydon Pickering's form, so the link text stays in the flow. Text under the overlay cannot be selected.</dd></div>
+      <div><dt>My call</dt><dd><span class="call" data-call="add">Add</span>A common need, it works everywhere, and it is better for screen readers than the wrapper.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- 6 ------------------------------------------------------------------- -->
+<section class="sheet content-grid" id="c6" data-candidate="6" data-call="add">
+  <header class="sheet-head">
+    <span class="sheet-number" aria-hidden="true">06</span>
+    <h2>Reveal with <code>clip-path</code></h2>
+    <p class="sheet-lede">Use it for dropdowns, menus and panels that open over the page and whose height is not known. It unrolls the panel without animating height, in every browser.</p>
+  </header>
+  <div class="check">
+    <span class="label">Try</span>
+    <p>Open and close both menus a few times. The left one unrolls at an even pace and keeps its shadow. The right one opens too fast and waits before it closes, because its transition runs over 40rem of height it does not have.</p>
+    <div class="tools">
+      <button class="tool" type="button" aria-pressed="false" data-tool="d6-both">Toggle both</button>
+    </div>
+  </div>
+  <div class="stages breakout">
+    <figure class="stage">
+      <figcaption class="stage-bar"><span>[ This entry ]</span><span>clip-path: inset()</span></figcaption>
+      <div class="stage-body" id="d6">
+        <div class="dropdown">
+          <button type="button" aria-expanded="false" data-menu>Options</button>
+          <div class="menu"><a href="#c6">Rename</a><a href="#c6">Duplicate</a><a href="#c6">Move to folder</a><a href="#c6">Archive</a><a href="#c6">Delete</a></div>
+        </div>
+      </div>
+    </figure>
+    <figure class="stage stage-old">
+      <figcaption class="stage-bar"><span>[ Replaces ]</span><span>max-height: 0 to 40rem</span></figcaption>
+      <div class="stage-body" id="d6-old">
+        <div class="dropdown">
+          <button type="button" aria-expanded="false" data-menu>Options</button>
+          <div class="menu-mh"><a href="#c6">Rename</a><a href="#c6">Duplicate</a><a href="#c6">Move to folder</a><a href="#c6">Archive</a><a href="#c6">Delete</a></div>
+        </div>
+      </div>
+    </figure>
+  </div>
+  <div class="facts">
+    <div class="code">
+      <span class="label">Snippet</span>
+      <pre><code>.menu {
+  clip-path: inset(0 -3rem 100%);
+  visibility: hidden;
+}
+
+.menu.is-open {
+  clip-path: inset(0 -3rem -3rem);
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .menu {
+    transition:
+      clip-path 0.25s ease-out,
+      visibility 0.25s;
+  }
+}</code></pre>
+    </div>
+    <dl class="fact-list">
+      <div><dt>Support</dt><dd><strong>Chrome 55 / Firefox 54 / Safari 12.1.</strong> <span class="here" data-feature="clip"></span></dd></div>
+      <div><dt>Without it</dt><dd>Every current browser has it.</dd></div>
+      <div><dt>Stripe</dt><dd><code>.hds-navigation-menu__popup{clip-path:inset(0 -60px 100% -60px round …)}</code> and <code>[data-status=open]{clip-path:inset(0 -60px -60px -60px round …)}</code>, in <code>5abff0f798ddf7af.css</code>. Seen live: the Products menu opens with a 0.2s <code>clip-path</code> transition and its height reads 698px the whole time.</dd></div>
+      <div><dt>Caveats</dt><dd>Only for panels that overlap the page. In the normal flow a closed panel leaves a gap, so an accordion still uses entry 4. The <code>visibility</code> part is my addition. Stripe opens the menu from a script.</dd></div>
+      <div><dt>My call</dt><dd><span class="call" data-call="add">Add</span>It works everywhere, needs no height, and Stripe's own fallback was the max-height trick on the right.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- 7 ------------------------------------------------------------------- -->
+<section class="sheet content-grid" id="c7" data-candidate="7" data-call="maybe">
+  <header class="sheet-head">
+    <span class="sheet-number" aria-hidden="true">07</span>
+    <h2>Shadow change that fades and does not repaint</h2>
+    <p class="sheet-lede">Use it on cards that lift on hover, most of all in a grid of many cards or with a large blur.</p>
+  </header>
+  <div class="check">
+    <span class="label">Try</span>
+    <p>Hover each card, or press the button. They look the same, and that is the point. The difference is how much the browser paints, which the bars show.</p>
+    <div class="tools">
+      <button class="tool" type="button" aria-pressed="false" data-tool="d7-raise">Raise both</button>
+    </div>
+  </div>
+  <div class="stages breakout">
+    <figure class="stage">
+      <figcaption class="stage-bar"><span>[ This entry ]</span><span>two shadows, opacity only</span></figcaption>
+      <div class="stage-body" id="d7">
+        <div class="card"><h3>Cross-fade</h3><p>Each shadow is painted once.</p></div>
+        <div class="bars this" role="img" aria-label="Cross-fade: 12 paint events and about 6 commits">
+          <div><span>Paint events</span><i style="--n: 12"></i><b>12</b></div>
+          <div><span>Main-thread commits</span><i style="--n: 6.5"></i><b>6 to 7</b></div>
+        </div>
+      </div>
+    </figure>
+    <figure class="stage stage-old">
+      <figcaption class="stage-bar"><span>[ Replaces ]</span><span>transition: box-shadow</span></figcaption>
+      <div class="stage-body" id="d7-old">
+        <div class="naive"><h3>Plain transition</h3><p>The shadow is repainted on every frame.</p></div>
+        <div class="bars" role="img" aria-label="Plain transition: 76 to 80 paint events and 38 to 40 commits">
+          <div><span>Paint events</span><i style="--n: 78"></i><b>76 to 80</b></div>
+          <div><span>Main-thread commits</span><i style="--n: 39"></i><b>38 to 40</b></div>
+        </div>
+      </div>
+    </figure>
+  </div>
+  <p class="prose prose-soft">The bars are my measurement and do not update live. I traced one change in and one change out, 0.3s each, twice, in Chrome 150 on 2026-10-01. A page cannot count its own paints.</p>
+  <div class="facts">
+    <div class="code">
+      <span class="label">Snippet</span>
+      <pre><code>.card {
+  position: relative;
+  isolation: isolate;
+}
+
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.card::before {
+  box-shadow:
+    0 1px 4px oklch(0.3 0.05 250 / 0.1),
+    0 2px 10px oklch(0.3 0.05 250 / 0.08);
+}
+
+.card::after {
+  box-shadow:
+    0 4px 8px oklch(0.3 0.05 250 / 0.06),
+    0 12px 32px oklch(0.3 0.05 250 / 0.16);
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .card:hover::before { opacity: 0; }
+  .card:hover::after { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card::before,
+  .card::after { transition: opacity 0.3s ease; }
+}</code></pre>
+    </div>
+    <dl class="fact-list">
+      <div><dt>Support</dt><dd><strong>Every browser.</strong> <span class="here" data-feature="always"></span></dd></div>
+      <div><dt>Without it</dt><dd>Does not apply.</dd></div>
+      <div><dt>Stripe</dt><dd><code>.hds-resource-card:before{box-shadow:var(--hds-shadow-xs);opacity:1}</code> and <code>.hds-resource-card:after{box-shadow:var(--hds-shadow-md);opacity:0}</code>, in <code>c27cf5158235e02f.css</code>. Seen live on <code>/billing</code>: the card has no shadow of its own, and hover swaps the two opacities.</dd></div>
+      <div><dt>Caveats</dt><dd>It takes both pseudo-elements of the card, so it cannot share an element with entry 27. The saving was about 2ms of paint per card per hover. That Stripe does it for paint cost is my inference.</dd></div>
+      <div><dt>My call</dt><dd><span class="call" data-call="maybe">Maybe</span>Worth it for a grid of cards. For one card the plain transition is fine.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- 8 ------------------------------------------------------------------- -->
+<section class="sheet content-grid" id="c8" data-candidate="8" data-call="maybe">
+  <header class="sheet-head">
+    <span class="sheet-number" aria-hidden="true">08</span>
+    <h2>Label centered on its letters with <code>text-box</code></h2>
+    <p class="sheet-lede">Use it on single-line labels in buttons, badges and chips, so equal padding looks equal in any font.</p>
+  </header>
+  <div class="callout">
+    <span class="label">[ Where this stands ]</span>
+    <p><code>PRACTICES.md</code> lists <code>* { text-box: trim-both cap alphabetic }</code> under "Left out on purpose". That rule trimmed every text block on the page. A one-line paragraph went from 25px tall to 11px.</p>
+    <p>This candidate is the scoped version. It is one declaration on the single-line labels you pick, and their padding is set with the trim in mind. Nothing else on the page changes, so the earlier decision stands either way.</p>
+    <p><strong>It is already in <code>PRACTICES.md</code> as entry 33.</strong> It was added while this page was being built, with a second rule for a button that holds an icon. A yes here keeps it. A no means it should come out again.</p>
+  </div>
+  <div class="check">
+    <span class="label">Try</span>
+    <p>The orange bands are the space above the capitals and below the baseline. Change the font. On the left the two bands stay equal. On the right they drift apart, and the third button shows the declaration doing nothing on a flex container.</p>
+    <div class="tools">
+      <label class="tool-select">Font
+        <select data-tool="d8-font">
+          <option value="system-ui, sans-serif">system-ui</option>
+          <option value="Menlo, Consolas, monospace">Menlo or monospace</option>
+          <option value="'Avenir Next', Avenir, sans-serif">Avenir Next</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+          <option value="'Gill Sans', 'Gill Sans MT', sans-serif">Gill Sans</option>
+        </select>
+      </label>
+    </div>
+  </div>
+  <div class="stages breakout">
+    <figure class="stage">
+      <figcaption class="stage-bar"><span>[ This entry ]</span><span>padding starts at the letters</span></figcaption>
+      <div class="stage-body" id="d8">
+        <p class="unsupported" data-needs="textbox">This browser has no <code>text-box</code>. The button keeps its normal line box, so it looks like the first one on the right.</p>
+        <div class="sample">
+          <span class="measure"><button class="button" type="button">Save changes</button></span>
+          <p class="readout"></p>
+        </div>
+        <div class="sample">
+          <p class="hint">Entry 33's rule for a button with an icon: inline-flex, with text-box on the span</p>
+          <span class="measure"><button class="icon-button" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Save changes</span></button></span>
+          <p class="readout"></p>
+        </div>
+      </div>
+    </figure>
+    <figure class="stage stage-old">
+      <figcaption class="stage-bar"><span>[ Without it ]</span><span>same padding, untrimmed</span></figcaption>
+      <div class="stage-body" id="d8-old">
+        <div class="sample">
+          <span class="measure"><button class="plain-button" type="button">Save changes</button></span>
+          <p class="readout"></p>
+        </div>
+        <div class="sample">
+          <p class="hint">display: inline-flex with text-box on the button, as Stripe ships it</p>
+          <span class="measure"><button class="flex-button" type="button"><span>Save changes</span></button></span>
+          <p class="readout"></p>
+        </div>
+      </div>
+    </figure>
+  </div>
+  <div class="facts">
+    <div class="code">
+      <span class="label">Snippet</span>
+      <pre><code>.button {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  text-box: trim-both cap alphabetic;
+}</code></pre>
+    </div>
+    <dl class="fact-list">
+      <div><dt>Support</dt><dd><strong>Chrome 133 / Firefox 154 / Safari 18.2.</strong> <span class="here" data-feature="textbox"></span></dd></div>
+      <div><dt>Without it</dt><dd>The label keeps its normal line box. If you raised the padding to suit the trimmed label, the button is taller there.</dd></div>
+      <div><dt>Stripe</dt><dd><code>.hds-button{display:inline-flex;text-box:trim-both cap alphabetic}</code>, in <code>c27cf5158235e02f.css</code>, next to a padding of 15.5px above and 16.5px below.</dd></div>
+      <div><dt>Caveats</dt><dd>Stripe's own declaration is inert. Their button is a flex container, and switching <code>text-box</code> off on 13 buttons changed no height. I infer the intent from the declaration. The gain is small, from nothing to 1.7px at 16px depending on the font, and the button gets shorter, so the padding has to be set again. It is already entry 33.</dd></div>
+      <div><dt>My call</dt><dd><span class="call" data-call="maybe">Maybe</span>Real but small. It pays off with a brand font whose metrics are uneven. I would not have added it ahead of your call.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- Summary ------------------------------------------------------------- -->
+<section class="sheet sheet-plain content-grid" id="summary">
+  <header class="sheet-head">
+    <h2>Decisions</h2>
+    <p class="sheet-lede" id="summary-tally" aria-live="polite"></p>
+  </header>
+  <ol class="summary-list" id="summary-list"></ol>
+  <div class="copy-block">
+    <div class="copy-row">
+      <button class="button-ink" type="button" data-copy>Copy decisions</button>
+      <span class="copy-status" data-copy-status aria-live="polite"></span>
+    </div>
+    <textarea id="copy-text" readonly aria-label="Decisions as plain text" spellcheck="false"></textarea>
+  </div>
+</section>
+
+<!-- Collapsed -------------------------------------------------------------- -->
+<section class="tail content-grid">
+  <details class="fold">
+    <summary>Two surprises in Stripe's own CSS</summary>
+    <div class="prose prose-soft">
+      <p><strong>The <code>text-box</code> declaration on Stripe's buttons does nothing.</strong> <code>.hds-button</code> is a flex container, and <code>text-box</code> has no effect on one. I switched it off on 13 buttons on the home page and no height changed. The uneven padding, 15.5px above and 16.5px below, does the centering.</p>
+      <p><strong><code>@media (prefers-reduced-motion: reduced)</code> ships on <code>/payments</code> and <code>/pricing</code>.</strong> <code>reduced</code> is not a valid value, so the rule never applies and the mobile menu keeps its motion. Opt-in motion, as in entry 22, cannot fail this way.</p>
+      <p>Also worth knowing: Stripe uses no <code>oklch()</code>, no <code>light-dark()</code> and no <code>prefers-color-scheme</code>. Colors are hex tokens and dark sections use a class.</p>
+    </div>
+  </details>
+  <details class="fold">
+    <summary>Looked at and rejected</summary>
+    <div class="prose prose-soft">
+      <h3>Covered by an existing entry</h3>
+      <ul>
+        <li><strong>Accordion.</strong> <code>::details-content</code> with <code>allow-discrete</code> and an <code>interpolate-size</code> branch. Same as entry 4.</li>
+        <li><strong>Hover gating.</strong> <code>(hover: hover)</code> and <code>(pointer: fine)</code>. Entry 21. The older system also gives touch a pressed state with <code>(pointer: coarse) { :active }</code>. Entry 31 is press feedback.</li>
+        <li><strong>Reduced motion.</strong> 55 <code>no-preference</code> queries against 12 <code>reduce</code> on the home page. Entry 22.</li>
+        <li><strong>Focus.</strong> A 3px translucent outline with a 3px offset on <code>:focus-visible</code>. Entry 20.</li>
+        <li><strong>Tabular numbers.</strong> Entry 28. Stripe adds a tight variant with <code>letter-spacing: -0.03em</code>, which could be one more line there.</li>
+        <li><strong>Container queries, subgrid, logical properties, scroll snap, <code>overflow: clip</code>, <code>scrollbar-gutter</code>, <code>html:has(…)</code> scroll lock.</strong> All present, all in entries 9, 12, 13, 16, 17 and 18.</li>
+        <li><strong>Popover placement.</strong> <code>anchor()</code> with side and alignment set by a script. Entry 26 needs no script.</li>
+      </ul>
+      <h3>Not at the level of properties and values</h3>
+      <ul>
+        <li><strong>Cascade layers.</strong> <code>@layer reset, base, app</code> with <code>:where()</code> 109 times. It is stylesheet architecture, and Tailwind and StyleX manage the cascade their own way.</li>
+        <li><strong>The layout grid.</strong> 4, 8 and 12 columns with span tokens that change at breakpoints. The older grid depends on a script-measured scrollbar width. Entry 1 needs neither.</li>
+        <li><strong>Type and spacing scale.</strong> Fixed <code>rem</code> tokens redeclared at 640px and 940px. A breakpoint ladder, which entry 7 replaces.</li>
+      </ul>
+      <h3>Brand design, or behind the list already</h3>
+      <ul>
+        <li><strong>Color.</strong> Hex tokens, a <code>.hds-mode--dark</code> class, <code>color-mix()</code> in sRGB. Entries 2 and 8 are ahead of it.</li>
+        <li><strong>Shadow tokens.</strong> Two blue-tinted layers per elevation. Sound, but it is their look.</li>
+        <li><strong>Easing.</strong> Two curves cover most of it and there is no <code>linear()</code>. Entry 30 has motion tokens.</li>
+        <li><strong>Gradient border and spinner.</strong> <code>mask-composite: exclude</code> over a conic gradient. Decoration. The reusable part is candidate 3.</li>
+        <li><strong>Card that grows on hover.</strong> An oversized layer whose <code>clip-path</code> animates. A one-off. The mechanism is candidate 6.</li>
+      </ul>
+      <h3>Too narrow or too fragile</h3>
+      <ul>
+        <li><strong>Bottom-sheet dialog.</strong> Scroll snap with a named scroll timeline that fades the overlay. It still needs a script, and Firefox has no scroll timelines.</li>
+        <li><strong><code>:lang()</code> type overrides.</strong> Weight changes for Japanese and Chinese, specific to their font.</li>
+        <li><strong><code>@font-face</code> inside <code>@media</code>.</strong> <code>font-display: block</code> on wide screens and <code>swap</code> on narrow ones.</li>
+        <li><strong>Real superscripts.</strong> <code>font-feature-settings: "sups"</code>. Works only when the font has the glyphs.</li>
+        <li><strong>Half-pixel nudges and per-browser color patches.</strong> Hand tuning behind <code>min-resolution</code>, <code>@-moz-document</code> and <code>-webkit-touch-callout</code>.</li>
+        <li><strong>Sail's support test and font-metric tokens.</strong> Workarounds for browsers before <code>@property</code> and <code>text-box</code>.</li>
+      </ul>
+      <p>The full list with reasons and URLs is in <a href="stripe.md"><code>research/stripe.md</code></a>.</p>
+    </div>
+  </details>
+  <p class="prose prose-soft mono" style="margin-block-start: var(--space-block)">Every demo was tested in Chrome 150. Safari and Firefox support comes from MDN browser-compat-data, read on 2026-10-01.</p>
+</section>
+
+</main>
+
+<div class="tally" role="region" aria-label="Decisions so far">
+  <nav class="tally-dots" id="tally-dots" aria-label="Jump to a candidate"></nav>
+  <span class="tally-count" id="tally-count"></span>
+  <button type="button" data-copy>Copy decisions</button>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+
+  /* Feature tests ---------------------------------------------------------- */
+
+  const supports = (...tests) =>
+    typeof CSS !== "undefined" && typeof CSS.supports === "function" && tests.every((t) => CSS.supports(t));
+
+  const features = {
+    anchor: supports("anchor-name: --a", "anchor-scope: --a"),
+    scroll: supports("animation-timeline: scroll()"),
+    property: "CSSPropertyRule" in window,
+    has: supports("selector(:has(a))"),
+    clip: supports("clip-path: inset(0 -1rem 100%)"),
+    textbox: supports("text-box: trim-both cap alphabetic"),
+    always: true,
+  };
+
+  for (const [name, ok] of Object.entries(features)) {
+    document.documentElement.classList.toggle(`no-${name}`, !ok);
+  }
+  for (const el of $$("[data-feature]")) {
+    const ok = features[el.dataset.feature];
+    el.dataset.ok = String(ok);
+    el.textContent = ok ? "This browser has it." : "This browser lacks it. The demo shows the fallback.";
+  }
+
+  /* Decisions -------------------------------------------------------------- */
+
+  const KEY = "good-css:stripe-candidates:v1";
+  const CHOICES = ["yes", "maybe", "no"];
+  const sheets = $$("section[data-candidate]");
+  const candidates = sheets.map((el) => ({
+    n: el.dataset.candidate,
+    el,
+    call: el.dataset.call,
+    title: $("h2", el).textContent.replace(/\s+/g, " ").trim(),
+    titleHTML: $("h2", el).innerHTML,
+  }));
+
+  let state = {};
+  let stored = true;
+  try {
+    localStorage.setItem(`${KEY}:probe`, "1");
+    localStorage.removeItem(`${KEY}:probe`);
+    state = JSON.parse(localStorage.getItem(KEY) || "{}") || {};
+  } catch {
+    stored = false;
+  }
+  $("#storage-note").hidden = stored;
+
+  const entry = (n) => state[n] || (state[n] = { choice: null, note: "" });
+  const choiceOf = (n) => (CHOICES.includes(state[n]?.choice) ? state[n].choice : "open");
+  const label = { yes: "Yes", maybe: "Maybe", no: "No", open: "Open" };
+
+  const persist = () => {
+    if (stored) {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(state));
+      } catch {
+        stored = false;
+        $("#storage-note").hidden = false;
+      }
+    }
+    render();
+  };
+
+  const plainText = () => {
+    const lines = candidates.map((c) => {
+      const choice = choiceOf(c.n);
+      const note = (state[c.n]?.note || "").replace(/\s+/g, " ").trim();
+      const word = choice === "open" ? "UNDECIDED" : choice.toUpperCase();
+      return `${c.n}. ${c.title}: ${word}${note ? `. Note: ${note}` : ""}`;
+    });
+    const t = tally();
+    lines.push(`Tally: ${t.yes} yes, ${t.maybe} maybe, ${t.no} no, ${t.open} undecided`);
+    return lines.join("\n");
+  };
+
+  const tally = () => {
+    const t = { yes: 0, maybe: 0, no: 0, open: 0 };
+    for (const c of candidates) t[choiceOf(c.n)] += 1;
+    return t;
+  };
+
+  // Build the controls once.
+  for (const c of candidates) {
+    const set = document.createElement("fieldset");
+    set.className = "decide";
+    set.innerHTML = `
+      <legend class="label">Your decision on ${c.n.padStart(2, "0")}</legend>
+      <div class="seg">
+        ${CHOICES.map(
+          (v) => `<label><input type="radio" name="choice-${c.n}" value="${v}"><span>${label[v]}</span></label>`,
+        ).join("")}
+      </div>
+      <label class="note"><span class="label">Note</span><input type="text" name="note-${c.n}" maxlength="240" placeholder="Optional, one line" autocomplete="off"></label>
+      <button class="clear" type="button">Clear</button>`;
+    c.el.append(set);
+    c.controls = set;
+
+    set.addEventListener("change", (e) => {
+      if (e.target.type === "radio") {
+        entry(c.n).choice = e.target.value;
+        persist();
+      }
+    });
+    $(".note input", set).addEventListener("input", (e) => {
+      entry(c.n).note = e.target.value;
+      persist();
+    });
+    $(".clear", set).addEventListener("click", () => {
+      delete state[c.n];
+      $(".note input", set).value = "";
+      persist();
+    });
+    $(".note input", set).value = state[c.n]?.note || "";
+  }
+
+  $("#index-list").innerHTML = candidates
+    .map(
+      (c) => `<li><a href="#c${c.n}" title="${c.title.replace(/"/g, "&quot;")}">
+        <span class="index-number">${c.n.padStart(2, "0")}</span>
+        <span class="index-title">${c.titleHTML}</span>
+        <span class="mark" data-mark="${c.n}"></span></a></li>`,
+    )
+    .join("");
+  $("#tally-dots").innerHTML = candidates.map((c) => `<a href="#c${c.n}" data-dot="${c.n}">${c.n}</a>`).join("");
+  $("#summary-list").innerHTML = candidates
+    .map(
+      (c) => `<li><span class="index-number">${c.n.padStart(2, "0")}</span>
+        <a href="#c${c.n}">${c.titleHTML}</a>
+        <span class="mark" data-mark="${c.n}"></span>
+        <span class="summary-call">my call: ${c.call}</span>
+        <span class="summary-note" data-note="${c.n}"></span></li>`,
+    )
+    .join("");
+
+  function render() {
+    const t = tally();
+    for (const c of candidates) {
+      const choice = choiceOf(c.n);
+      for (const radio of $$('input[type="radio"]', c.controls)) radio.checked = radio.value === choice;
+      $(".clear", c.controls).disabled = choice === "open" && !(state[c.n]?.note || "").trim();
+      for (const mark of $$(`[data-mark="${c.n}"]`)) {
+        mark.dataset.choice = choice;
+        mark.textContent = label[choice];
+      }
+      const dot = $(`[data-dot="${c.n}"]`);
+      dot.dataset.choice = choice;
+      dot.setAttribute("aria-label", `Candidate ${c.n}, ${label[choice]}`);
+      $(`[data-note="${c.n}"]`).textContent = (state[c.n]?.note || "").trim();
+    }
+    const count = `${t.yes} yes · ${t.maybe} maybe · ${t.no} no · ${t.open} open`;
+    $("#tally-count").textContent = count;
+    $("#summary-tally").textContent =
+      t.open === 0 ? `All eight decided. ${count}.` : `${8 - t.open} of 8 decided. ${count}.`;
+    $("#index-decided").textContent = String(8 - t.open);
+    $("#copy-text").value = plainText();
+  }
+
+  async function copy(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // No clipboard API on this page, so fall back to selecting the text.
+      const area = $("#copy-text");
+      area.focus();
+      area.select();
+      try {
+        return document.execCommand("copy");
+      } catch {
+        return false;
+      }
+    }
+  }
+
+  let statusTimer;
+  for (const button of $$("[data-copy]")) {
+    button.addEventListener("click", async () => {
+      const ok = await copy(plainText());
+      const message = ok ? "Copied." : "Could not copy. Select the text below and copy it by hand.";
+      for (const status of $$("[data-copy-status]")) status.textContent = message;
+      const original = "Copy decisions";
+      for (const b of $$("[data-copy]")) b.textContent = ok ? "Copied" : original;
+      clearTimeout(statusTimer);
+      statusTimer = setTimeout(() => {
+        for (const b of $$("[data-copy]")) b.textContent = original;
+        for (const status of $$("[data-copy-status]")) status.textContent = "";
+      }, 2500);
+    });
+  }
+
+  render();
+
+  /* Demo wiring. None of this is part of a proposed snippet, except where a
+     comparison demo is the script the snippet replaces. ---------------------- */
+
+  const pressed = (button, on) => button.setAttribute("aria-pressed", String(on));
+  const isPressed = (button) => button.getAttribute("aria-pressed") === "true";
+  const tool = (name) => $(`[data-tool="${name}"]`);
+
+  // 1. Tabs. The links go nowhere on this page, so the click only moves aria-current.
+  const measureBar = (nav) => {
+    const list = $("ul", nav).getBoundingClientRect();
+    const link = $('[aria-current="page"]', nav).getBoundingClientRect();
+    const bar = $(".bar", nav);
+    bar.style.setProperty("--x", `${link.left - list.left}px`);
+    bar.style.setProperty("--w", `${link.width}px`);
+  };
+  for (const nav of $$("#d1 .tabs, #d1-old .tabs-js")) {
+    nav.addEventListener("click", (e) => {
+      const link = e.target.closest("a");
+      if (!link) return;
+      e.preventDefault();
+      $("[aria-current]", nav)?.removeAttribute("aria-current");
+      link.setAttribute("aria-current", "page");
+      if (nav.matches(".tabs-js")) measureBar(nav);
+    });
+  }
+  measureBar($("#d1-old .tabs-js"));
+  tool("d1-big").addEventListener("click", (e) => {
+    const on = !isPressed(e.currentTarget);
+    pressed(e.currentTarget, on);
+    for (const stage of $$("#d1, #d1-old")) stage.classList.toggle("is-big", on);
+  });
+  tool("d1-long").addEventListener("click", (e) => {
+    const on = !isPressed(e.currentTarget);
+    pressed(e.currentTarget, on);
+    for (const link of $$('#d1 a[href="/pricing"], #d1-old a[href="/pricing"]')) {
+      link.textContent = on ? "Pricing" : "Pricing and billing";
+    }
+  });
+
+  // 2. The slider sets a width. The readouts are instruments, not the technique.
+  const readouts = $$("[data-readout]").map((out) => ({ out, box: $(out.dataset.readout, out.parentElement) }));
+  const readScroller = () => {
+    for (const { out, box } of readouts) {
+      const cs = getComputedStyle(box);
+      const parts = [`content ${box.scrollWidth}px`, `box ${box.clientWidth}px`];
+      if (box.matches(".scroller")) parts.push(`--fade: ${cs.getPropertyValue("--fade").trim() || "unset"}`);
+      if (box.matches(".scroller-edges")) {
+        parts.push(`start ${cs.getPropertyValue("--fade-start").trim() || "unset"}`);
+        parts.push(`end ${cs.getPropertyValue("--fade-end").trim() || "unset"}`);
+      }
+      out.textContent = parts.join(" · ");
+    }
+  };
+  tool("d2-width").addEventListener("input", (e) => {
+    for (const sizer of $$("#d2 .sizer, #d2-old .sizer")) sizer.style.setProperty("--w", `${e.target.value}%`);
+    requestAnimationFrame(readScroller);
+  });
+  for (const { box } of readouts) box.addEventListener("scroll", () => requestAnimationFrame(readScroller), { passive: true });
+  if ("ResizeObserver" in window) {
+    const observer = new ResizeObserver(() => requestAnimationFrame(readScroller));
+    for (const { box } of readouts) observer.observe(box);
+  }
+  readScroller();
+
+  // 3. Print the number while it moves, and feed the pointer position to the panels.
+  // An unregistered property fires no transition events, so the readout polls,
+  // and only while the cards are on screen.
+  const meters = $$("[data-progress]").map((out) => ({ out, card: $(".card", out.parentElement), name: out.dataset.progress }));
+  const readProgress = () => {
+    for (const { out, card, name } of meters) {
+      const value = Number.parseFloat(getComputedStyle(card).getPropertyValue(name)) || 0;
+      const text = `${name}: ${value.toFixed(2)}`;
+      if (out.textContent !== text) out.textContent = text;
+    }
+  };
+  let metering = 0;
+  const meterLoop = () => {
+    readProgress();
+    metering = requestAnimationFrame(meterLoop);
+  };
+  readProgress();
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(([hit]) => {
+      cancelAnimationFrame(metering);
+      if (hit.isIntersecting) meterLoop();
+    }).observe($("#d3").closest(".stages"));
+  }
+  for (const spot of $$("[data-spot]")) {
+    const [x, y] = spot.dataset.spot.split(" ");
+    spot.addEventListener("pointermove", (e) => {
+      const r = spot.getBoundingClientRect();
+      spot.style.setProperty(x, `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}%`);
+      spot.style.setProperty(y, `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`);
+    });
+    spot.addEventListener("pointerleave", () => {
+      spot.style.removeProperty(x);
+      spot.style.removeProperty(y);
+    });
+  }
+
+  // 5. Links and buttons report what was clicked and never leave the page.
+  const counter = (out) => {
+    const counts = {};
+    return (what) => {
+      counts[what] = (counts[what] || 0) + 1;
+      out.textContent = `${what}, ${counts[what]} ${counts[what] === 1 ? "time" : "times"}.`;
+    };
+  };
+  const logNew = counter($("#d5-log"));
+  const logOld = counter($("#d5-old-log"));
+  $("#d5").addEventListener("click", (e) => {
+    if (e.target.closest("button")) return logNew("Save pressed");
+    if (e.target.closest(".card-link")) {
+      e.preventDefault();
+      logNew("Link followed");
+    }
+  });
+  $("#d5-old").addEventListener("click", (e) => {
+    if (e.target.closest(".wrap-card")) {
+      e.preventDefault();
+      logOld(e.target.closest(".fake-button") ? "Save clicked, but the link was followed" : "Link followed");
+    }
+  });
+  const spoken = (el) => el.textContent.replace(/\s+/g, " ").trim();
+  $("#d5-name").textContent = spoken($("#d5 .card-link"));
+  $("#d5-old-name").textContent = spoken($("#d5-old .wrap-card"));
+
+  // 6. Menus.
+  const setMenu = (button, open) => {
+    button.setAttribute("aria-expanded", String(open));
+    button.nextElementSibling.classList.toggle("is-open", open);
+  };
+  for (const button of $$("[data-menu]")) {
+    button.addEventListener("click", () => setMenu(button, button.getAttribute("aria-expanded") !== "true"));
+    button.nextElementSibling.addEventListener("click", (e) => {
+      if (e.target.closest("a")) e.preventDefault();
+    });
+  }
+  tool("d6-both").addEventListener("click", (e) => {
+    const on = !isPressed(e.currentTarget);
+    pressed(e.currentTarget, on);
+    for (const button of $$("[data-menu]")) setMenu(button, on);
+  });
+
+  // 7. The button applies the same state as hover, for touch and keyboard.
+  tool("d7-raise").addEventListener("click", (e) => {
+    const on = !isPressed(e.currentTarget);
+    pressed(e.currentTarget, on);
+    for (const card of $$("#d7 .card, #d7-old .naive")) card.classList.toggle("is-raised", on);
+  });
+
+  // 8. Measure the space above the capitals and below the baseline, and draw it.
+  const canvas = document.createElement("canvas").getContext("2d");
+  const measureLabels = () => {
+    for (const wrap of $$(".measure")) {
+      const button = wrap.firstElementChild;
+      const host = $("span", button) || button;
+      let marker = $(".baseline-marker", host);
+      if (!marker) {
+        marker = document.createElement("i");
+        marker.className = "baseline-marker";
+        host.append(marker);
+      }
+      const cs = getComputedStyle(button);
+      canvas.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+      const cap = canvas.measureText("H").actualBoundingBoxAscent;
+      const box = button.getBoundingClientRect();
+      const baseline = marker.getBoundingClientRect().bottom;
+      const above = baseline - cap - box.top;
+      const below = box.bottom - baseline;
+      for (const [cls, size] of [["band-top", above], ["band-bottom", below]]) {
+        let band = $(`.${cls}`, wrap);
+        if (!band) {
+          band = document.createElement("span");
+          band.className = `band ${cls}`;
+          wrap.append(band);
+        }
+        band.style.blockSize = `${Math.max(0, size)}px`;
+      }
+      $(".readout", wrap.parentElement).textContent =
+        `above ${above.toFixed(1)}px · below ${below.toFixed(1)}px · height ${box.height.toFixed(1)}px`;
+    }
+  };
+  tool("d8-font").addEventListener("change", (e) => {
+    for (const stage of $$("#d8, #d8-old")) stage.style.setProperty("--demo-font", e.target.value);
+    requestAnimationFrame(measureLabels);
+  });
+  addEventListener("resize", () => requestAnimationFrame(measureLabels));
+  (document.fonts?.ready || Promise.resolve()).then(() => requestAnimationFrame(measureLabels));
+  measureLabels();
+})();
+</script>
+</body>
+</html>

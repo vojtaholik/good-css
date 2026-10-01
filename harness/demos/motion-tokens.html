@@ -1,0 +1,96 @@
+<template data-specimen data-height="460">
+  Toggle the dropdown. It fades over 180ms on <code>--ease-out</code>. Then run the curves. The <code>--ease-out</code> square leaves faster than plain <code>ease-out</code> and settles for longer. The <code>--ease-in-out</code> square waits longer than plain <code>ease-in-out</code>, then crosses the middle faster.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      gap: 2rem;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: grid;
+      justify-items: start;
+      gap: 0.75rem;
+    }
+
+    /* Shown and hidden by opacity alone, the property the entry transitions. */
+    .dropdown {
+      padding: 0.75rem 1rem;
+      opacity: 0;
+
+      &[data-open] {
+        opacity: 1;
+      }
+    }
+
+    .lanes {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.75rem 1rem;
+      justify-self: stretch;
+    }
+
+    .lane {
+      display: grid;
+      grid-template-columns: subgrid;
+      grid-column: 1 / -1;
+      align-items: center;
+    }
+
+    .track {
+      container-type: inline-size;
+      border-bottom: 1px solid var(--bp-line-faint);
+    }
+
+    .track i {
+      display: block;
+      width: 1rem;
+      height: 1rem;
+      background: var(--bp-ink);
+    }
+
+    body[data-run] .track i {
+      translate: calc(100cqi - 100%) 0;
+    }
+
+    /* Each lane names its curve in --ease. One second, so the shapes show. */
+    @media (prefers-reduced-motion: no-preference) {
+      .track i {
+        transition: translate 1s var(--ease);
+      }
+    }
+  }
+</style>
+
+<section>
+  <button data-toggle aria-expanded="false">Toggle the dropdown</button>
+  <div class="box dropdown">A dropdown, faded in on <code>--ease-out</code></div>
+</section>
+
+<section>
+  <button data-race>Run the curves</button>
+  <div class="lanes">
+    <div class="lane" style="--ease: var(--ease-out)"><code>--ease-out</code><div class="track"><i></i></div></div>
+    <div class="lane" style="--ease: ease-out"><code>ease-out</code><div class="track"><i></i></div></div>
+    <div class="lane" style="--ease: var(--ease-in-out)"><code>--ease-in-out</code><div class="track"><i></i></div></div>
+    <div class="lane" style="--ease: ease-in-out"><code>ease-in-out</code><div class="track"><i></i></div></div>
+  </div>
+  <p class="label">Slowed to one second here, so the curves can be compared.</p>
+</section>
+
+<script>
+  const toggle = document.querySelector("[data-toggle]");
+  const dropdown = document.querySelector(".dropdown");
+
+  toggle.addEventListener("click", () => {
+    toggle.setAttribute("aria-expanded", dropdown.toggleAttribute("data-open"));
+  });
+
+  document.querySelector("[data-race]").addEventListener("click", () => {
+    document.body.toggleAttribute("data-run");
+  });
+</script>

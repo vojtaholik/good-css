@@ -1,0 +1,86 @@
+/* What every specimen starts from. It is all layered: unlayered CSS from the
+   entry beats it. A fixture puts its own cosmetics in `@layer demo`. */
+@layer base, demo;
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Smoothed like the harness page, or light text on the blue looks bold. */
+  :root {
+    font-family: var(--bp-font-body);
+    line-height: 1.5;
+    color: var(--bp-ink);
+    background: var(--bp-paper);
+    scrollbar-color: var(--bp-scrollbar);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    font-family: var(--bp-font-display);
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  code,
+  .label {
+    font-family: var(--bp-font-mono);
+    font-size: 0.8125rem;
+  }
+
+  button {
+    min-width: 2.25rem;
+    min-height: 2.25rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--bp-ink);
+    background: none;
+    font: inherit;
+    font-size: 0.875rem;
+    color: inherit;
+    cursor: pointer;
+
+    &:hover:not(:disabled),
+    &[aria-pressed="true"] {
+      background: var(--bp-ink);
+      color: var(--bp-paper);
+    }
+
+    &:disabled {
+      border-color: var(--bp-line-faint);
+      color: var(--bp-line);
+      cursor: default;
+    }
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--bp-ink);
+    outline-offset: 2px;
+  }
+
+  /* An outlined box, and the hatched fill that stands in for an image. */
+  .box {
+    border: 1px solid var(--bp-line);
+    background: var(--bp-panel);
+  }
+
+  .hatch {
+    border: 1px solid var(--bp-line);
+    background: var(--bp-hatch), var(--bp-panel);
+  }
+}

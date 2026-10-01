@@ -1,0 +1,75 @@
+<template data-specimen data-height="420">
+  Open and close each one. In Chrome the height eases both ways and the text stays visible until it has closed.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      padding: 1.5rem;
+    }
+
+    details {
+      border-bottom: 1px solid var(--bp-line);
+
+      &:first-of-type {
+        border-top: 1px solid var(--bp-line);
+      }
+    }
+
+    summary {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: 1rem;
+      list-style: none;
+      font-family: var(--bp-font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.1;
+      text-transform: uppercase;
+      cursor: pointer;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::after {
+        content: "+";
+        font-family: var(--bp-font-mono);
+        font-weight: 400;
+      }
+
+      [open] > &::after {
+        content: "\2212";
+      }
+    }
+
+    /* The padding is on an element inside, not on ::details-content. */
+    details > div {
+      max-width: 60ch;
+      padding-bottom: 1.25rem;
+    }
+  }
+</style>
+
+<details name="faq" open>
+  <summary>What animates?</summary>
+  <div>
+    <p>The height of the box around this text, from zero to whatever the text needs. Nothing measures it and no script runs.</p>
+  </div>
+</details>
+
+<details name="faq">
+  <summary>Why does only one stay open?</summary>
+  <div>
+    <p>All three share <code>name="faq"</code>. Opening one closes the others, and each of them animates.</p>
+  </div>
+</details>
+
+<details name="faq">
+  <summary>What about a long answer?</summary>
+  <div>
+    <p>The duration is the same for any height, so a long answer moves faster. That holds up for a few paragraphs.</p>
+    <p>In Safari and Firefox this opens and closes at once, with no animation. That is the intended result there.</p>
+  </div>
+</details>

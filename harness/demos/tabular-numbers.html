@@ -1,0 +1,70 @@
+<template data-specimen data-height="380">
+  In the first column the digits line up and the running timer keeps its width. In the second the digits drift and the unit jitters.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      align-items: start;
+      gap: 2rem;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: grid;
+      gap: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td,
+    .row {
+      padding-block: 0.375rem;
+      border-bottom: 1px solid var(--bp-line-faint);
+      font-size: 1.5rem;
+      text-align: end;
+    }
+
+    .timer {
+      font-family: var(--bp-font-display);
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+  }
+</style>
+
+<section>
+  <p class="label">td and time</p>
+  <table>
+    <tr><td>1,111.11</td></tr>
+    <tr><td>9,876.54</td></tr>
+    <tr><td>4,040.07</td></tr>
+  </table>
+  <p class="timer"><time data-timer></time> s</p>
+</section>
+
+<section>
+  <p class="label">The same numbers, left alone</p>
+  <div>
+    <div class="row">1,111.11</div>
+    <div class="row">9,876.54</div>
+    <div class="row">4,040.07</div>
+  </div>
+  <p class="timer"><span data-timer></span> s</p>
+</section>
+
+<script>
+  const timers = document.querySelectorAll("[data-timer]");
+  const tick = () => {
+    for (const timer of timers) timer.textContent = (performance.now() / 1000).toFixed(2);
+  };
+
+  setInterval(tick, 70);
+  tick();
+</script>

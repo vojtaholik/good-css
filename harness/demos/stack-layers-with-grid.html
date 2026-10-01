@@ -1,0 +1,58 @@
+<template data-specimen data-height="440">
+  Change the width. Each stack keeps the size of its largest layer and the badge stays in its corner.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      align-items: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .image {
+      aspect-ratio: 16 / 9;
+    }
+
+    .title {
+      font-size: 2.5rem;
+      text-align: center;
+    }
+
+    .badge {
+      margin: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      background: var(--bp-ink);
+      color: var(--bp-paper);
+    }
+
+    .copy {
+      padding: 3.5rem 1.5rem 1.5rem;
+    }
+  }
+</style>
+
+<section>
+  <p class="label">The image layer sets the size</p>
+  <div class="stack">
+    <div class="hatch image"></div>
+    <h2 class="title">Title</h2>
+    <span class="badge label">Badge</span>
+  </div>
+</section>
+
+<section>
+  <p class="label">The text layer sets the size</p>
+  <div class="stack">
+    <div class="hatch"></div>
+    <p class="copy">No layer here has a height of its own. The text is the largest, so the stack is as tall as the text, and the hatched layer behind stretches to fill it.</p>
+    <span class="badge label">Badge</span>
+  </div>
+</section>

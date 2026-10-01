@@ -1,0 +1,15 @@
+{
+  "name": "good-css",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "bun deploy/build.js",
+    "skill": "bun scripts/build-skill.js"
+  },
+  "devDependencies": {
+    "happy-dom": "^20.14.5",
+    "marked": "^18.0.14",
+    "vite": "^8.3.1"
+  }
+}

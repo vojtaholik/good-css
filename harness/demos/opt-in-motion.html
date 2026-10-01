@@ -1,0 +1,32 @@
+<template data-specimen data-height="360">
+  Hover the box. It scales with a transition. Turn on Reduce Motion in the system settings: it still scales, at once.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      place-items: center;
+      place-content: center;
+      gap: 3rem;
+      min-height: 100dvh;
+      padding: 1.5rem;
+    }
+
+    .box {
+      width: 8rem;
+      height: 8rem;
+    }
+  }
+</style>
+
+<div class="hatch box"></div>
+<p class="label">prefers-reduced-motion <output></output></p>
+
+<script>
+  const query = matchMedia("(prefers-reduced-motion: no-preference)");
+  const show = () => (document.querySelector("output").textContent = `[ ${query.matches ? "no-preference" : "reduce"} ]`);
+
+  query.addEventListener("change", show);
+  show();
+</script>

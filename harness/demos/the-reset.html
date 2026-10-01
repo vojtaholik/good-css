@@ -1,0 +1,73 @@
+<template data-specimen data-height="520">
+  Make the frame narrower. The two halves stay equal, the heading stays balanced, and the wide image stays inside.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+      align-content: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: grid;
+      align-content: start;
+      gap: 0.5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+
+      & > * {
+        padding: 0.75rem;
+      }
+    }
+
+    .one-line {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<section>
+  <p class="label">min-width: 0</p>
+  <div class="columns">
+    <div class="box"><p class="one-line">One line that is far too long for half of this frame and must be cut short</p></div>
+    <div class="box"><p>Equal halves</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="label">text-wrap: balance</p>
+  <h2>A heading set on two lines of about the same length</h2>
+</section>
+
+<section>
+  <p class="label">text-wrap: pretty</p>
+  <p>The browser spends more effort on where each line of this paragraph breaks, so that the last line never ends up holding a single short word.</p>
+</section>
+
+<section>
+  <p class="label">font-synthesis: none</p>
+  <p class="label">This font has no italic. <i>Marked up as italic, this stays upright</i>, because the browser may not fake one.</p>
+</section>
+
+<section class="wide">
+  <p class="label">max-width: 100% on an svg 1600px wide</p>
+  <svg class="hatch" width="1600" height="240" viewBox="0 0 1600 240" role="img" aria-label="Wide placeholder"></svg>
+</section>

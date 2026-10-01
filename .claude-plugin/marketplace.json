@@ -1,0 +1,16 @@
+{
+  "name": "good-css",
+  "owner": {
+    "name": "Vojta Holik",
+    "url": "https://github.com/vojtaholik"
+  },
+  "description": "The good-css skill as a Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "good-css",
+      "source": "./",
+      "description": "Modern CSS techniques that replace breakpoint ladders, wrapper elements and scripts.",
+      "category": "development"
+    }
+  ]
+}

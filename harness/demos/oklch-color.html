@@ -1,0 +1,97 @@
+<template data-specimen data-height="320">
+  Move the hue. The hover and the subtle color follow, and stay as light as they were.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    /* Swatches sit on white, the way the tokens would be used on a page. */
+    .card {
+      display: grid;
+      gap: 1.25rem;
+      padding: 1.25rem;
+      background: white;
+      color: oklch(0.25 0 0);
+    }
+
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      gap: 1rem;
+    }
+
+    .swatch {
+      display: grid;
+      gap: 0.5rem;
+
+      &::before {
+        content: "";
+        height: 4.5rem;
+        background: var(--swatch);
+      }
+    }
+
+    .cta {
+      justify-self: start;
+      border: 0;
+      background: var(--primary);
+      color: white;
+
+      &:hover:not(:disabled) {
+        background: var(--primary-hover);
+        color: white;
+      }
+    }
+
+    .hue {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      min-width: 10rem;
+      accent-color: var(--bp-ink);
+    }
+  }
+</style>
+
+<div class="card">
+  <div class="swatches">
+    <div class="swatch" style="--swatch: var(--primary)"><code>--primary</code></div>
+    <div class="swatch" style="--swatch: var(--primary-hover)"><code>--primary-hover</code></div>
+    <div class="swatch" style="--swatch: var(--primary-subtle)"><code>--primary-subtle</code></div>
+  </div>
+  <button class="cta">Hover me</button>
+</div>
+
+<label class="hue">
+  <span>Hue of <code>--primary</code></span>
+  <input type="range" min="0" max="360">
+  <output class="label"></output>
+</label>
+
+<script>
+  /* Only the hue changes. Lightness and chroma stay the entry's own. */
+  const root = document.documentElement;
+  const base = getComputedStyle(root).getPropertyValue("--primary").trim();
+  const hue = document.querySelector("input");
+  const output = document.querySelector("output");
+
+  const show = () => (output.textContent = `[ ${hue.value} ]`);
+
+  hue.value = base.match(/([\d.]+)\)$/)?.[1] ?? 0;
+  show();
+
+  hue.addEventListener("input", () => {
+    root.style.setProperty("--primary", `oklch(from ${base} l c ${hue.value})`);
+    show();
+  });
+</script>

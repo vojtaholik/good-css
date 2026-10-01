@@ -1,0 +1,50 @@
+<template data-specimen data-height="300">
+  The second card is the mirror image of the first: border, text and close button all swap sides.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      align-items: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .card {
+      padding-block: 1.5rem;
+    }
+
+    .card p {
+      max-width: 24ch;
+    }
+
+    .close {
+      min-width: 1.75rem;
+      min-height: 1.75rem;
+      padding: 0;
+    }
+  }
+</style>
+
+<section>
+  <p class="label">dir="ltr"</p>
+  <div class="box card" dir="ltr">
+    <p>The thick border and the text start on the left. The button is on the right.</p>
+    <button class="close" aria-label="Close">×</button>
+  </div>
+</section>
+
+<section>
+  <p class="label">dir="rtl", same CSS</p>
+  <div class="box card" dir="rtl" lang="ar">
+    <p>الحد السميك والنص يبدآن من اليمين. الزر على اليسار.</p>
+    <button class="close" aria-label="إغلاق">×</button>
+  </div>
+</section>

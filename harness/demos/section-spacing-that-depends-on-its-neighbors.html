@@ -1,0 +1,116 @@
+<template data-specimen data-height="700">
+  Move the sections with the arrows. Where a named pair meets, the hatched padding between the two shrinks and the readouts change: logos before features, features before cta, logos after hero, faq after features. Logos gets a line on top only straight after hero. Every other edge keeps 96px.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+
+    .order {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      & li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+
+    /* The page is drawn at half size, so every section fits in the frame.
+       The readouts give the real padding. */
+    main {
+      zoom: 0.5;
+      border: 2px solid var(--bp-line);
+    }
+
+    /* The hatch is a section's padding. The solid box is its content. */
+    section {
+      --content: color-mix(in oklch, var(--bp-ink) 35%, var(--bp-paper));
+
+      padding-inline: 3rem;
+      outline: 2px dashed var(--bp-line-faint);
+      outline-offset: -1px;
+      background:
+        linear-gradient(var(--content) 0 0) content-box,
+        var(--bp-hatch),
+        var(--bp-panel);
+
+      & > div {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.5rem 2rem;
+        padding: 1rem 1.5rem;
+        font-family: var(--bp-font-mono);
+        font-size: 1.625rem;
+      }
+    }
+  }
+</style>
+
+<ol class="order" aria-label="Order of the sections"></ol>
+
+<main>
+  <section class="hero"><div><span>.hero</span><output></output></div></section>
+  <section class="logos"><div><span>.logos</span><output></output></div></section>
+  <section class="features"><div><span>.features</span><output></output></div></section>
+  <section class="faq"><div><span>.faq</span><output></output></div></section>
+  <section class="cta"><div><span>.cta</span><output></output></div></section>
+</main>
+
+<script>
+  const main = document.querySelector("main");
+  const order = document.querySelector(".order");
+  const chips = new Map();
+
+  /* Reads each section's padding as the entry's rules resolved it, and puts
+     the arrows in the same order as the sections. */
+  const render = () => {
+    for (const section of main.children) {
+      const { paddingBlockStart, paddingBlockEnd } = getComputedStyle(section);
+      const [earlier, later] = chips.get(section).querySelectorAll("button");
+
+      section.querySelector("output").textContent = `padding-block [ ${paddingBlockStart} ${paddingBlockEnd} ]`;
+      earlier.disabled = !section.previousElementSibling;
+      later.disabled = !section.nextElementSibling;
+    }
+
+    order.append(...[...main.children].map((section) => chips.get(section)));
+  };
+
+  for (const section of main.children) {
+    const name = section.className;
+    const chip = document.createElement("li");
+
+    chip.innerHTML = `
+      <button aria-label="Move ${name} earlier">↑</button>
+      <code>.${name}</code>
+      <button aria-label="Move ${name} later">↓</button>`;
+
+    const [earlier, later] = chip.querySelectorAll("button");
+
+    const move = (button, other, place) => {
+      button.addEventListener("click", () => {
+        place();
+        render();
+        (button.disabled ? other : button).focus();
+      });
+    };
+
+    move(earlier, later, () => section.previousElementSibling.before(section));
+    move(later, earlier, () => section.nextElementSibling.after(section));
+    chips.set(section, chip);
+  }
+
+  render();
+</script>

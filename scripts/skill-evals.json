@@ -1,0 +1,78 @@
+{
+  "skill_name": "good-css",
+  "evals": [
+    {
+      "id": 1,
+      "name": "plain-css-pricing",
+      "prompt": "I need a pricing section for our SaaS landing page. Three plans (Starter $9, Team $29, Business $79), each a card with the plan name, price per month, a short blurb, 4 to 6 features and a 'Choose plan' button. The middle one should be highlighted. Plain HTML and CSS only, one file called pricing.html, no framework. It needs to work on phones and support dark mode.",
+      "expected_output": "pricing.html, one file of plain HTML and CSS",
+      "files": [],
+      "expectations": [
+        "Hover styles sit behind @media (hover: hover) and (pointer: fine)",
+        "Focus is styled with :focus-visible and outline is never removed",
+        "Pressable elements have an :active state",
+        "Motion is opt-in behind prefers-reduced-motion: no-preference",
+        "No transition: all",
+        "Logical properties only, no physical left or right",
+        "Colors are written in oklch(), with no rgb() or hsl()",
+        "Variants are derived with color-mix(in oklch, ...)",
+        "No width breakpoints",
+        "One set of color tokens with light-dark()",
+        "Fluid sizes use clamp() with a rem + vw preferred value",
+        "Card grid is intrinsic: repeat(auto-fit|auto-fill, minmax(min(100%, ...), 1fr))",
+        "Card parts line up across cards with subgrid",
+        "Prices use tabular numbers"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "tailwind-product-grid",
+      "prompt": "we're on react + tailwind v4. write me ProductGrid.tsx: a grid of product cards (image, name, price, short description, an 'Add to cart' button, and a little heart icon button to favorite). clicking anywhere on the card should go to the product page. descriptions vary a lot in length so things should still line up across a row. if you need anything in the css entry file, put it in app.css. don't run anything, just write the files.",
+      "expected_output": "ProductGrid.tsx with Tailwind v4 classes, plus app.css if the entry file needs rules",
+      "files": [],
+      "expectations": [
+        "Hover styles sit behind (hover: hover) and (pointer: fine)",
+        "Focus is styled with focus-visible and outline is never removed",
+        "Pressable elements have an active state",
+        "Motion is opt-in behind prefers-reduced-motion: no-preference",
+        "No transition-all",
+        "Logical utilities only, no physical left or right",
+        "No width breakpoint variants",
+        "Card grid is intrinsic: auto-fit or auto-fill with minmax(min(100%, ...), 1fr)",
+        "Card parts line up across cards with subgrid",
+        "Whole card is clickable from one stretched link, not a wrapping <a>",
+        "Focus ring moves from the link to the card with :has()",
+        "Buttons sit above the stretched link",
+        "Heart button has a hit area of at least 44px",
+        "Price uses tabular numbers"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "plain-css-help-page",
+      "prompt": "Build a help page for our app as one file, help.html. Plain HTML and CSS, vanilla JS only where you really need it. It has a sticky header with the logo and a 'More' dropdown menu, a row of category tabs under the header that can be wider than the screen on a phone, an FAQ of six questions that expand and collapse smoothly with links at the top that jump to each question, and a 'Contact support' button that opens a modal with a form (email, a message textarea, submit). It should feel polished.",
+      "expected_output": "help.html, one file of plain HTML and CSS with as little JavaScript as the page needs",
+      "files": [],
+      "expectations": [
+        "Hover styles sit behind @media (hover: hover) and (pointer: fine)",
+        "Focus is styled with :focus-visible and outline is never removed",
+        "Pressable elements have an :active state",
+        "Motion is opt-in behind prefers-reduced-motion: no-preference",
+        "No transition: all",
+        "Logical properties only, no physical left or right",
+        "Colors are written in oklch(), with no rgb() or hsl()",
+        "Variants are derived with color-mix(in oklch, ...)",
+        "No width breakpoints",
+        "Accordion is <details> animated with ::details-content and interpolate-size",
+        "Modal is a <dialog> with enter and exit transitions via @starting-style and allow-discrete",
+        "Dropdown is a popover placed with anchor positioning",
+        "In-page links clear the sticky header with scroll-padding-top",
+        "Page scroll locks behind the modal with :has(), keeping the scrollbar gutter",
+        "Textarea grows with field-sizing: content",
+        "Form feedback uses :user-invalid",
+        "Tab row handles overflow: safe alignment or an overflow-only edge fade",
+        "Overflow is cut with clip, not hidden, where nothing scrolls"
+      ]
+    }
+  ]
+}

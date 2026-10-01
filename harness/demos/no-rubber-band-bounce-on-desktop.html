@@ -1,0 +1,62 @@
+<template data-specimen data-height="360">
+  Open it in its own tab and scroll past the top with a trackpad. The page does not stretch. On a touch device it still does.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      --bar: 3.5rem;
+      --side: 9rem;
+    }
+
+    header,
+    aside {
+      position: fixed;
+      inset-inline-start: 0;
+      padding: 1rem;
+      background: var(--bp-paper);
+    }
+
+    header {
+      inset-block-start: 0;
+      inset-inline-end: 0;
+      height: var(--bar);
+      border-bottom: 1px solid var(--bp-line);
+      z-index: 1;
+    }
+
+    aside {
+      inset-block: var(--bar) 0;
+      width: var(--side);
+      border-inline-end: 1px solid var(--bp-line);
+    }
+
+    main {
+      display: grid;
+      gap: 1rem;
+      margin-block-start: var(--bar);
+      margin-inline-start: var(--side);
+      padding: 1rem;
+    }
+
+    .row {
+      height: 5rem;
+    }
+  }
+</style>
+
+<header><code>position: fixed</code> header</header>
+<aside><code>fixed</code> sidebar</aside>
+
+<main>
+  <p>Scroll past the top or the bottom with a trackpad. The header and the sidebar stay where they are.</p>
+  <p>Only a top-level page bounces, so open this specimen in its own tab to test it.</p>
+  <div class="hatch row"></div>
+  <div class="hatch row"></div>
+  <div class="hatch row"></div>
+  <div class="hatch row"></div>
+  <div class="hatch row"></div>
+  <div class="hatch row"></div>
+  <div class="hatch row"></div>
+  <div class="hatch row"></div>
+</main>

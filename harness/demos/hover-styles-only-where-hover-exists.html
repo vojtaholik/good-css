@@ -1,0 +1,41 @@
+<template data-specimen data-height="220">
+  With a mouse the button changes on hover. On a touch screen, or with a stylus, the readout says the query does not match and a tap leaves nothing stuck.
+</template>
+
+<style>
+  @layer demo {
+    /* The entry names this token and leaves its value to the project. */
+    :root {
+      --primary-hover: color-mix(in oklch, var(--bp-ink) 65%, var(--bp-paper));
+    }
+
+    body {
+      display: grid;
+      justify-items: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .button {
+      padding: 0.75rem 1.25rem;
+      border: 0;
+      background: var(--bp-ink);
+      font-size: 1rem;
+      color: var(--bp-paper);
+    }
+  }
+</style>
+
+<button class="button">Hover or tap</button>
+<p class="label"><span data-query></span> on this device <output></output></p>
+
+<script>
+  /* The query is read from the entry's own rule, so the readout cannot drift from it. */
+  const [rule] = document.querySelector("style[data-source]").sheet.cssRules;
+  const query = matchMedia(rule.conditionText);
+  const show = () => (document.querySelector("output").textContent = `[ ${query.matches ? "matches" : "does not match"} ]`);
+
+  document.querySelector("[data-query]").textContent = rule.conditionText;
+  query.addEventListener("change", show);
+  show();
+</script>

@@ -1,0 +1,60 @@
+<template data-specimen data-height="300">
+  At full width both rows fit and nothing is faded. Make the frame narrower until they overflow. The first row fades at both edges. The second fades only the side that still has content: sharp at the start, then fading there too once you scroll.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      gap: 2rem;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    :is(.scroller, .scroller-edges) {
+      display: flex;
+      gap: 0.5rem;
+      scrollbar-width: none;
+
+      & > * {
+        flex: none;
+        padding: 0.625rem 1rem;
+      }
+    }
+  }
+</style>
+
+<section>
+  <p class="label">.scroller</p>
+  <div class="scroller">
+    <span class="box">Overview</span>
+    <span class="box">Payments</span>
+    <span class="box">Balances</span>
+    <span class="box">Customers</span>
+    <span class="box">Products</span>
+    <span class="box">Reports</span>
+    <span class="box">Billing</span>
+    <span class="box">Developers</span>
+    <span class="box">Settings</span>
+  </div>
+</section>
+
+<section>
+  <p class="label">.scroller-edges</p>
+  <div class="scroller-edges">
+    <span class="box">Overview</span>
+    <span class="box">Payments</span>
+    <span class="box">Balances</span>
+    <span class="box">Customers</span>
+    <span class="box">Products</span>
+    <span class="box">Reports</span>
+    <span class="box">Billing</span>
+    <span class="box">Developers</span>
+    <span class="box">Settings</span>
+  </div>
+</section>

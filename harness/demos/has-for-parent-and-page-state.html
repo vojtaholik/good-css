@@ -1,0 +1,138 @@
+<template data-specimen data-height="520">
+  The article with an image spans two columns. Only the heading before a paragraph loses its margin. The form lights up when you tab into its field. The page stops scrolling while the dialog is open, and does not shift sideways.
+</template>
+
+<style>
+  @layer demo {
+    /* The entry names this token and leaves its value to the project. */
+    :root {
+      --surface-raised: color-mix(in oklch, var(--bp-ink) 30%, transparent);
+    }
+
+    body {
+      display: grid;
+      gap: 2rem;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .articles {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+
+    article {
+      display: grid;
+      align-content: start;
+      gap: 0.5rem;
+      padding: 0.75rem;
+    }
+
+    img {
+      width: 100%;
+      aspect-ratio: 4 / 1;
+    }
+
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    h2 {
+      margin-block-end: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    ul {
+      margin: 0;
+      padding-inline-start: 1.25rem;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      border: 1px solid var(--bp-line);
+    }
+
+    input {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--bp-line);
+      background: none;
+      font: inherit;
+      color: inherit;
+    }
+
+    dialog {
+      max-width: 20rem;
+      padding: 1.5rem;
+      border: 1px solid var(--bp-ink);
+      background: var(--bp-paper);
+      color: var(--bp-ink);
+
+      & p {
+        margin-block-end: 1rem;
+      }
+    }
+
+    ::backdrop {
+      background: color-mix(in oklch, black 45%, transparent);
+    }
+  }
+</style>
+
+<section>
+  <p class="label">article:has(img)</p>
+  <div class="articles">
+    <article class="box">No image</article>
+    <article class="box">
+      <img class="hatch" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 1'/%3E">
+      Has an image, spans two
+    </article>
+    <article class="box">No image</article>
+  </div>
+</section>
+
+<section>
+  <p class="label">h2:has(+ p)</p>
+  <div class="pair">
+    <div>
+      <h2>A paragraph follows</h2>
+      <p>So the heading has no margin under it.</p>
+    </div>
+    <div>
+      <h2>A list follows</h2>
+      <ul>
+        <li>So the heading keeps its margin.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="label">form:has(:focus-visible)</p>
+  <form>
+    <label for="name">Focus the field</label>
+    <input id="name" type="text">
+  </form>
+</section>
+
+<section>
+  <p class="label">html:has(dialog:modal)</p>
+  <p><button commandfor="modal" command="show-modal">Open the dialog</button></p>
+  <p>While it is open, this page does not scroll.</p>
+  <div class="hatch" style="height: 30rem"></div>
+</section>
+
+<dialog id="modal">
+  <p>Try to scroll the page behind this dialog.</p>
+  <button commandfor="modal" command="close">Close</button>
+</dialog>

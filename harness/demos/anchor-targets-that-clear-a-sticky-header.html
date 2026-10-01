@@ -1,0 +1,59 @@
+<template data-specimen data-height="420">
+  Click each link. The section heading lands just below the header, never under it.
+</template>
+
+<style>
+  @layer demo {
+    /* As tall as the entry's scroll-padding-top. */
+    header {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      height: 5rem;
+      padding-inline: 1.5rem;
+      border-bottom: 1px solid var(--bp-line);
+      background: var(--bp-paper);
+    }
+
+    header a {
+      color: inherit;
+    }
+
+    section {
+      display: grid;
+      gap: 1rem;
+      padding: 1rem 1.5rem 2rem;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+    }
+
+    .hatch {
+      height: 24rem;
+    }
+  }
+</style>
+
+<header>
+  <a href="#one">Section one</a>
+  <a href="#two">Section two</a>
+  <a href="#three">Section three</a>
+</header>
+
+<section id="one">
+  <h2>Section one</h2>
+  <div class="hatch"></div>
+</section>
+
+<section id="two">
+  <h2>Section two</h2>
+  <div class="hatch"></div>
+</section>
+
+<section id="three">
+  <h2>Section three</h2>
+  <div class="hatch"></div>
+</section>

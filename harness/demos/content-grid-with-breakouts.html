@@ -1,0 +1,32 @@
+<template data-specimen data-height="400">
+  Make the frame narrower. The breakout shrinks to content width, the gutters hold, and nothing overflows.
+</template>
+
+<style>
+  @layer demo {
+    main {
+      row-gap: 1rem;
+      padding-block: 1.5rem;
+    }
+
+    main > *,
+    .full-width > * {
+      padding: 1rem;
+    }
+
+    .full-width {
+      border-inline: 0;
+      padding-inline: 0;
+    }
+  }
+</style>
+
+<!-- The widths are narrowed inline so all three fit inside the frame. -->
+<main class="content-grid" style="--gutter: 1rem; --content: 26rem; --breakout: 40rem">
+  <p class="box"><code>content</code>, the default for every child</p>
+  <p class="box breakout"><code>.breakout</code></p>
+  <div class="hatch full-width">
+    <p class="box"><code>.full-width</code> reaches both edges, and its child sits on the content column</p>
+  </div>
+  <p class="box"><code>content</code></p>
+</main>

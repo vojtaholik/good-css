@@ -1,0 +1,100 @@
+<template data-specimen data-height="380">
+  Switch the theme. The page and its controls flip, and the two fixed sections never change.
+</template>
+
+<style>
+  @layer demo {
+    /* Everything here is drawn with the entry's two tokens, nothing else. */
+    :root,
+    section {
+      background: var(--background);
+      color: var(--foreground);
+    }
+
+    /* The scrollbar is the browser's own, so it flips with the scheme too. */
+    :root {
+      scrollbar-color: auto;
+    }
+
+    body {
+      display: grid;
+      align-content: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .pair {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      gap: 1rem;
+    }
+
+    section {
+      display: grid;
+      gap: 0.75rem;
+      padding: 1rem;
+      border: 1px solid;
+    }
+
+    button {
+      border-color: currentColor;
+
+      &:hover:not(:disabled),
+      &[aria-pressed="true"] {
+        background: var(--foreground);
+        color: var(--background);
+      }
+    }
+
+    :focus-visible {
+      outline-color: currentColor;
+    }
+  }
+</style>
+
+<div class="row" role="group" aria-label="Theme of the page">
+  <button data-theme-set="" aria-pressed="true">System</button>
+  <button data-theme-set="light">Light</button>
+  <button data-theme-set="dark">Dark</button>
+</div>
+
+<div class="row">
+  <p>The page, and the browser's own controls:</p>
+  <input type="text" value="Text input" aria-label="Text input">
+  <label><input type="checkbox" checked> Checkbox</label>
+</div>
+
+<div class="pair">
+  <section data-theme="light">
+    <p><code>data-theme="light"</code></p>
+    <p>Always light. Same two tokens.</p>
+    <label><input type="checkbox" checked> Checkbox</label>
+  </section>
+  <section data-theme="dark">
+    <p><code>data-theme="dark"</code></p>
+    <p>Always dark. Same two tokens.</p>
+    <label><input type="checkbox" checked> Checkbox</label>
+  </section>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll("[data-theme-set]");
+
+  for (const button of buttons) {
+    button.addEventListener("click", () => {
+      const theme = button.dataset.themeSet;
+
+      if (theme) document.documentElement.dataset.theme = theme;
+      else delete document.documentElement.dataset.theme;
+
+      for (const other of buttons) other.setAttribute("aria-pressed", other === button);
+    });
+  }
+</script>

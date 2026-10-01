@@ -1,0 +1,69 @@
+<template data-specimen data-height="420">
+  Change the width. The text is 16px up to a 400px viewport and 28px from 1600px. Open it in its own tab for the full range.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    /* The hatched bands above and below the text are --space-section. */
+    .spaced {
+      padding-block: var(--space-section);
+      border: 1px solid var(--bp-line);
+      background:
+        linear-gradient(var(--bp-paper) 0 0) content-box,
+        var(--bp-hatch),
+        var(--bp-panel);
+    }
+
+    .spaced p {
+      padding: 0 1rem;
+      font-size: var(--text-body);
+    }
+
+    dl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.25rem 1.5rem;
+      margin: 0;
+      font-family: var(--bp-font-mono);
+      font-size: 0.8125rem;
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+</style>
+
+<div class="spaced">
+  <p>This text is set in <code>--text-body</code>. Make the frame wider and it grows.</p>
+</div>
+
+<dl>
+  <dt>viewport</dt>
+  <dd data-read="viewport"></dd>
+  <dt>--text-body</dt>
+  <dd data-read="text"></dd>
+  <dt>--space-section</dt>
+  <dd data-read="space"></dd>
+</dl>
+
+<script>
+  const spaced = document.querySelector(".spaced");
+  const px = (value) => `[ ${Math.round(parseFloat(value) * 10) / 10}px ]`;
+  const write = (name, value) => (document.querySelector(`[data-read="${name}"]`).textContent = px(value));
+
+  const read = () => {
+    write("viewport", innerWidth);
+    write("text", getComputedStyle(spaced.firstElementChild).fontSize);
+    write("space", getComputedStyle(spaced).paddingBlockStart);
+  };
+
+  addEventListener("resize", read);
+  read();
+</script>

@@ -1,0 +1,49 @@
+<template data-specimen data-height="280">
+  Click the links in each row. The bar slides under that row's current link and takes its width. The bar in the other row does not move, because each row scopes its own anchor.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      gap: 2.5rem;
+      padding: 1.5rem;
+    }
+
+    .tabs ul {
+      gap: 0.5rem;
+      margin: 0;
+      padding: 0;
+      border-bottom: 1px solid var(--bp-line-faint);
+      list-style: none;
+    }
+
+    .tabs a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: var(--bp-ink-soft);
+      text-decoration: none;
+    }
+
+    /* The second cue the entry asks for. */
+    .tabs [aria-current="page"] {
+      font-weight: 600;
+      color: var(--bp-ink);
+    }
+  }
+</style>
+
+<!-- The entry's markup, twice, to show that two rows do not share an anchor. -->
+<!-- html -->
+<!-- html -->
+
+<script>
+  for (const link of document.querySelectorAll(".tabs a")) {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      link.closest(".tabs").querySelector("[aria-current]")?.removeAttribute("aria-current");
+      link.setAttribute("aria-current", "page");
+    });
+  }
+</script>

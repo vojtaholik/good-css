@@ -1,0 +1,36 @@
+/* Blueprint fonts and tokens, shared by the harness page and every specimen.
+   The tokens are prefixed so they never collide with a token an entry
+   defines. */
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap");
+
+/* Paper Mono, served from public/fonts. It has no italic, and the reset
+   specimen uses that to show font-synthesis: none. */
+@font-face {
+  font-family: "Paper Mono";
+  src: url("/fonts/PaperMono-Variable.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+:root {
+  --bp-paper: oklch(0.54 0.19 264);
+  /* White with no hue of its own, so a mix with the paper keeps the paper's
+     hue. `oklch(1 0 0)` would pull every mix toward red. */
+  --bp-ink: oklch(1 0 none);
+  --bp-ink-soft: color-mix(in oklch, var(--bp-ink) 82%, var(--bp-paper));
+  --bp-line: color-mix(in oklch, var(--bp-ink) 60%, transparent);
+  --bp-line-faint: color-mix(in oklch, var(--bp-ink) 24%, transparent);
+  /* A lighter paper for surfaces. It is opaque, so no line shows through. */
+  --bp-panel: color-mix(in oklch, var(--bp-ink) 9%, var(--bp-paper));
+  /* Thumb, then track, for scrollbar-color. */
+  --bp-scrollbar: var(--bp-line) var(--bp-panel);
+  --bp-hatch: repeating-linear-gradient(
+    -45deg,
+    var(--bp-line-faint) 0 1px,
+    transparent 1px 7px
+  );
+
+  --bp-font-display: "Barlow Condensed", "DIN Condensed", "Arial Narrow", sans-serif;
+  --bp-font-body: "Barlow", system-ui, sans-serif;
+  --bp-font-mono: "Paper Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}

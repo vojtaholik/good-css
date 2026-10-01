@@ -1,0 +1,102 @@
+<template data-specimen data-height="400">
+  In the first button the solid box ends at the top of the capitals and at the baseline, so the hatched padding is even all round and the descenders hang into it. The second has spare room above the capitals and under the baseline. The third is a flex container and is not trimmed. The fourth is a flex button with an icon, and its label is trimmed through the span. At normal size they are 35px, 48px, 48px and 40px tall.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      gap: 2rem;
+      padding: 1.5rem;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: start;
+      gap: 1.5rem 2rem;
+    }
+
+    figure {
+      display: grid;
+      justify-items: start;
+      gap: 0.5rem;
+      margin: 0;
+    }
+
+    /* The hatch is the button's padding. The solid box is the text's own box. */
+    .button,
+    .button-with-icon {
+      --text-box: color-mix(in oklch, var(--bp-ink) 35%, var(--bp-paper));
+
+      min-width: 0;
+      min-height: 0;
+      border: 0;
+      background: var(--bp-hatch), var(--bp-panel);
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--bp-ink);
+    }
+
+    .button {
+      background:
+        linear-gradient(var(--text-box) 0 0) content-box,
+        var(--bp-hatch),
+        var(--bp-panel);
+    }
+
+    .button-with-icon > span {
+      background: var(--text-box);
+    }
+
+    /* 16px at normal size, as in a real icon button. */
+    svg {
+      width: 1em;
+      height: 1em;
+    }
+
+    .large :is(.button, .button-with-icon) {
+      font-size: 3.5rem;
+    }
+  }
+</style>
+
+<!-- The second and third buttons change one declaration inline, to compare. -->
+<div class="row large">
+  <button class="button">Apply</button>
+  <button class="button" style="text-box: normal">Apply</button>
+  <button class="button" style="display: inline-flex">Apply</button>
+  <button class="button-with-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M3 8.5l3.5 3.5L13 4.5" /></svg><span>Apply</span></button>
+</div>
+
+<div class="row">
+  <figure>
+    <button class="button">Apply</button>
+    <figcaption class="label">as in the entry <output></output></figcaption>
+  </figure>
+  <figure>
+    <button class="button" style="text-box: normal">Apply</button>
+    <figcaption class="label">text-box: normal <output></output></figcaption>
+  </figure>
+  <figure>
+    <button class="button" style="display: inline-flex">Apply</button>
+    <figcaption class="label">display: inline-flex <output></output></figcaption>
+  </figure>
+  <figure>
+    <button class="button-with-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M3 8.5l3.5 3.5L13 4.5" /></svg><span>Apply</span></button>
+    <figcaption class="label">.button-with-icon <output></output></figcaption>
+  </figure>
+</div>
+
+<script>
+  const measure = () => {
+    for (const figure of document.querySelectorAll("figure")) {
+      const { height } = figure.querySelector("button").getBoundingClientRect();
+      figure.querySelector("output").textContent = `[ ${Math.round(height * 10) / 10}px ]`;
+    }
+  };
+
+  document.fonts.ready.then(measure);
+  measure();
+</script>

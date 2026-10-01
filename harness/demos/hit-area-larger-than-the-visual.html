@@ -1,0 +1,61 @@
+<template data-specimen data-height="200">
+  Click inside the dashed square but outside the small button. The count goes up. The square is 44px, and the large button has none.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 3rem;
+      padding: 2.5rem 1.5rem;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .icon-button {
+      min-width: 0;
+      min-height: 0;
+      padding: 0;
+    }
+
+    .small {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .large {
+      width: 4rem;
+      height: 4rem;
+    }
+
+    /* Draws the hit area. The entry leaves it invisible. */
+    .icon-button::after {
+      outline: 1px dashed var(--bp-ink);
+    }
+  }
+</style>
+
+<div>
+  <button class="icon-button small" aria-label="Small button">×</button>
+  <p class="label">24px button, clicks <output>[ 0 ]</output></p>
+</div>
+
+<div>
+  <button class="icon-button large" aria-label="Large button">×</button>
+  <p class="label">64px button, clicks <output>[ 0 ]</output></p>
+</div>
+
+<script>
+  for (const button of document.querySelectorAll(".icon-button")) {
+    const output = button.parentElement.querySelector("output");
+    let clicks = 0;
+
+    button.addEventListener("click", () => (output.textContent = `[ ${++clicks} ]`));
+  }
+</script>
