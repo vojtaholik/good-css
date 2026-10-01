@@ -1,6 +1,7 @@
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { marked } from "marked";
+import { check } from "../skills/good-css/scripts/check.mjs";
 
 /* Writes the skill's reference files from PRACTICES.md, so an entry is
    written in one place only.
@@ -9,7 +10,10 @@ import { marked } from "marked";
      bun scripts/build-skill.js --check   fails if they are out of date
 
    An entry keeps its title, when to use it, the code, the rules and the
-   support line. "Why it works" and the credits stay in PRACTICES.md. */
+   support line. "Why it works" and the credits stay in PRACTICES.md.
+
+   Both forms stop when the CSS of an entry breaks a rule that SKILL.md
+   gives for all CSS. */
 const root = join(import.meta.dirname, "..");
 const skill = join(root, "skills/good-css");
 const references = join(skill, "references");
@@ -88,8 +92,12 @@ const slugify = (text) =>
 
 function readSections(source) {
   const sections = [];
+  let line = 1;
 
   for (const token of marked.lexer(source)) {
+    token.line = line;
+    line += token.raw.split("\n").length - 1;
+
     if (token.type === "heading" && token.depth === 2) {
       const numbered = token.text.match(/^(\d+)\.\s+(.+)$/);
       sections.push({
@@ -128,6 +136,18 @@ const missing = [...fileOf.keys()].filter((slug) => !sections.some((section) => 
 if (unplaced.length || missing.length) {
   for (const section of unplaced) console.error(`No file for "${section.slug}". Add it to \`files\`.`);
   for (const slug of missing) console.error(`"${slug}" is in \`files\` and not in PRACTICES.md.`);
+  process.exit(1);
+}
+
+/* An agent copies an entry's code as written, so the code has to follow the
+   rules itself. A fence opens one line above its code. */
+const broken = sections.flatMap((section) =>
+  section.tokens
+    .filter((token) => token.type === "code" && token.lang === "css")
+    .flatMap((token) => check(token.text).map((violation) => `PRACTICES.md:${token.line + violation.line} ${violation.message}`)),
+);
+if (broken.length) {
+  for (const violation of broken) console.error(violation);
   process.exit(1);
 }
 

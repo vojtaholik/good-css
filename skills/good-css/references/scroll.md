@@ -133,7 +133,7 @@ Support: `animation-timeline` in Chrome 115 and Safari 26. Firefox has it in Nig
 Use it on any page with in-page links and a fixed or sticky header.
 
 ```css
-html { scroll-padding-top: 5rem; }
+html { scroll-padding-block-start: 5rem; }
 
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }

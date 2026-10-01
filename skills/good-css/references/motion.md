@@ -5,10 +5,12 @@
 Use it for every transition or animation that moves or scales something.
 
 ```css
-.box:hover { transform: scale(1.2); }
+@media (hover: hover) and (pointer: fine) {
+  .box:hover { transform: scale(1.2); }
+}
 
 @media (prefers-reduced-motion: no-preference) {
-  .box { transition: transform 300ms; }
+  .box { transition: transform 300ms var(--ease-out, ease-out); }
 }
 ```
 
@@ -36,7 +38,7 @@ Use them in every transition and animation. Two easing curves, defined once, and
 Rules:
 
 - Never use `ease-in` on UI. It starts slow and reads as lag.
-- Keep UI transitions under 300ms. Press feedback takes 100 to 160ms, tooltips and small popovers 125 to 200ms, dropdowns 150 to 250ms, modals and drawers 200 to 500ms.
+- Keep a UI transition at 300ms or less. Press feedback takes 100 to 160ms, tooltips and small popovers 125 to 200ms, dropdowns 150 to 250ms. The one exception is a modal or drawer, which takes 200 to 500ms.
 - Name the properties in a transition. Never write `transition: all`.
 - Other entries write `var(--ease-out, ease-out)`, so their snippets work before these tokens exist.
 - Whether something should animate at all is not a CSS question. Emil Kowalski's `animate` and `review-animations` skills answer it.
@@ -73,7 +75,7 @@ Use it when one state change should drive several values together, or when a scr
 .card .more { opacity: var(--progress); }
 
 @media (prefers-reduced-motion: no-preference) {
-  .card { transition: --progress 0.4s var(--ease-out, ease-out); }
+  .card { transition: --progress 0.3s var(--ease-out, ease-out); }
 }
 ```
 
@@ -127,7 +129,7 @@ Use it on cards that lift on hover, most of all in a grid of many cards or with 
 
 @media (prefers-reduced-motion: no-preference) {
   .card::before,
-  .card::after { transition: opacity 0.3s ease; }
+  .card::after { transition: opacity 0.3s var(--ease-out, ease-out); }
 }
 ```
 

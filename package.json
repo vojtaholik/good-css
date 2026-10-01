@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "bun deploy/build.js",
+    "build": "bun scripts/build-skill.js --check && bun deploy/build.js",
     "skill": "bun scripts/build-skill.js"
   },
   "devDependencies": {

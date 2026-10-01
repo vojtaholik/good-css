@@ -9,6 +9,7 @@ Install it the way `README.md` says. If you cannot install anything, read `skill
 ## If you are changing the repo
 
 - Never edit `skills/good-css/references/`. Edit `PRACTICES.md`, then run `bun scripts/build-skill.js`. With `--check` the script writes nothing and fails when the files are out of date.
+- The script also runs `skills/good-css/scripts/check.mjs` over the CSS of every entry, and stops when a block breaks a rule under "In all CSS" in `SKILL.md`. `bun run build` runs it with `--check` first, so a deploy fails on a broken entry or on stale files.
 - A new entry needs a place in the `files` map in `scripts/build-skill.js`, and the script stops until it has one. If the entry is for a kind of task the table in `SKILL.md` does not name, add that task to the table.
 - `SKILL.md` is written by hand and loads on every CSS task. Put in it only what every task needs, and keep entry text out of it.
 - After a change to `SKILL.md`, give each prompt in `scripts/skill-evals.json` to a fresh agent, once with the skill and once without, and check the output against the expectations listed there.
