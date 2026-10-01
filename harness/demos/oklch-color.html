@@ -15,8 +15,8 @@
       display: grid;
       gap: 1.25rem;
       padding: 1.25rem;
-      background: white;
-      color: oklch(0.25 0 0);
+      background: oklch(1 0 none);
+      color: oklch(0.25 0 none);
     }
 
     .swatches {
@@ -40,11 +40,18 @@
       justify-self: start;
       border: 0;
       background: var(--primary);
-      color: white;
+      color: oklch(1 0 none);
 
-      &:hover:not(:disabled) {
+      @media (hover: hover) and (pointer: fine) {
+        &:hover:not(:disabled) {
+          background: var(--primary-hover);
+          color: oklch(1 0 none);
+        }
+      }
+
+      &:active:not(:disabled) {
         background: var(--primary-hover);
-        color: white;
+        color: oklch(1 0 none);
       }
     }
 

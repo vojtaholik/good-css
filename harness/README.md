@@ -44,6 +44,9 @@ An entry with no fixture shows a hatched box that names the file to add. Create 
 - Write `<!-- html -->` where the entry's HTML blocks should go. Write it twice for two copies.
 - Build with what `demos/base.css` gives you: the `--bp-*` tokens, `.box`, `.hatch`, `.label` and the button style.
 - Never restate the technique in a fixture. If the specimen needs a rule the entry lacks, the entry is missing it.
+- Write a fixture's own CSS the way the list says, as in the "In all CSS" rules of `skills/good-css/SKILL.md`: `inline` and `block` properties, colors in `oklch()` with `none` as the hue of a gray, each `:hover` inside `@media (hover: hover) and (pointer: fine)`, and `overflow: clip` unless something scrolls.
+
+The page in `harness.css` follows the list too, and starts with the reset of entry 6 as written. `demos/base.css` follows the same rules but holds none of the entries, so a specimen never works because of something its fixture brought.
 
 Renaming an entry's title changes its slug. Rename the fixture to match.
 

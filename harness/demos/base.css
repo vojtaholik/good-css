@@ -1,5 +1,10 @@
 /* What every specimen starts from. It is all layered: unlayered CSS from the
-   entry beats it. A fixture puts its own cosmetics in `@layer demo`. */
+   entry beats it. A fixture puts its own cosmetics in `@layer demo`.
+
+   It follows the list in how it is written, and on purpose it holds none of
+   the entries: no reset, no press scale, and a focus ring that is not the one
+   in entry 20. A specimen has to work on the entry's code alone, and a base
+   that already carried an entry would hide a broken one. */
 @layer base, demo;
 
 @layer base {
@@ -55,9 +60,20 @@
     color: inherit;
     cursor: pointer;
 
-    &:hover:not(:disabled),
     &[aria-pressed="true"] {
       background: var(--bp-ink);
+      color: var(--bp-paper);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover:not(:disabled) {
+        background: var(--bp-ink);
+        color: var(--bp-paper);
+      }
+    }
+
+    &:active:not(:disabled) {
+      background: var(--bp-ink-soft);
       color: var(--bp-paper);
     }
 
@@ -66,6 +82,10 @@
       color: var(--bp-line);
       cursor: default;
     }
+  }
+
+  a:active {
+    opacity: 0.7;
   }
 
   :focus-visible {

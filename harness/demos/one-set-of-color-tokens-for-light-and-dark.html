@@ -46,10 +46,16 @@
     button {
       border-color: currentColor;
 
-      &:hover:not(:disabled),
-      &[aria-pressed="true"] {
+      &:is(:active, [aria-pressed="true"]) {
         background: var(--foreground);
         color: var(--background);
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        &:hover:not(:disabled) {
+          background: var(--foreground);
+          color: var(--background);
+        }
       }
     }
 

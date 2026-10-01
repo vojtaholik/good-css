@@ -2,6 +2,7 @@
    by hand: the reset, the content grid, fluid sizes, color-mix, the animated
    accordion. Specimens do not use this file. They run the entry's own code. */
 
+/* The reset, entry 6, as the entry has it. */
 *,
 *::before,
 *::after {
@@ -10,6 +11,56 @@
 }
 
 :root {
+  interpolate-size: allow-keywords;
+  scrollbar-gutter: stable;
+  text-wrap: pretty;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+textarea,
+select {
+  font-size: max(16px, 1rem);
+}
+
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+button,
+[role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* The page's own tokens and base. */
+:root {
   --text-display: clamp(5rem, 1rem + 17vw, 17rem);
   --text-number: clamp(4rem, 2.5rem + 6vw, 8.5rem);
   --text-title: clamp(2rem, 1.25rem + 3vw, 4rem);
@@ -17,6 +68,7 @@
   --text-lede: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
   --space-sheet: clamp(3rem, 1.5rem + 6vw, 7rem);
   --space-block: clamp(1.5rem, 1rem + 2vw, 3rem);
+  --space-number: clamp(1.25rem, 0.5rem + 3vw, 3.5rem);
 
   /* Every guide line sits this far outside its column, so text and frames
      never touch one. A block that should reach the guides uses the same
@@ -26,14 +78,12 @@
 
   --title-code: color-mix(in oklch, var(--bp-ink) 16%, var(--bp-paper));
 
-  /* Hover fills stay see-through: they end on a guide and must not hide it. */
+  /* Hover and press fills stay see-through: they end on a guide and must not
+     hide it. */
   --hover-fill: color-mix(in oklch, var(--bp-ink) 14%, transparent);
+  --press-fill: color-mix(in oklch, var(--bp-ink) 26%, transparent);
 
-  interpolate-size: allow-keywords;
-  text-wrap: pretty;
-  font-synthesis: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
   color-scheme: dark;
   scrollbar-color: var(--bp-scrollbar);
@@ -62,8 +112,6 @@ html {
 
 body {
   position: relative;
-  margin: 0;
-  min-height: 100svh;
 }
 
 h1,
@@ -82,12 +130,27 @@ h2,
   font-family: var(--bp-font-display);
   font-weight: 700;
   text-transform: uppercase;
-  text-wrap: balance;
   text-box: trim-both cap alphabetic;
 }
 
 a {
   color: inherit;
+}
+
+/* A link in running text. Its underline thickens under the pointer and
+   under a press. */
+:is(.prose, .install, .footer p) a {
+  text-underline-offset: 0.2em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(.prose, .install, .footer p) a:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+
+:is(.prose, .install, .footer p) a:active {
+  text-decoration-thickness: 2px;
 }
 
 code,
@@ -115,8 +178,12 @@ pre,
 }
 
 :focus-visible {
-  outline: 2px solid var(--bp-ink);
-  outline-offset: 2px;
+  outline: max(2px, 0.08em) solid currentColor;
+  outline-offset: 0.25em;
+}
+
+@view-transition {
+  navigation: auto;
 }
 
 /* Content grid ------------------------------------------------------------ */
@@ -214,7 +281,6 @@ pre,
 
   & a {
     color: var(--bp-ink);
-    text-underline-offset: 0.2em;
   }
 }
 
@@ -244,17 +310,11 @@ pre,
   }
 }
 
-@media (hover: hover) {
-  .install a:hover {
-    text-decoration-thickness: 2px;
-  }
-}
-
 /* The index: a status row, then every entry. Both are laid out in the same
    columns, and the block reaches the guides on either side. */
 .index {
   margin-inline: calc(var(--guide-gap) * -1);
-  border-top: 1px solid var(--bp-line-faint);
+  border-block-start: 1px solid var(--bp-line-faint);
 
   & :is(.title-block, ol) {
     columns: 3 16rem;
@@ -269,7 +329,7 @@ pre,
 
   & :is(.title-block > div, a) {
     padding: 0.625rem var(--guide-gap);
-    border-bottom: 1px solid var(--bp-line-faint);
+    border-block-end: 1px solid var(--bp-line-faint);
     break-inside: avoid;
   }
 
@@ -285,7 +345,7 @@ pre,
 /* Every cell of the index is one line, so the rows line up across columns.
    A title that does not fit is cut short, and the link's tooltip has it whole. */
 .index :is(dt, .index-title) {
-  overflow: hidden;
+  overflow: clip;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -313,7 +373,7 @@ pre,
   background: var(--bp-hatch);
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .index a:hover {
     background: var(--hover-fill);
 
@@ -321,6 +381,10 @@ pre,
       color: var(--bp-ink);
     }
   }
+}
+
+.index a:active {
+  background: var(--press-fill);
 }
 
 /* Sheet ------------------------------------------------------------------- */
@@ -331,15 +395,15 @@ pre,
   container-type: inline-size;
   row-gap: var(--space-block);
   padding-block: var(--space-block) var(--space-sheet);
-  border-top: 1px solid var(--bp-line-faint);
+  border-block-start: 1px solid var(--bp-line-faint);
 }
 
-/* The head stands two blocks clear of the specimen it names. */
+/* The head stands a block and a half clear of the specimen it names. */
 .sheet-head {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 1.5rem clamp(1.25rem, 0.5rem + 3vw, 3.5rem);
-  margin-block-end: var(--space-block);
+  gap: 1.5rem var(--space-number);
+  margin-block-end: calc(var(--space-block) / 2);
 
   & h2 {
     align-self: start;
@@ -403,13 +467,14 @@ pre,
   height: calc(var(--frame-height) + var(--bar) + 2px);
   min-height: 10rem;
   border: 1px solid var(--bp-line);
+  /* `hidden`, not `clip`: the corner grip is only drawn on a scroll container. */
   overflow: hidden;
   resize: both;
 
   /* A grip in the corner of the frame: two strokes on a paper square. */
   &::-webkit-resizer {
-    border: solid var(--bp-line);
-    border-width: 1px 0 0 1px;
+    border-block-start: 1px solid var(--bp-line);
+    border-inline-start: 1px solid var(--bp-line);
     background:
       linear-gradient(
         135deg,
@@ -429,7 +494,8 @@ pre,
   }
 }
 
-/* A control in a bar is a cell of it, divided from the rest by a line. */
+/* A control in a bar is a cell of it, divided from the rest by a line. Its
+   focus ring is drawn inside the cell, where the frame cannot clip it. */
 :is(.viewport-bar, .install-command) :is(button, a) {
   display: grid;
   place-items: center;
@@ -443,9 +509,21 @@ pre,
   cursor: pointer;
 }
 
+/* The hit area of entry 27, for the controls that look smaller than 44px.
+   On a frame's bar the part above the bar is clipped by the frame. */
+:is(.viewport-bar :is(button, a), .footer nav a) {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: min(0px, (100% - 44px) / 2);
+  }
+}
+
 .viewport-bar {
   display: flex;
-  border-bottom: 1px solid var(--bp-line);
+  border-block-end: 1px solid var(--bp-line);
   background: var(--bp-panel);
 
   & :is(button, a) {
@@ -459,7 +537,10 @@ pre,
   & [aria-pressed="true"] {
     background: var(--bp-ink);
     color: var(--bp-paper);
-    outline-color: var(--bp-paper);
+
+    &:active {
+      background: var(--bp-ink-soft);
+    }
   }
 }
 
@@ -467,7 +548,7 @@ pre,
   flex: 1;
   align-self: center;
   padding-inline: 0.75rem;
-  overflow: hidden;
+  overflow: clip;
   white-space: nowrap;
 }
 
@@ -475,10 +556,14 @@ pre,
   display: flex;
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   :is(.viewport-bar, .install-command) :is(button:not([aria-pressed="true"]), a):hover {
     background: var(--hover-fill);
   }
+}
+
+:is(.viewport-bar, .install-command) :is(button:not([aria-pressed="true"]), a):active {
+  background: var(--press-fill);
 }
 
 .no-specimen {
@@ -540,20 +625,25 @@ pre,
 
   & .prose {
     max-width: calc(68ch + var(--guide-gap) * 2);
-    padding: 0.5rem var(--guide-gap) 2rem;
+    padding-block: 0.5rem 2rem;
+    padding-inline: var(--guide-gap);
   }
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .entry summary:hover {
     background: var(--hover-fill);
   }
 }
 
+.entry summary:active {
+  background: var(--press-fill);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .entry::details-content {
     transition:
-      height 0.3s ease-out,
+      height 0.3s var(--ease-out),
       content-visibility 0.3s allow-discrete;
   }
 }
@@ -595,16 +685,6 @@ pre,
     overflow-x: auto;
     tab-size: 2;
   }
-
-  & a {
-    text-underline-offset: 0.2em;
-  }
-}
-
-@media (hover: hover) {
-  .prose a:hover {
-    text-decoration-thickness: 2px;
-  }
 }
 
 /* Footer ------------------------------------------------------------------ */
@@ -613,11 +693,7 @@ pre,
    they are there for whoever looks for them, and are not part of the list. */
 .footer {
   padding-block: var(--space-block);
-  border-top: 1px solid var(--bp-line-faint);
-
-  & a {
-    text-underline-offset: 0.2em;
-  }
+  border-block-start: 1px solid var(--bp-line-faint);
 
   & nav {
     display: flex;
@@ -642,13 +718,14 @@ pre,
   gap: 0.5rem var(--space-block);
 }
 
-@media (hover: hover) {
-  .footer p a:hover {
-    text-decoration-thickness: 2px;
-  }
-
+@media (hover: hover) and (pointer: fine) {
   .footer nav a:hover {
     color: var(--bp-ink);
     text-decoration: underline;
   }
+}
+
+.footer nav a:active {
+  color: var(--bp-ink);
+  text-decoration: underline;
 }

@@ -7,13 +7,13 @@
     /* As tall as the entry's scroll-padding-top. */
     header {
       position: sticky;
-      top: 0;
+      inset-block-start: 0;
       display: flex;
       align-items: center;
       gap: 1.5rem;
       height: 5rem;
       padding-inline: 1.5rem;
-      border-bottom: 1px solid var(--bp-line);
+      border-block-end: 1px solid var(--bp-line);
       background: var(--bp-paper);
     }
 
@@ -24,7 +24,8 @@
     section {
       display: grid;
       gap: 1rem;
-      padding: 1rem 1.5rem 2rem;
+      padding-block: 1rem 2rem;
+      padding-inline: 1.5rem;
     }
 
     h2 {
