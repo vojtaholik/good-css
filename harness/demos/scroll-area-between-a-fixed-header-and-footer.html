@@ -1,0 +1,114 @@
+<template data-specimen data-height="460">
+  Each panel is at most 80% of the frame's height. Its header and footer stay put and the list between them scrolls. The second panel has a form between the panel and the list, and behaves the same. Scroll a list to its end: the page behind does not move. Press Fewer rows: both panels shrink to their content and the scrollbar goes.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .panels {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: start;
+      gap: 1.5rem;
+    }
+
+    .panel {
+      flex: 1 1 16rem;
+      max-inline-size: 22rem;
+      border: 1px solid var(--bp-line);
+      background: var(--bp-panel);
+    }
+
+    /* Sized with padding, so neither shrinks when the list overflows. */
+    .panel :is(header, footer) {
+      padding: 0.75rem 1rem;
+    }
+
+    .panel header {
+      border-block-end: 1px solid var(--bp-line);
+    }
+
+    .panel footer {
+      border-block-start: 1px solid var(--bp-line);
+    }
+
+    .panel-body {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      & li {
+        padding: 0.625rem 1rem;
+      }
+
+      & li + li {
+        border-block-start: 1px solid var(--bp-line-faint);
+      }
+    }
+
+    /* Below the panels, so the page has somewhere to scroll to. */
+    .after {
+      max-inline-size: 50ch;
+      padding-block-end: 12rem;
+    }
+  }
+</style>
+
+<p><button aria-pressed="false">Fewer rows</button></p>
+
+<div class="panels">
+  <section class="panel">
+    <header><code>.panel-body</code> is a child of the panel</header>
+    <ul class="panel-body">
+      <li>Ana opened the report</li>
+      <li>Ben left a comment</li>
+      <li>Chidi approved the budget</li>
+      <li data-extra>Dana uploaded three files</li>
+      <li data-extra>Emre renamed the folder</li>
+      <li data-extra>Farah shared the link</li>
+      <li data-extra>Goran closed the task</li>
+      <li data-extra>Hana moved it to done</li>
+      <li data-extra>Ivo archived the thread</li>
+      <li data-extra>Jun reopened the task</li>
+    </ul>
+    <footer><button>Mark all as read</button></footer>
+  </section>
+
+  <section class="panel">
+    <header>A form sits between them, with <code>.panel-wrap</code></header>
+    <form class="panel-wrap">
+      <ul class="panel-body">
+        <li>Ana opened the report</li>
+        <li>Ben left a comment</li>
+        <li>Chidi approved the budget</li>
+        <li data-extra>Dana uploaded three files</li>
+        <li data-extra>Emre renamed the folder</li>
+        <li data-extra>Farah shared the link</li>
+        <li data-extra>Goran closed the task</li>
+        <li data-extra>Hana moved it to done</li>
+        <li data-extra>Ivo archived the thread</li>
+        <li data-extra>Jun reopened the task</li>
+      </ul>
+      <footer><button type="button">Mark all as read</button></footer>
+    </form>
+  </section>
+</div>
+
+<p class="after">The page goes on below the panels. At the end of a list, scrolling stays in the list and this text does not move.</p>
+
+<script>
+  const toggle = document.querySelector("button[aria-pressed]");
+
+  toggle.addEventListener("click", () => {
+    const fewer = toggle.getAttribute("aria-pressed") !== "true";
+
+    toggle.setAttribute("aria-pressed", fewer);
+    for (const row of document.querySelectorAll("[data-extra]")) row.hidden = fewer;
+  });
+</script>

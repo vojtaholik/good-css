@@ -1,7 +1,7 @@
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { marked } from "marked";
-import { check } from "../skills/good-css/scripts/check.mjs";
+import { check } from "./check-css.mjs";
 
 /* Writes the skill's reference files from PRACTICES.md, so an entry is
    written in one place only.
@@ -28,11 +28,14 @@ const files = {
     "oklch-color",
     "one-set-of-color-tokens-for-light-and-dark",
     "fluid-sizes-with-clamp",
+    "one-fluid-scale-for-type-and-space",
     "left-out-on-purpose",
   ],
   layout: [
     "content-grid-with-breakouts",
     "section-spacing-that-depends-on-its-neighbors",
+    "space-between-siblings-set-by-the-parent",
+    "push-one-item-away-with-an-auto-margin",
     "intrinsic-grid",
     "subgrid-rows-shared-across-cards",
     "container-queries-with-container-units",
@@ -52,8 +55,13 @@ const files = {
     "form-feedback-with-user-invalid",
     "textarea-that-grows-with-its-content",
     "label-centered-on-its-letters-with-text-box",
+    "icon-sized-by-the-text-beside-it",
     "tabular-numbers",
     "concentric-nested-radius",
+  ],
+  content: [
+    "long-text-that-wraps-truncates-or-clamps",
+    "image-box-that-holds-any-upload",
   ],
   motion: [
     "opt-in-motion",
@@ -71,6 +79,7 @@ const files = {
   ],
   scroll: [
     "carousel-on-native-scroll",
+    "scroll-area-between-a-fixed-header-and-footer",
     "styles-that-apply-only-when-a-scroller-overflows",
     "anchor-targets-that-clear-a-sticky-header",
     "no-rubber-band-bounce-on-desktop",

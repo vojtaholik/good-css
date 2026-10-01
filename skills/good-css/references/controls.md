@@ -238,6 +238,47 @@ Rules:
 
 Support: Chrome 133, Firefox 154, Safari 18.2.
 
+## 47. Icon sized by the text beside it
+
+Use it on every icon that sits next to a label, in buttons, links, list rows and notices. The icon takes its size from the font, so it follows the text and never needs a size per variant.
+
+```css
+.with-icon {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+
+.with-icon > svg {
+  flex: none;
+  block-size: 1cap;
+  inline-size: auto;
+}
+
+.notice {
+  display: flex;
+  align-items: start;
+  gap: 0.5em;
+}
+
+.notice > svg {
+  flex: none;
+  inline-size: 1em;
+  block-size: 1lh;
+}
+```
+
+Rules:
+
+- Never size an icon in `px`. A 16px icon that matches 16px text is 5px to 7px shorter than the capitals of 32px text.
+- Keep `flex: none`. Without it a long label squeezes the icon.
+- The `svg` needs a `viewBox`. `inline-size: auto` then follows the drawing's ratio.
+- Many icon sets leave padding inside the drawing, and `1cap` looks small on those. Raise the number and keep the unit, as in `1.2cap`.
+- Do not use `align-items: center` on a label that can wrap. The icon then sits beside the middle line.
+- With entry 33 the trimmed label is `1cap` tall, so `align-items: center` lines the icon up with it at both edges.
+
+Support: `cap` in Chrome 118, Firefox 97, Safari 17.2. `lh` in Chrome 109, Firefox 120, Safari 16.4. Tested in Chrome 150 and real Safari 27 on 2026-10-01, where the icon came out within 0.01px of the capital height at 16px and at 32px.
+
 ## 28. Tabular numbers
 
 Use it on any number that changes or sits in a column, such as prices, tables, timers and counters.

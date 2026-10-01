@@ -1,0 +1,60 @@
+<template data-specimen data-height="460">
+  Make the frame narrower. Every size shrinks along a straight line, and stops changing below 320px and above 1240px. At 1240px or wider the readout says body 20px, title 48.83px and padding 40px. At 320px it says 18px, 37.32px and 18px.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .card {
+      max-inline-size: 44rem;
+      border: 1px solid var(--bp-line);
+      background: var(--bp-panel);
+    }
+
+    .label {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1.5rem;
+    }
+  }
+</style>
+
+<article class="card">
+  <h1>Step 4</h1>
+  <h2>Step 2, a heading</h2>
+  <p>Step 0 is the body text. The gap between these lines is <code>--space-s</code> and the padding around them is the pair <code>--space-s-l</code>.</p>
+  <small>Step −1, the small print.</small>
+</article>
+
+<p class="label">
+  <span>frame <output data-read="frame"></output></span>
+  <span>title <output data-read="h1"></output></span>
+  <span>heading <output data-read="h2"></output></span>
+  <span>body <output data-read="p"></output></span>
+  <span>small <output data-read="small"></output></span>
+  <span>padding <output data-read="padding"></output></span>
+</p>
+
+<script>
+  const card = document.querySelector(".card");
+  const px = (value) => `[ ${Math.round(parseFloat(value) * 100) / 100}px ]`;
+
+  const read = () => {
+    for (const output of document.querySelectorAll("[data-read]")) {
+      const what = output.dataset.read;
+
+      if (what === "frame") output.textContent = `[ ${innerWidth}px ]`;
+      else if (what === "padding") output.textContent = px(getComputedStyle(card).paddingBlockStart);
+      else output.textContent = px(getComputedStyle(card.querySelector(what)).fontSize);
+    }
+  };
+
+  addEventListener("resize", read);
+  read();
+</script>

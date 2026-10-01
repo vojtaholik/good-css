@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 /* Checks CSS against the rules under "In all CSS" in SKILL.md that can be
    read off the text with no judgment.
 
-     node check.mjs styles.css page.html
+     node scripts/check-css.mjs styles.css page.html
 
    A .css file is read whole. Any other file is read for its <style> blocks.
    Each violation prints as path:line and what to write instead, and the exit
@@ -207,7 +207,7 @@ export const checkFile = (path) => {
 if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const paths = process.argv.slice(2);
   if (!paths.length) {
-    console.error("Usage: node check.mjs <file> [<file> …]");
+    console.error("Usage: node scripts/check-css.mjs <file> [<file> …]");
     process.exit(2);
   }
 

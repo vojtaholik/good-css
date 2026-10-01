@@ -1,0 +1,80 @@
+<template data-specimen data-height="420">
+  Each icon is as tall as the capital letters beside it and stands on their baseline, at all three sizes. Make the frame narrower until the notice wraps: its icon stays beside the first line.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      justify-items: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .sizes {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 1rem 2rem;
+    }
+
+    .medium {
+      font-size: 1.5rem;
+    }
+
+    .large {
+      font-size: 2.5rem;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button {
+      padding-block: 0.5rem;
+    }
+
+    .notice {
+      max-inline-size: 26rem;
+      padding: 1rem;
+    }
+
+    svg {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+  }
+</style>
+
+<div class="sizes">
+  <a class="with-icon" href="#">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 1h14v14H1zM4.5 8h7M8 4.5v7" /></svg>
+    Add file
+  </a>
+  <a class="with-icon medium" href="#">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 1h14v14H1zM4.5 8h7M8 4.5v7" /></svg>
+    Add file
+  </a>
+  <a class="with-icon large" href="#">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 1h14v14H1zM4.5 8h7M8 4.5v7" /></svg>
+    Add file
+  </a>
+</div>
+
+<div class="sizes">
+  <button class="with-icon">
+    <svg viewBox="0 0 24 16" aria-hidden="true"><path d="M1 8h22M16 1l7 7-7 7" /></svg>
+    A wide icon
+  </button>
+  <button class="with-icon medium">
+    <svg viewBox="0 0 24 16" aria-hidden="true"><path d="M1 8h22M16 1l7 7-7 7" /></svg>
+    A wide icon
+  </button>
+</div>
+
+<p class="box notice">
+  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l7 14H1zM8 6v4.5M8 12.5v1" /></svg>
+  <span>This notice is long enough to wrap onto two or three lines, and the icon stays beside the first of them.</span>
+</p>

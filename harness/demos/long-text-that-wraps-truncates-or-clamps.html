@@ -1,0 +1,75 @@
+<template data-specimen data-height="340">
+  Make the frame narrower. The long address breaks inside its box and never sticks out of it. Each name stays on one line and ends in an ellipsis. The excerpt stops after three lines with an ellipsis, at any width.
+</template>
+
+<style>
+  @layer demo {
+    /* Columns of plain blocks. A grid or flex item would need the reset's
+       `min-width: 0` before it could get narrower than a name. */
+    body {
+      padding: 1.5rem;
+      columns: 16rem;
+      column-gap: 1.5rem;
+    }
+
+    section {
+      margin-block-end: 1.5rem;
+      break-inside: avoid;
+    }
+
+    section > .label {
+      margin-block-end: 0.5rem;
+    }
+
+    .box {
+      padding: 0.75rem 1rem;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .row .hatch {
+      flex: none;
+      inline-size: 2.5rem;
+      block-size: 2.5rem;
+    }
+  }
+</style>
+
+<section>
+  <p class="label">overflow-wrap: break-word</p>
+  <div class="box">
+    <p>The report is at https://example.com/reports/2026/quarterly-revenue-by-region-and-product-line-final-v3.pdf and it wraps like any other text.</p>
+  </div>
+</section>
+
+<section>
+  <p class="label">.name in a block</p>
+  <div class="box">
+    <p class="name">Hubert Blaine Wolfeschlegelsteinhausenbergerdorff, Senior Vice President of Regional Operations</p>
+  </div>
+</section>
+
+<section>
+  <p class="label">.name in a flex row</p>
+  <div class="box row">
+    <div class="hatch"></div>
+    <!-- The entry's rule for a page without the reset: every flex item
+         between the row and the text gets `min-inline-size: 0`. -->
+    <div style="min-inline-size: 0">
+      <p class="name">Hubert Blaine Wolfeschlegelsteinhausenbergerdorff</p>
+      <p class="name label">hubert.blaine.wolfeschlegelsteinhausenbergerdorff@example.com</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="label">.excerpt, three lines</p>
+  <!-- The padding is on the box. The clamped paragraph has none. -->
+  <div class="box">
+    <p class="excerpt">Revenue grew in every region for the third quarter in a row. The largest gains came from the two newest markets, where the product launched in spring. Costs rose more slowly than revenue, so the margin widened by two points. The full breakdown by region and product line is in the attached report.</p>
+  </div>
+</section>

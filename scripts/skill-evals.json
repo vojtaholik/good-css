@@ -18,7 +18,7 @@
         "Variants are derived with color-mix(in oklch, ...)",
         "No width breakpoints",
         "One set of color tokens with light-dark()",
-        "Fluid sizes use clamp() with a rem + vw preferred value",
+        "Fluid sizes use clamp() with a rem + vw preferred value, or the scale derived from six inputs",
         "Card grid is intrinsic: repeat(auto-fit|auto-fill, minmax(min(100%, ...), 1fr))",
         "Card parts line up across cards with subgrid",
         "Prices use tabular numbers"

@@ -1,0 +1,81 @@
+<template data-specimen data-height="520">
+  In both boxes the first child touches the top padding and the last child the bottom padding, with no space left over at either end. The fields are 1rem apart. In the article each heading has twice the space above it and half the space below it.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+      align-items: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .box {
+      padding: 1.5rem;
+    }
+
+    /* Each child is tinted, so the space between two of them shows. */
+    :is(.fields, .prose) > * {
+      background: color-mix(in oklch, var(--bp-ink) 12%, transparent);
+    }
+
+    label {
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    input {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--bp-line);
+      background: none;
+      font: inherit;
+      color: inherit;
+    }
+
+    /* The entry's rule for a button in a flex column. */
+    .fields > button {
+      align-self: start;
+    }
+
+    .prose :is(h2, h3) {
+      font-size: 1.5rem;
+    }
+
+    .prose ul {
+      padding-inline-start: 1.25rem;
+    }
+  }
+</style>
+
+<section>
+  <p class="label">.fields</p>
+  <form class="box fields">
+    <label>Name <input type="text" value="Ana Novak"></label>
+    <label>Email <input type="email" value="ana@example.com"></label>
+    <label>Team <input type="text" value="Design"></label>
+    <button type="button">Save</button>
+  </form>
+</section>
+
+<section>
+  <p class="label">.prose</p>
+  <article class="box prose">
+    <p>The first paragraph has no space above it.</p>
+    <h2>A heading asks for more</h2>
+    <p>What follows a heading sits closer to it.</p>
+    <p>Two paragraphs are 1em apart.</p>
+    <h3>A smaller heading</h3>
+    <ul>
+      <li>List items are not direct children.</li>
+      <li>The rule leaves them alone.</li>
+    </ul>
+    <p>The last paragraph has no space below it.</p>
+  </article>
+</section>

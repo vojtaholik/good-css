@@ -1,0 +1,74 @@
+<template data-specimen data-height="460">
+  The four covers are the same shape, whatever the shape of the file: each picture fills its box and is cropped, never stretched. The last one fails to load and shows the box with its background. The avatars are round and the same size beside any length of name, and the white one still has an edge on the white card.
+</template>
+
+<style>
+  @layer demo {
+    body {
+      display: grid;
+      align-content: start;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .covers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+      gap: 1rem;
+    }
+
+    figure {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0;
+    }
+
+    /* A white card, where an avatar with a white background needs its edge. */
+    .people {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+      gap: 1rem;
+      padding: 1rem;
+      background: oklch(1 0 none);
+      color: oklch(0.25 0 none);
+    }
+
+    .person {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<!-- The pictures are drawn inline, in three shapes. The fourth address is
+     not an image, so that load fails. -->
+<div class="covers">
+  <figure>
+    <img class="thumb" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20600%20900'%20width='600'%20height='900'%3E%3Crect%20width='600'%20height='900'%20style='fill:oklch(0.93%200.03%20264)'/%3E%3Cpath%20d='M0%200L600%20900M600%200L0%20900'%20style='stroke:oklch(0.54%200.19%20264);stroke-width:6;fill:none'/%3E%3Ccircle%20cx='300.0'%20cy='450.0'%20r='180.0'%20style='fill:oklch(0.93%200.03%20264);stroke:oklch(0.54%200.19%20264);stroke-width:6'/%3E%3Ctext%20x='300.0'%20y='450.0'%20text-anchor='middle'%20dominant-baseline='central'%20style='font:600%2076px%20sans-serif;fill:oklch(0.35%200.15%20264)'%3E600%20%C3%97%20900%3C/text%3E%3C/svg%3E" alt="A tall picture with a circle in the middle">
+    <figcaption class="label">tall file</figcaption>
+  </figure>
+  <figure>
+    <img class="thumb" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201500%20500'%20width='1500'%20height='500'%3E%3Crect%20width='1500'%20height='500'%20style='fill:oklch(0.93%200.03%20264)'/%3E%3Cpath%20d='M0%200L1500%20500M1500%200L0%20500'%20style='stroke:oklch(0.54%200.19%20264);stroke-width:6;fill:none'/%3E%3Ccircle%20cx='750.0'%20cy='250.0'%20r='150.0'%20style='fill:oklch(0.93%200.03%20264);stroke:oklch(0.54%200.19%20264);stroke-width:6'/%3E%3Ctext%20x='750.0'%20y='250.0'%20text-anchor='middle'%20dominant-baseline='central'%20style='font:600%2063px%20sans-serif;fill:oklch(0.35%200.15%20264)'%3E1500%20%C3%97%20500%3C/text%3E%3C/svg%3E" alt="A wide picture with a circle in the middle">
+    <figcaption class="label">wide file</figcaption>
+  </figure>
+  <figure>
+    <img class="thumb" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20800%20800'%20width='800'%20height='800'%3E%3Crect%20width='800'%20height='800'%20style='fill:oklch(0.93%200.03%20264)'/%3E%3Cpath%20d='M0%200L800%20800M800%200L0%20800'%20style='stroke:oklch(0.54%200.19%20264);stroke-width:6;fill:none'/%3E%3Ccircle%20cx='400.0'%20cy='400.0'%20r='240.0'%20style='fill:oklch(0.93%200.03%20264);stroke:oklch(0.54%200.19%20264);stroke-width:6'/%3E%3Ctext%20x='400.0'%20y='400.0'%20text-anchor='middle'%20dominant-baseline='central'%20style='font:600%20101px%20sans-serif;fill:oklch(0.35%200.15%20264)'%3E800%20%C3%97%20800%3C/text%3E%3C/svg%3E" alt="A square picture with a circle in the middle">
+    <figcaption class="label">square file</figcaption>
+  </figure>
+  <figure>
+    <img class="thumb" src="data:image/png;base64,bm90IGFuIGltYWdl" alt="">
+    <figcaption class="label">a file that fails to load</figcaption>
+  </figure>
+</div>
+
+<div class="people">
+  <div class="person">
+    <img class="avatar" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201500%20500'%20width='1500'%20height='500'%3E%3Crect%20width='1500'%20height='500'%20style='fill:oklch(0.93%200.03%20264)'/%3E%3Cpath%20d='M0%200L1500%20500M1500%200L0%20500'%20style='stroke:oklch(0.54%200.19%20264);stroke-width:6;fill:none'/%3E%3Ccircle%20cx='750.0'%20cy='250.0'%20r='150.0'%20style='fill:oklch(0.93%200.03%20264);stroke:oklch(0.54%200.19%20264);stroke-width:6'/%3E%3Ctext%20x='750.0'%20y='250.0'%20text-anchor='middle'%20dominant-baseline='central'%20style='font:600%2063px%20sans-serif;fill:oklch(0.35%200.15%20264)'%3E1500%20%C3%97%20500%3C/text%3E%3C/svg%3E" alt="">
+    <p>Ana Novak</p>
+  </div>
+  <div class="person">
+    <img class="avatar" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20400%20400'%20width='400'%20height='400'%3E%3Crect%20width='400'%20height='400'%20style='fill:oklch(1%200%20none)'/%3E%3Ccircle%20cx='200'%20cy='160'%20r='70'%20style='fill:oklch(0.9%200%20none)'/%3E%3Cpath%20d='M60%20400a140%20150%200%200%201%20280%200z'%20style='fill:oklch(0.9%200%20none)'/%3E%3C/svg%3E" alt="">
+    <p>Hubert Blaine Wolfe the Third, who has a long name and a picture with a white background</p>
+  </div>
+</div>

@@ -24,8 +24,9 @@ dialog::backdrop {
 }
 
 dialog[open],
-[popover]:popover-open,
 dialog[open]::backdrop { opacity: 1; }
+
+[popover]:popover-open { opacity: 1; }
 
 @starting-style {
   dialog[open],
@@ -37,7 +38,8 @@ dialog[open]::backdrop { opacity: 1; }
   dialog,
   [popover] { translate: 0 0.5rem; }
 
-  dialog[open],
+  dialog[open] { translate: 0 0; }
+
   [popover]:popover-open { translate: 0 0; }
 
   @starting-style {
@@ -53,6 +55,7 @@ Rules:
 - Never start from `scale(0)`. If the element scales in, start at `scale(0.95)` with `opacity: 0`.
 - The dialog's `::backdrop` needs the same three states and its own transition, as in the block. Without them it snaps while the dialog fades.
 - Write no fallback. Where the exit is not supported the element closes at once.
+- Keep `[popover]:popover-open` out of the selector list that opens the dialog. A browser that does not know one selector in a list drops the whole rule, and the dialog would open at `opacity: 0`. Inside `@starting-style` the shared list is safe, because every browser that reads the block knows the selector.
 
 Support: both directions in Chrome 117. In Safari 27 the entry animates and `<dialog>` and popovers close at once, tested in real Safari on 2026-10-01. An element toggled with a class animates both ways there. Firefox 129 animates the entry only.
 

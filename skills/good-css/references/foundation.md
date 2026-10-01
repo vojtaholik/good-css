@@ -16,6 +16,7 @@ Start every new project with it. In an existing project add one rule at a time a
   interpolate-size: allow-keywords;
   scrollbar-gutter: stable;
   text-wrap: pretty;
+  overflow-wrap: break-word;
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -49,6 +50,7 @@ button, [role="button"] {
 Rules:
 
 - Load every weight and style the design uses. With `font-synthesis: none` a missing bold renders as regular.
+- With `min-width: 0` on everything, a sized image, icon or avatar in a flex row shrinks to make room for the text beside it. Give it `flex: none`.
 - The reset removes the tap highlight, so every pressable element needs its own `:active` state. Entry 31 (`controls.md`) has it.
 - Never fix input zoom with `user-scalable=no` or `maximum-scale=1`. That takes zoom away from people who need it.
 - Keep `user-select: none` to controls. Never set it on `body` or on links, because people copy text.
@@ -114,7 +116,63 @@ Rules:
 - Write the preferred value as `rem + vw`, never `vw` alone. `clamp(1rem, 1vw, 1.75rem)` stays at 16px on every screen narrower than 1600px, because 1vw is smaller than 1rem until then. A bare `vw` value also ignores the reader's font size setting.
 - Work the preferred value out from two points. The slope is `(max - min) / (wide - narrow)`, in px over px, and times 100 it is the `vw` number. The `rem` part is `min - slope × narrow`.
 - Keep both bounds in `rem` so they follow the reader's font size.
+- For a font size, keep the maximum at or below 2.5 times the minimum. The `vw` part does not grow when the reader zooms, so fluid text grows less than the page. Past 2.5 times, 500% zoom cannot double the text at some widths, and that fails WCAG 1.4.4.
 - Put fluid values in tokens. Components use the token and never repeat the math.
+- For more than two or three sizes, derive a whole scale as entry 44 does.
+
+## 44. One fluid scale for type and space
+
+Use it when a design has more than two or three font sizes. Six numbers describe every size, and the browser derives the steps. It replaces a table of sizes per breakpoint, and it replaces a generator that someone has to find and run again.
+
+```css
+:root {
+  --narrow: 20;
+  --wide: 77.5;
+  --size-narrow: 1.125;
+  --size-wide: 1.25;
+  --ratio-narrow: 1.2;
+  --ratio-wide: 1.25;
+
+  --fluid: clamp(0rem, (100vw - var(--narrow) * 1rem) / (var(--wide) - var(--narrow)), 1rem);
+  --at-narrow: calc(var(--size-narrow) * (1rem - var(--fluid)));
+  --at-wide: calc(var(--size-wide) * var(--fluid));
+
+  --step--1: calc(var(--step-0) / var(--ratio-narrow));
+  --step-0: calc(var(--at-narrow) + var(--at-wide));
+  --step-1: calc(var(--at-narrow) * var(--ratio-narrow) + var(--at-wide) * var(--ratio-wide));
+  --step-2: calc(var(--at-narrow) * pow(var(--ratio-narrow), 2) + var(--at-wide) * pow(var(--ratio-wide), 2));
+  --step-3: calc(var(--at-narrow) * pow(var(--ratio-narrow), 3) + var(--at-wide) * pow(var(--ratio-wide), 3));
+  --step-4: calc(var(--at-narrow) * pow(var(--ratio-narrow), 4) + var(--at-wide) * pow(var(--ratio-wide), 4));
+
+  --space-s: var(--step-0);
+  --space-m: calc(1.5 * var(--step-0));
+  --space-l: calc(2 * var(--step-0));
+  --space-s-l: calc(var(--at-narrow) + 2 * var(--at-wide));
+}
+
+body { font-size: var(--step-0); }
+h1 { font-size: var(--step-4); }
+h2 { font-size: var(--step-2); }
+small { font-size: var(--step--1); }
+
+.card {
+  display: grid;
+  gap: var(--space-s);
+  padding: var(--space-s-l);
+}
+```
+
+Rules:
+
+- Write the inputs as plain numbers. With `20rem` and `77.5rem` the `--fluid` line divides a length by a length, and Firefox does not support that.
+- Change an input in the rule that declares the steps. A step takes its value where it is declared, so a ratio set on a descendant changes nothing below it.
+- Derive sizes below step 0 from step 0 and the narrow ratio, as `--step--1` does. With both ratios a small size shrinks as the screen grows.
+- Check the top step against the limit in entry 7. Step `n` passes when `(size-wide / size-narrow) × (ratio-wide / ratio-narrow)ⁿ` is 2.5 or less. The example gives 1.31 at step 4.
+- Write a pair only where a layout uses it, and never use one for a font size. A pair is steep on purpose and breaks that limit.
+- For a scale that follows the container, write `100cqi` in place of `100vw`. Entry 12 (`layout.md`) has the rules.
+- Components use the tokens and never repeat the math.
+
+Support: Chrome 120, Firefox 118, Safari 15.4, set by `pow()`. Tested in Chrome 150 and real Safari 27 on 2026-10-01, where every step came out within 0.001px of the formula.
 
 ## Left out on purpose
 

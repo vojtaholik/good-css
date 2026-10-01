@@ -1,0 +1,63 @@
+<template data-specimen data-height="420">
+  The hero is as tall as the frame, and its title sits centered between the toolbar and the line at the bottom. In the toolbar the account link is pushed to the far end. Scroll down: the two cards are the same height and both buttons sit on the bottom edge, whatever the length of the text.
+</template>
+
+<style>
+  @layer demo {
+    .hero {
+      padding: 1.5rem;
+    }
+
+    .toolbar {
+      padding-block-end: 1rem;
+      border-block-end: 1px solid var(--bp-line);
+
+      & a {
+        color: inherit;
+      }
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .card {
+      padding: 1.25rem;
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+
+<section class="hero">
+  <nav class="toolbar" aria-label="Site">
+    <a href="#">Docs</a>
+    <a href="#">Pricing</a>
+    <a href="#">Blog</a>
+    <a class="account" href="#">Account</a>
+  </nav>
+  <h1>A title in the middle</h1>
+  <p class="label">.hero, 100svh, with the header above and this line below</p>
+</section>
+
+<div class="cards">
+  <article class="box card">
+    <h2>A short card</h2>
+    <p>One line of text.</p>
+    <p class="actions"><button>Open</button></p>
+  </article>
+  <article class="box card">
+    <h2>A long card</h2>
+    <p>This card has more to say, so it is the taller of the two and sets the height of the row. The grid stretches the short card to match it, and that is the free space the auto margin takes.</p>
+    <p class="actions"><button>Open</button></p>
+  </article>
+</div>

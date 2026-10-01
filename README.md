@@ -1,6 +1,6 @@
 # good-css
 
-Forty opinionated modern CSS techniques, packaged as an agent skill. With it installed, a coding agent reaches for one declaration that adapts on its own before a set of breakpoints, and for a CSS feature before a script. Every technique is a set of properties and values, so it works in plain CSS, Tailwind, StyleX or anything else.
+Opinionated modern CSS techniques, packaged as an agent skill. With it installed, a coding agent reaches for one declaration that adapts on its own before a set of breakpoints, and for a CSS feature before a script. Every technique is a set of properties and values, so it works in plain CSS, Tailwind, StyleX or anything else.
 
 - [PRACTICES.md](PRACTICES.md) is the list for people. Each entry says when to use it, shows the CSS, explains why it works and credits who it is borrowed from.
 - [good-css.vercel.app](https://good-css.vercel.app) runs every entry as a live specimen.
@@ -46,15 +46,16 @@ The agent loads the skill in three steps and pays only for the ones a task reach
 | File | Loaded | Lines | Tokens |
 | --- | --- | --- | --- |
 | The description in `SKILL.md` | in every session | 1 | 70 |
-| `SKILL.md` | when a task involves CSS | 48 | 950 |
-| `references/foundation.md` | reset, color tokens, dark mode, fluid sizes | 125 | 1,550 |
-| `references/layout.md` | page and component layout | 246 | 2,060 |
-| `references/controls.md` | buttons, links, cards, inputs | 277 | 2,150 |
-| `references/disclosure.md` | dialogs, popovers, menus, accordions, tabs | 206 | 1,750 |
-| `references/scroll.md` | carousels, overflowing rows, app shells | 186 | 1,480 |
+| `SKILL.md` | when a task involves CSS | 49 | 1,020 |
+| `references/foundation.md` | reset, color tokens, dark mode, fluid sizes and scales | 183 | 2,540 |
+| `references/layout.md` | page and component layout | 320 | 3,010 |
+| `references/controls.md` | buttons, links, cards, inputs, icons | 318 | 2,590 |
+| `references/content.md` | text and images from a user or a CMS | 70 | 1,000 |
+| `references/disclosure.md` | dialogs, popovers, menus, accordions, tabs | 209 | 1,830 |
+| `references/scroll.md` | carousels, overflowing rows, scrolling panels, app shells | 222 | 1,830 |
 | `references/motion.md` | transitions and animations | 155 | 1,290 |
 
-`PRACTICES.md` is 18,200 tokens. The six reference files together are 10,300, and a task reads one or two of them.
+`PRACTICES.md` is 24,300 tokens. The seven reference files together are 14,100. A component reads two or three of them and a whole page reads most.
 
 ## Working on the list
 

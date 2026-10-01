@@ -225,6 +225,7 @@ Start every new project with it. In an existing project add one rule at a time a
   interpolate-size: allow-keywords;
   scrollbar-gutter: stable;
   text-wrap: pretty;
+  overflow-wrap: break-word;
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -265,6 +266,7 @@ Why it works:
 - The two smoothing rules switch macOS from subpixel to grayscale antialiasing. Text renders thinner and matches the weight shown in Figma. Other systems ignore them.
 - `100svh` is the viewport height with the mobile browser toolbars showing, so the page never sits behind them. `100dvh` changes as the toolbar moves and re-lays out the page each time.
 - `scrollbar-gutter: stable` reserves the scrollbar's space. The page does not shift sideways when a modal locks scrolling or when content grows past one screen.
+- `overflow-wrap: break-word` breaks a word that cannot fit on a line, such as a URL, where it would otherwise run out of its box. Entry 41 has the rest.
 - `-webkit-text-size-adjust: 100%` stops iOS from inflating text in landscape.
 - `-webkit-tap-highlight-color: transparent` removes the gray flash iOS and Android paint over a tapped element.
 - Inputs at 16px or more stop iOS Safari from zooming the page on focus. It does not zoom back out.
@@ -274,6 +276,7 @@ Why it works:
 Rules:
 
 - Load every weight and style the design uses. With `font-synthesis: none` a missing bold renders as regular.
+- With `min-width: 0` on everything, a sized image, icon or avatar in a flex row shrinks to make room for the text beside it. Give it `flex: none`.
 - The reset removes the tap highlight, so every pressable element needs its own `:active` state. Entry 31 has it.
 - Never fix input zoom with `user-scalable=no` or `maximum-scale=1`. That takes zoom away from people who need it.
 - Keep `user-select: none` to controls. Never set it on `body` or on links, because people copy text.
@@ -283,7 +286,7 @@ Rules:
 
 Support: `text-wrap: pretty` in Chrome 117 and Safari 26, ignored by Firefox. `scrollbar-gutter` in Chrome 94, Firefox 97, Safari 18.2. `interpolate-size` in Chrome 129 only. The rest works everywhere.
 
-- Borrowed from: Travis Arnold, @souporserious on X, 2025-04-02, "2025 CSS Reset" · Ayomidé Daniel, @aydahnizzy on X, 2025-10-10, for the font rules · `text-wrap: pretty` on everything is a house rule · Kevin Powell, [3 modern CSS properties to add to your reset](https://www.youtube.com/watch?v=qI5rXLJnxco), 2026-04-02, for `svh` and the gutter · Emil Kowalski, [mobile-native skill](https://github.com/emilkowalski/skills/blob/main/skills/mobile-native/SKILL.md), for the touch rules · Chris Coyier, [The Downsides of scrollbar-gutter: stable](https://blog.master.dev/the-downsides-of-scrollbar-gutter-stable-and-one-weird-trick/), 2025-12-03
+- Borrowed from: Travis Arnold, @souporserious on X, 2025-04-02, "2025 CSS Reset" · Ayomidé Daniel, @aydahnizzy on X, 2025-10-10, for the font rules · `text-wrap: pretty` on everything is a house rule · Kevin Powell, [3 modern CSS properties to add to your reset](https://www.youtube.com/watch?v=qI5rXLJnxco), 2026-04-02, for `svh` and the gutter · Emil Kowalski, [mobile-native skill](https://github.com/emilkowalski/skills/blob/main/skills/mobile-native/SKILL.md), for the touch rules · Chris Coyier, [The Downsides of scrollbar-gutter: stable](https://blog.master.dev/the-downsides-of-scrollbar-gutter-stable-and-one-weird-trick/), 2025-12-03 · Ahmad Shadeed, [Defensive CSS](https://defensivecss.dev/), for `overflow-wrap` and the `flex: none` rule
 - Background: Jen Simmons, [Better typography with text-wrap pretty](https://webkit.org/blog/16547/better-typography-with-text-wrap-pretty/) · Adam Argyle, [CSS text-wrap: pretty](https://developer.chrome.com/blog/css-text-wrap-pretty)
 - Docs: [MDN: text-wrap](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-wrap) · [MDN: font-synthesis](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-synthesis) · [MDN: font-smooth](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-smooth)
 
@@ -309,9 +312,11 @@ Rules:
 - Write the preferred value as `rem + vw`, never `vw` alone. `clamp(1rem, 1vw, 1.75rem)` stays at 16px on every screen narrower than 1600px, because 1vw is smaller than 1rem until then. A bare `vw` value also ignores the reader's font size setting.
 - Work the preferred value out from two points. The slope is `(max - min) / (wide - narrow)`, in px over px, and times 100 it is the `vw` number. The `rem` part is `min - slope × narrow`.
 - Keep both bounds in `rem` so they follow the reader's font size.
+- For a font size, keep the maximum at or below 2.5 times the minimum. The `vw` part does not grow when the reader zooms, so fluid text grows less than the page. Past 2.5 times, 500% zoom cannot double the text at some widths, and that fails WCAG 1.4.4.
 - Put fluid values in tokens. Components use the token and never repeat the math.
+- For more than two or three sizes, derive a whole scale as entry 44 does.
 
-- Borrowed from: Kyrylo Silin, @kyrylo on X, 2026-05-10 · James Gilyead and Trys Mudford, [Utopia](https://utopia.fyi/) · Adrian Roselli, [Responsive Type and Zoom](https://adrianroselli.com/2019/12/responsive-type-and-zoom.html)
+- Borrowed from: Kyrylo Silin, @kyrylo on X, 2026-05-10 · James Gilyead and Trys Mudford, [Utopia](https://utopia.fyi/) · Adrian Roselli, [Responsive Type and Zoom](https://adrianroselli.com/2019/12/responsive-type-and-zoom.html) · Maxwell Barvian, [Addressing Accessibility Concerns With Using Fluid Type](https://www.smashingmagazine.com/2023/11/addressing-accessibility-concerns-fluid-type/), 2023-11-07, for the 2.5 limit
 - Docs: [MDN: clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/clamp) · Adrian Bece, [Modern Fluid Typography Using CSS Clamp](https://www.smashingmagazine.com/2022/01/modern-fluid-typography-css-clamp/)
 
 ## 8. One set of color tokens for light and dark
@@ -496,6 +501,8 @@ Rules:
 - A container cannot take its width from its content. Never put `container-type` on a shrink-to-fit element, or it collapses to zero.
 - With no container ancestor the query never matches. Kevin Powell makes `header`, `main` and `footer` containers in his reset, so most components need none of their own.
 - A container cannot also be a subgrid. Entry 13 and this one need separate elements.
+- Container units are different from queries. With no container above the element, `cqi` measures the viewport, so one token written with `cqi` serves the page and every slot.
+- Never register a fluid token that uses `cqi` with `@property`. A registered length computes once on `:root`, where there is no container, and every slot then gets the viewport's value.
 
 Support: Chrome 105, Firefox 110, Safari 16.
 
@@ -565,6 +572,8 @@ Rules:
 
 - The wrap point is a share of the container, not a length. Change `min-inline-size` to move it.
 - Drop the sidebar's `flex-basis` for a sidebar sized by its content.
+- For a sticky sidebar, add `align-self: start` beside `position: sticky` and its inset. The two sides stretch to the same height, and a stretched sidebar has no room to stick.
+- A bare `img` or `video` as one of the sides stretches to the height of the row and distorts. Set `align-items: start` on the container.
 
 Support: Chrome 84, Firefox 63, Safari 14.1.
 
@@ -589,6 +598,7 @@ Why it works:
 Rules:
 
 - It works on every `align-*`, `justify-*` and `place-*` property.
+- Auto margins on the item center it the same way and are safe in every browser that has flexbox. Entry 46 has them.
 
 Support: Chrome 115, Firefox 63, Safari 17.6.
 
@@ -643,6 +653,7 @@ Rules:
 
 - Put it on the element that overflows, not on `html` or `body`.
 - Keep `hidden` or `auto` for elements a script scrolls. `clip` blocks that too.
+- Keep `hidden` or `auto` on an element with `resize`. With `clip` the browser draws no resize handle.
 
 Support: Chrome 90, Firefox 81, Safari 16.
 
@@ -805,8 +816,9 @@ dialog::backdrop {
 }
 
 dialog[open],
-[popover]:popover-open,
 dialog[open]::backdrop { opacity: 1; }
+
+[popover]:popover-open { opacity: 1; }
 
 @starting-style {
   dialog[open],
@@ -818,7 +830,8 @@ dialog[open]::backdrop { opacity: 1; }
   dialog,
   [popover] { translate: 0 0.5rem; }
 
-  dialog[open],
+  dialog[open] { translate: 0 0; }
+
   [popover]:popover-open { translate: 0 0; }
 
   @starting-style {
@@ -840,10 +853,11 @@ Rules:
 - Never start from `scale(0)`. If the element scales in, start at `scale(0.95)` with `opacity: 0`.
 - The dialog's `::backdrop` needs the same three states and its own transition, as in the block. Without them it snaps while the dialog fades.
 - Write no fallback. Where the exit is not supported the element closes at once.
+- Keep `[popover]:popover-open` out of the selector list that opens the dialog. A browser that does not know one selector in a list drops the whole rule, and the dialog would open at `opacity: 0`. Inside `@starting-style` the shared list is safe, because every browser that reads the block knows the selector.
 
 Support: both directions in Chrome 117. In Safari 27 the entry animates and `<dialog>` and popovers close at once, tested in real Safari on 2026-10-01. An element toggled with a class animates both ways there. Firefox 129 animates the entry only.
 
-- Borrowed from: Una Kravets and Joey Arhar, [Four new CSS features for smooth entry and exit animations](https://developer.chrome.com/blog/entry-exit-animations) · Kevin Powell, [Transition to and from display: none](https://www.youtube.com/watch?v=KD3_l3S_D6M), 2026-07-22 · Chris Coyier, [In-N-Out Animations: Dialogs](https://blog.master.dev/in-n-out-animations-dialogs-part-1-3/), 2026-06-01 · Adam Argyle, [Steal this popover code](https://nerdy.dev/steal-this-popover-starter-kit), 2024-03-15
+- Borrowed from: Una Kravets and Joey Arhar, [Four new CSS features for smooth entry and exit animations](https://developer.chrome.com/blog/entry-exit-animations) · Kevin Powell, [Transition to and from display: none](https://www.youtube.com/watch?v=KD3_l3S_D6M), 2026-07-22 · Chris Coyier, [In-N-Out Animations: Dialogs](https://blog.master.dev/in-n-out-animations-dialogs-part-1-3/), 2026-06-01 · Adam Argyle, [Steal this popover code](https://nerdy.dev/steal-this-popover-starter-kit), 2024-03-15 · Ahmad Shadeed, [Grouping vendor selectors](https://defensivecss.dev/tip/grouping-selectors/), Defensive CSS, for the split rules
 
 ## 24. Anchor targets that clear a sticky header
 
@@ -1516,6 +1530,348 @@ Rules:
 Support: every browser.
 
 - Borrowed from: Stripe, on its resource cards · Tobias Ahlin, [How to animate box-shadow](https://tobiasahlin.com/blog/how-to-animate-box-shadow/), for the older form of the idea
+
+## 41. Long text that wraps, truncates or clamps
+
+Use it on any text that comes from a user or a CMS, such as names, titles, URLs and excerpts. Decide for each one what happens when the content is longer than the design. It wraps, it is cut to one line, or it is cut to a few lines.
+
+```css
+:root { overflow-wrap: break-word; }
+
+.name {
+  white-space: nowrap;
+  overflow: clip;
+  text-overflow: ellipsis;
+}
+
+.excerpt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: clip;
+}
+```
+
+Why it works:
+
+- `overflow-wrap: break-word` breaks a word only when it cannot fit on a line by itself. Ordinary text wraps as before. It inherits, so the one declaration in the reset covers the page.
+- The reset's `min-width: 0` lets a flex or grid item get narrower than its longest word. It does nothing for the word, which then paints over the next column. The two rules need each other.
+- `nowrap` keeps the text on one line, `overflow` cuts it and `text-overflow` draws the ellipsis at the cut.
+- `-webkit-line-clamp` counts lines, so the clamp holds at any font size and any width.
+
+Rules:
+
+- Put the truncation on the element that holds the text. On a flex or grid container the text is cut and no ellipsis appears.
+- Every flex item between the row and the truncated text must be able to shrink. The reset's `min-width: 0` covers that. Without the reset, set `min-inline-size: 0` on each of them.
+- The clamp needs all four declarations. Unprefixed `line-clamp` is in no browser yet.
+- Put padding on a wrapper, never on the clamped element. The next line shows through the bottom padding.
+- Use `break-word` on the root and not `anywhere`. `anywhere` also shrinks the minimum content width, so a box sized by its content collapses to one letter per line.
+- A table with automatic layout ignores `break-word`. Set `overflow-wrap: anywhere` on the cell.
+- Truncate only text the reader can get in full somewhere else. Never truncate text they have to read.
+
+Support: `text-overflow`, `-webkit-line-clamp` and `overflow-wrap: break-word` work everywhere. With `overflow: clip` the ellipsis and the clamp draw in Chrome 150 and Safari 27, tested on 2026-10-01. Firefox is untested, and `overflow: hidden` is the form to fall back to. `overflow-wrap: anywhere` in Chrome 80, Firefox 65, Safari 15.4.
+
+- Borrowed from: Ahmad Shadeed, [Defensive CSS](https://defensivecss.dev/), the tips [Long content](https://defensivecss.dev/tip/long-content/) and [Minimum content size in flexbox](https://defensivecss.dev/tip/flexbox-min-content-size/) · Ahmad Shadeed, [Handling Short And Long Content In CSS](https://ishadeed.com/article/css-short-long-content/), 2020-12-16
+- Docs: [MDN: overflow-wrap](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overflow-wrap) · [MDN: text-overflow](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-overflow) · [MDN: line-clamp](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/line-clamp)
+
+## 42. Image box that holds any upload
+
+Use it on every image, video or embed whose file you do not control, such as thumbnails, cover photos and avatars. The box keeps its shape whatever the file's ratio, and it has that shape before the file loads.
+
+```css
+.thumb {
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background-color: var(--surface-muted, oklch(0.9 0 none));
+}
+
+.avatar {
+  flex: none;
+  inline-size: 3.5rem;
+  block-size: 3.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  outline: 1px solid light-dark(oklch(0 0 none / 0.1), oklch(1 0 none / 0.1));
+  outline-offset: -1px;
+}
+```
+
+Why it works:
+
+- `aspect-ratio` works out the height from the width, so the space is there before the file loads.
+- `object-fit: cover` scales the picture until it fills the box and crops the rest. The default stretches it.
+- The background color shows until the image paints, and in its place when the load fails.
+- An outline with a negative offset draws inside the image's edge. It takes no space and follows the `border-radius`, so a white avatar on a white card still has an edge.
+- `flex: none` stops the text beside the avatar from squeezing it.
+
+Rules:
+
+- One axis must be `auto`. A `height` attribute or a fixed height wins over the ratio. The reset sets `height: auto` on `img`, `svg` and `video`, and `block-size: auto` here does the same for an `iframe`.
+- `object-fit` does nothing until the box has both sizes or a ratio.
+- `cover` crops. Use `contain` for logos, product shots and anything that must stay whole. Move the crop with `object-position`.
+- Leave the background color off an image that has transparent areas. It shows through them.
+- A fixed-size image in a flex row needs both sizes, as the avatar has. With only a width it stretches to the height of the row.
+- In Safari a failed image ignores `aspect-ratio` and draws a square box. Where a failed load must not move the layout, put the ratio on a wrapper and give the image `inline-size: 100%` and `block-size: 100%`.
+- `light-dark()` needs the `color-scheme` from entry 8. Without it the outline stays black on a dark page.
+
+Support: `aspect-ratio` in Chrome 88, Firefox 89, Safari 15. An outline that follows the radius in Chrome 94, Firefox 88, Safari 16.4. `light-dark()` in Chrome 123, Firefox 120, Safari 17.5. The square box of a failed image is from real Safari 27, tested on 2026-10-01. Chrome 150 keeps the ratio.
+
+- Borrowed from: Ahmad Shadeed, [Defensive CSS](https://defensivecss.dev/), the tips [Image distortion](https://defensivecss.dev/tip/image-compressed/), [Image inner border](https://defensivecss.dev/tip/inner-shadow/) and [Default flexbox stretching](https://defensivecss.dev/tip/default-flexbox-stretching/). This version draws the inner edge with an outline where his adds an element · Heydon Pickering and Andy Bell, [The Frame](https://every-layout.dev/layouts/frame/), Every Layout, which wraps the media. On `img`, `video` and `iframe` the rule goes on the element.
+- Docs: [MDN: aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/aspect-ratio) · [MDN: object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/object-fit) · [MDN: outline-offset](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/outline-offset)
+
+## 43. Scroll area between a fixed header and footer
+
+Use it for the body of a modal, a chat list, a drawer or a sidebar. The panel grows with its content up to a limit, then the middle scrolls and the header and footer stay put.
+
+```css
+.panel {
+  display: flex;
+  flex-direction: column;
+  max-block-size: 80dvh;
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.panel-wrap {
+  flex: 1;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+```
+
+Why it works:
+
+- A flex item will not shrink below its content. A scroll container is the exception, with a minimum of zero, so the body shrinks to the space left and scrolls.
+- An element between the panel and the body, such as a form, is not a scroll container. It keeps the height of its content and pushes the footer out of the panel. `min-block-size: 0` gives it the same zero minimum.
+- `auto` shows a scrollbar only when there is overflow.
+- `scrollbar-gutter` does not inherit. The reset's declaration on `:root` covers the page and no inner scroller.
+- `overscroll-behavior: contain` stops the scroll from passing to the page at the end of the list.
+
+Rules:
+
+- The panel needs a limit, either `max-block-size` or a height. With no limit nothing overflows.
+- `.panel-wrap` is only for an element that sits between the panel and the body. Leave it out when the body is a direct child.
+- A header or footer with a set height shrinks to its content when the body overflows. Give it `flex: none`, or size it with padding.
+- Keep `min-height: 0` out of the reset. On every element it lets each item of a fixed-height column shrink under its own text.
+- The gutter takes the scrollbar's width on a short list as well. That is the price of no shift.
+
+Support: `scrollbar-gutter` in Chrome 94, Firefox 97, Safari 18.2. `overscroll-behavior` in Chrome 63, Firefox 59, Safari 16. `dvh` in Chrome 108, Firefox 101, Safari 15.4.
+
+- Borrowed from: Ahmad Shadeed, [Defensive CSS](https://defensivecss.dev/), the tips [Scrollbars on demand](https://defensivecss.dev/tip/scrollbar/), [Scrollbar gutter](https://defensivecss.dev/tip/scrollbar-gutter/), [Scroll chaining](https://defensivecss.dev/tip/scroll-chain/) and [Minimum content size in flexbox](https://defensivecss.dev/tip/flexbox-min-content-size/). He gives the four declarations one by one, and the panel around them is added here.
+- Docs: [MDN: scrollbar-gutter](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scrollbar-gutter) · [MDN: overscroll-behavior](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overscroll-behavior) · [MDN: min-height](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/min-height)
+
+## 44. One fluid scale for type and space
+
+Use it when a design has more than two or three font sizes. Six numbers describe every size, and the browser derives the steps. It replaces a table of sizes per breakpoint, and it replaces a generator that someone has to find and run again.
+
+```css
+:root {
+  --narrow: 20;
+  --wide: 77.5;
+  --size-narrow: 1.125;
+  --size-wide: 1.25;
+  --ratio-narrow: 1.2;
+  --ratio-wide: 1.25;
+
+  --fluid: clamp(0rem, (100vw - var(--narrow) * 1rem) / (var(--wide) - var(--narrow)), 1rem);
+  --at-narrow: calc(var(--size-narrow) * (1rem - var(--fluid)));
+  --at-wide: calc(var(--size-wide) * var(--fluid));
+
+  --step--1: calc(var(--step-0) / var(--ratio-narrow));
+  --step-0: calc(var(--at-narrow) + var(--at-wide));
+  --step-1: calc(var(--at-narrow) * var(--ratio-narrow) + var(--at-wide) * var(--ratio-wide));
+  --step-2: calc(var(--at-narrow) * pow(var(--ratio-narrow), 2) + var(--at-wide) * pow(var(--ratio-wide), 2));
+  --step-3: calc(var(--at-narrow) * pow(var(--ratio-narrow), 3) + var(--at-wide) * pow(var(--ratio-wide), 3));
+  --step-4: calc(var(--at-narrow) * pow(var(--ratio-narrow), 4) + var(--at-wide) * pow(var(--ratio-wide), 4));
+
+  --space-s: var(--step-0);
+  --space-m: calc(1.5 * var(--step-0));
+  --space-l: calc(2 * var(--step-0));
+  --space-s-l: calc(var(--at-narrow) + 2 * var(--at-wide));
+}
+
+body { font-size: var(--step-0); }
+h1 { font-size: var(--step-4); }
+h2 { font-size: var(--step-2); }
+small { font-size: var(--step--1); }
+
+.card {
+  display: grid;
+  gap: var(--space-s);
+  padding: var(--space-s-l);
+}
+```
+
+Why it works:
+
+- The first six lines are the whole design decision. Widths and sizes are in rem, written as plain numbers, so 20 is 320px and 1.125 is 18px. Body text runs from 18px on a 320px screen to 20px on a 1240px one, and each heading step is 1.2 times the last on the phone and 1.25 times on the desktop.
+- `--fluid` is a length that is 0 at the narrow width, 1rem at the wide width and a straight line between. It holds the only `clamp()`, and that one bounds every token.
+- `--at-narrow` and `--at-wide` are the two base sizes, each weighted by how close the viewport is to its width. Their sum is step 0.
+- `pow()` raises each ratio to the step number. A step is the narrow scale's size times one weight plus the wide scale's size times the other, which is the line entry 7 draws between two points.
+- A space token is a multiple of step 0, so it grows as much as body text does. A pair such as `--space-s-l` gives the two terms different multipliers. It is the small size on the phone and the large size on the desktop, 18px to 40px here.
+
+Rules:
+
+- Write the inputs as plain numbers. With `20rem` and `77.5rem` the `--fluid` line divides a length by a length, and Firefox does not support that.
+- Change an input in the rule that declares the steps. A step takes its value where it is declared, so a ratio set on a descendant changes nothing below it.
+- Derive sizes below step 0 from step 0 and the narrow ratio, as `--step--1` does. With both ratios a small size shrinks as the screen grows.
+- Check the top step against the limit in entry 7. Step `n` passes when `(size-wide / size-narrow) × (ratio-wide / ratio-narrow)ⁿ` is 2.5 or less. The example gives 1.31 at step 4.
+- Write a pair only where a layout uses it, and never use one for a font size. A pair is steep on purpose and breaks that limit.
+- For a scale that follows the container, write `100cqi` in place of `100vw`. Entry 12 has the rules.
+- Components use the tokens and never repeat the math.
+
+Support: Chrome 120, Firefox 118, Safari 15.4, set by `pow()`. Tested in Chrome 150 and real Safari 27 on 2026-10-01, where every step came out within 0.001px of the formula.
+
+- Borrowed from: James Gilyead, [Designing with fluid type scales](https://utopia.fyi/blog/designing-with-fluid-type-scales), 2020-02-01, for the two scales · Trys Mudford, [CSS-only fluid modular type scales](https://utopia.fyi/blog/css-modular-scales), 2020-02-02, and [Fluid custom properties](https://utopia.fyi/blog/fluid-custom-properties), 2020-02-03 · James Gilyead, [Designing with a fluid space palette](https://utopia.fyi/blog/designing-with-a-fluid-space-palette), 2021-03-16, for space pairs. Utopia prints one finished `clamp()` per step from a calculator, because CSS had no powers in 2020. With `pow()` the browser does that math.
+- Background: Miriam Suzanne, [Responsive and Fluid Typography with Baseline CSS Features](https://web.dev/articles/baseline-in-action-fluid-type), 2025-12-16
+- Docs: [MDN: pow()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/pow) · [Utopia type calculator](https://utopia.fyi/type/calculator/)
+
+## 45. Space between siblings set by the parent
+
+Use it wherever elements sit one above another, such as form fields, the parts of a card or the blocks of an article. The parent sets one space between its children, and no child carries a block margin of its own.
+
+```css
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.prose > * { margin-block: 0; }
+.prose > * + * { margin-block-start: var(--flow-space, 1em); }
+
+.prose > :is(h2, h3) { --flow-space: 2em; }
+.prose > :is(h2, h3) + * { --flow-space: 0.5em; }
+```
+
+Why it works:
+
+- A margin describes the relation between two neighbors, so the element itself is the wrong place for it. A paragraph with `margin-block-end` leaves that margin behind when it is the last child of a padded box.
+- `gap` puts space between flex items only. Nothing is left above the first child or below the last.
+- `* + *` matches every child that has a sibling before it, so the first child gets no margin. Heydon Pickering named the selector the lobotomized owl.
+- The fallback in `var(--flow-space, 1em)` is in `em`, so the space above each element follows that element's font size.
+- A custom property on a child changes the space above that child alone. A heading asks for more room above itself, and whatever follows a heading asks for less.
+
+Rules:
+
+- Use the flex form in a component whose children you know. Use the margin form for content you do not control, such as CMS or Markdown output, because flex turns every child into a flex item.
+- A flex column stretches its children, so a button or link that is a direct child becomes full width. Set `align-self: start` on it.
+- In the margin form, zero the children's block margins first. Without that line the browser's default margins stay above the first child and below the last.
+- Keep the `>`. Without it the rule reaches every nested element, list items included.
+- The margin form counts a hidden child, so a hidden first child leaves a space at the top. `gap` ignores hidden children.
+
+Support: `gap` in flex layout in Chrome 84, Firefox 63, Safari 14.1. `:is()` in Chrome 88, Firefox 78, Safari 14.
+
+- Borrowed from: Heydon Pickering and Andy Bell, [The Stack](https://every-layout.dev/layouts/stack/), Every Layout · Heydon Pickering, [Axiomatic CSS and Lobotomized Owls](https://alistapart.com/article/axiomatic-css-and-lobotomized-owls/), 2014-10-21 · Andy Bell, [My favourite 3 lines of CSS](https://piccalil.li/blog/my-favourite-3-lines-of-css/), 2023-02-06. Both authors keep the margin form everywhere. This version uses `gap` in components.
+- Docs: [MDN: gap](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/gap) · [MDN: next-sibling combinator](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Next-sibling_combinator)
+
+## 46. Push one item away with an auto margin
+
+Use it when one item in a flex row or column sits apart from the rest, such as the actions at the bottom of a card, the account link at the end of a toolbar, or a title centered in a full-height section between a header and a footer.
+
+```css
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card > .actions { margin-block-start: auto; }
+
+.toolbar {
+  display: flex;
+  gap: 1rem;
+}
+
+.toolbar > .account { margin-inline-start: auto; }
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-block-size: 100svh;
+}
+
+.hero > h1 { margin-block: auto; }
+```
+
+Why it works:
+
+- In a flex container an auto margin takes all the free space on its side. One auto margin pushes the item, and everything after it, to the far end.
+- Two opposite auto margins split the free space, so the item sits centered between its neighbors. The header stays at the top and the footer at the bottom, and either can be missing.
+- `gap` still applies. It is the least space the pushed item keeps when there is no free space left.
+
+Rules:
+
+- The container needs free space. A card has it when a grid row stretches it to match a taller neighbor. A column that is the only child of a taller box needs `block-size: 100%`.
+- The centered item is centered in the space left over, not in the section. A footer with no header pulls the title up by half the footer's height.
+- Write `min-block-size`, never `block-size`. A fixed height cuts off long content.
+- This is a flex technique. In a grid column the spare height goes to the rows first and every child grows.
+- It replaces a spacer element, `space-between` on a container with more than two children, and a wrapper around the group that should stay together.
+
+Support: auto margins work wherever flexbox does. `margin-block` in Chrome 87, Firefox 66, Safari 14.1. `svh` in Chrome 108, Firefox 101, Safari 15.4.
+
+- Borrowed from: Heydon Pickering and Andy Bell, [The Stack](https://every-layout.dev/layouts/stack/), section "Splitting the stack", and [The Cover](https://every-layout.dev/layouts/cover/), Every Layout. The Cover gives every child a margin and removes it at both ends. `gap` does that in one declaration.
+- Docs: [MDN: Aligning items in a flex container](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Aligning_items)
+
+## 47. Icon sized by the text beside it
+
+Use it on every icon that sits next to a label, in buttons, links, list rows and notices. The icon takes its size from the font, so it follows the text and never needs a size per variant.
+
+```css
+.with-icon {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+
+.with-icon > svg {
+  flex: none;
+  block-size: 1cap;
+  inline-size: auto;
+}
+
+.notice {
+  display: flex;
+  align-items: start;
+  gap: 0.5em;
+}
+
+.notice > svg {
+  flex: none;
+  inline-size: 1em;
+  block-size: 1lh;
+}
+```
+
+Why it works:
+
+- `1cap` is the height of the font's capital letters. An icon that tall reads as one more capital.
+- An `svg` has no baseline of its own. `align-items: baseline` rests its bottom edge on the baseline of the text, so the icon stands where a capital stands.
+- `1lh` is the height of one line. The second rule makes the icon's box as tall as the first line of the label, and the drawing centers itself in that box. The icon stays beside the first line when the label wraps.
+- A `gap` in `em` keeps the space in proportion.
+
+Rules:
+
+- Never size an icon in `px`. A 16px icon that matches 16px text is 5px to 7px shorter than the capitals of 32px text.
+- Keep `flex: none`. Without it a long label squeezes the icon.
+- The `svg` needs a `viewBox`. `inline-size: auto` then follows the drawing's ratio.
+- Many icon sets leave padding inside the drawing, and `1cap` looks small on those. Raise the number and keep the unit, as in `1.2cap`.
+- Do not use `align-items: center` on a label that can wrap. The icon then sits beside the middle line.
+- With entry 33 the trimmed label is `1cap` tall, so `align-items: center` lines the icon up with it at both edges.
+
+Support: `cap` in Chrome 118, Firefox 97, Safari 17.2. `lh` in Chrome 109, Firefox 120, Safari 16.4. Tested in Chrome 150 and real Safari 27 on 2026-10-01, where the icon came out within 0.01px of the capital height at 16px and at 32px.
+
+- Borrowed from: Andy Bell, [How I build a button component](https://piccalil.li/blog/how-i-build-a-button-component/), 2024-09-18, for `cap` and `flex: none`, and [LH units are cool](https://piccalil.li/blog/lh-units-are-cool/), 2023-12-13 · Heydon Pickering and Andy Bell, [The Icon](https://every-layout.dev/layouts/icon/), Every Layout
+- Docs: [MDN: length units](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length)
 
 ## Left out on purpose
 

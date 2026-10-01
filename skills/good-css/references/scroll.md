@@ -60,6 +60,42 @@ Rules:
 - Match `scroll-padding-inline` to `padding-inline` so a snapped card lines up with the page content.
 - Chrome 135 can draw the arrows and dots in CSS with `::scroll-button()` and `::scroll-marker`. Firefox and Safari have neither, so use the script.
 
+## 43. Scroll area between a fixed header and footer
+
+Use it for the body of a modal, a chat list, a drawer or a sidebar. The panel grows with its content up to a limit, then the middle scrolls and the header and footer stay put.
+
+```css
+.panel {
+  display: flex;
+  flex-direction: column;
+  max-block-size: 80dvh;
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.panel-wrap {
+  flex: 1;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+```
+
+Rules:
+
+- The panel needs a limit, either `max-block-size` or a height. With no limit nothing overflows.
+- `.panel-wrap` is only for an element that sits between the panel and the body. Leave it out when the body is a direct child.
+- A header or footer with a set height shrinks to its content when the body overflows. Give it `flex: none`, or size it with padding.
+- Keep `min-height: 0` out of the reset. On every element it lets each item of a fixed-height column shrink under its own text.
+- The gutter takes the scrollbar's width on a short list as well. That is the price of no shift.
+
+Support: `scrollbar-gutter` in Chrome 94, Firefox 97, Safari 18.2. `overscroll-behavior` in Chrome 63, Firefox 59, Safari 16. `dvh` in Chrome 108, Firefox 101, Safari 15.4.
+
 ## 36. Styles that apply only when a scroller overflows
 
 Use it on any row that may or may not fit, such as tabs, a toolbar or a table wrapper. It fades the edges only when there is something to scroll to. It replaces a `ResizeObserver` that compares `scrollWidth` with `clientWidth`.

@@ -1,6 +1,6 @@
 {
   "name": "good-css",
-  "description": "Modern CSS techniques for coding agents: 40 entries that replace breakpoint ladders, wrapper elements and scripts, in plain CSS, Tailwind, StyleX or any other authoring system.",
+  "description": "Modern CSS techniques for coding agents. They replace breakpoint ladders, wrapper elements and scripts, in plain CSS, Tailwind, StyleX or any other authoring system.",
   "author": {
     "name": "Vojta Holik",
     "url": "https://github.com/vojtaholik"
