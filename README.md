@@ -54,16 +54,6 @@ The agent loads the skill in three steps and pays only for the ones a task reach
 
 `PRACTICES.md` is 18,200 tokens. The six reference files together are 10,300, and a task reads one or two of them.
 
-## Motion
-
-good-css carries the motion declarations every project ships: easing tokens, durations, reduced-motion gating, press feedback, enter and exit transitions. Whether something should animate at all, and how it should feel, is the subject of [Emil Kowalski's skills](https://github.com/emilkowalski/skills). Install them next to this one:
-
-```bash
-npx skills@latest add emilkowalski/skills
-```
-
-good-css hands those decisions to his skills when they are installed and works without them.
-
 ## Working on the list
 
 `PRACTICES.md` is the only place an entry is written. The files in `skills/good-css/references` are generated from it and drop "Why it works" and the credits:
