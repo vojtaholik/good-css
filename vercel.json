@@ -2,5 +2,39 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "bun install",
-  "buildCommand": "bun run build"
+  "buildCommand": "bun run build",
+  "outputDirectory": "dist",
+  "routes": [
+    {
+      "src": "^/$",
+      "headers": {
+        "Vary": "Accept",
+        "Link": "</index.md>; rel=\"alternate\"; type=\"text/markdown\", </llms.txt>; rel=\"describedby\"; type=\"text/plain\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\""
+      },
+      "continue": true
+    },
+    { "src": "^/$", "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }], "dest": "/index.md" },
+    { "src": "^/(about|contact|privacy)/?$", "headers": { "Vary": "Accept" }, "continue": true },
+    {
+      "src": "^/(about|contact|privacy)/?$",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "dest": "/$1.md"
+    },
+    { "src": "^/specimen/([^/.]+)/?$", "headers": { "Vary": "Accept" }, "continue": true },
+    {
+      "src": "^/specimen/([^/.]+)/?$",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "dest": "/specimen/$1.md"
+    },
+    { "handle": "filesystem" },
+    { "handle": "error" },
+    {
+      "src": "^/.*$",
+      "status": 404,
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "dest": "/not-found.md",
+      "headers": { "Vary": "Accept" }
+    },
+    { "src": "^/.*$", "status": 404, "dest": "/not-found.html", "headers": { "Vary": "Accept" } }
+  ]
 }

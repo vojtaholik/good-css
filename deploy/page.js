@@ -22,7 +22,7 @@ export function readPage(markdown) {
   return { title: heading.text, statement: statement.text, body };
 }
 
-/* Draws a page with the masthead of the index. A page with no path, the 404,
+/* Draws a page with the masthead of the index. A page with no path, the one for a missing page,
    gets no canonical URL and no Markdown twin. */
 export function sitePage({ page, stylesheet, path }) {
   return `<!doctype html>

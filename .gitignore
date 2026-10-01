@@ -1,4 +1,5 @@
 refs/
 node_modules/
+dist/
 .vercel/
 .impeccable/

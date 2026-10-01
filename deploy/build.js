@@ -6,17 +6,16 @@ import { marked } from "marked";
 import { frontmatter, llmsTxt, robots, sitemap, sitemapUrls } from "./agent-files.js";
 import { footer, readPage, sitePage } from "./page.js";
 import { author, origin, pages, published } from "./site.js";
-import { vercelConfig } from "./vercel.js";
 
-/* Builds the harness for Vercel, in the Build Output layout: the index with
-   its content already in the HTML, one page per specimen at /specimen/<slug>,
-   the pages in deploy/pages, and the files an agent looks for.
+/* Builds the harness into dist/ as a static site: the index with its content
+   already in the HTML, one page per specimen at /specimen/<slug>, the pages
+   in deploy/pages, and the files an agent looks for.
 
-   A push to main deploys it: vercel.json has Vercel run `bun run build` and
-   serve what lands in .vercel/output. The dev server is untouched. */
+   A push to main deploys it. vercel.json has Vercel run `bun run build` and
+   serve dist/, and holds the rules that answer a request for Markdown with
+   Markdown. The dev server is untouched. */
 const root = join(import.meta.dirname, "..");
-const output = join(root, ".vercel/output");
-const dist = join(output, "static");
+const dist = join(root, "dist");
 const cacheDir = join(root, "node_modules/.vite-build");
 
 /* The "- Source:" lines of PRACTICES.md hold local file paths. This is the
@@ -193,10 +192,11 @@ for (const name of pages) {
   await write(`${name}.md`, frontmatter(meta) + markdown);
 }
 
-const notFound = await pageMarkdown("404");
+/* What vercel.json answers a missing page with, as HTML or as Markdown. */
+const notFound = await pageMarkdown("not-found");
 
-await write("404.html", sitePage({ page: readPage(notFound), stylesheet }));
-await write("404.md", notFound);
+await write("not-found.html", sitePage({ page: readPage(notFound), stylesheet }));
+await write("not-found.md", notFound);
 
 await server.close();
 await window.happyDOM.close();
@@ -214,7 +214,11 @@ await write("llms.txt", llmsTxt({ title: practices.title, description, entries }
 await write("sitemap.xml", sitemap(sitemapUrls(entries), today));
 await write("robots.txt", robots);
 
-await writeFile(join(output, "config.json"), JSON.stringify(vercelConfig, null, 2));
+/* vercel.json names the pages in its rules. The build fails if a page in
+   site.js is missing from them. */
+const routes = await readFile(join(root, "vercel.json"), "utf8");
+
+if (!routes.includes(`^/(${pages.join("|")})/?$`)) throw new Error("vercel.json does not route every page in deploy/site.js");
 
 /* The build fails if a Source line ever gets past the filter at the top. */
 for (const file of await readdir(dist, { recursive: true })) {

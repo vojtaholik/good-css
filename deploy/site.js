@@ -4,5 +4,5 @@ export const author = "Vojta Holik";
 export const published = "2026-10-01";
 
 /* The pages beside the index. Each is deploy/pages/<name>.md, published as
-   /<name> for people and /<name>.md for agents. */
+   /<name> for people and /<name>.md for agents. vercel.json lists them too. */
 export const pages = ["about", "contact", "privacy"];
