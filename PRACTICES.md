@@ -1130,7 +1130,6 @@ Support: Chrome 133, Firefox 154, Safari 18.2.
 
 - Borrowed from: Stripe, which ships it on its buttons at stripe.com. There the button is a flex container, so the declaration has no effect and uneven padding does the centering. The first rule above is the fix.
 - Docs: [MDN: text-box](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-box)
-- Source: `research/stripe.md`, candidate 8
 
 ## 34. Section spacing that depends on its neighbors
 
@@ -1229,7 +1228,6 @@ Support: Chrome 131, Firefox 147, Safari 26. Firefox places the bar and does not
 
 - Borrowed from: Stripe, which ships the vertical form for a side nav in its home page stylesheet. The research found the rules and no page that renders the component, so this is from the stylesheet alone.
 - Docs: [MDN: anchor-name](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/anchor-name) · [MDN: anchor-scope](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/anchor-scope) · [MDN: anchor-size()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/anchor-size)
-- Source: `research/stripe.md`, candidate 1
 
 ## 36. Styles that apply only when a scroller overflows
 
@@ -1308,7 +1306,6 @@ Support: `animation-timeline` in Chrome 115 and Safari 26. Firefox has it in Nig
 
 - Borrowed from: Stripe, in the navigation on stripe.com · Bramus Van Damme, [Detect if an element can scroll or not with only CSS](https://www.bram.us/2023/09/16/solved-by-css-scroll-driven-animations-detect-if-an-element-can-scroll-or-not/)
 - Docs: [MDN: scroll()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation-timeline/scroll)
-- Source: `research/stripe.md`, candidate 2
 
 ## 37. Transition a custom property with `@property`
 
@@ -1362,7 +1359,6 @@ Support: Chrome 85, Firefox 128, Safari 16.4.
 
 - Borrowed from: Stripe, on the stripe.com home page and its sales contact page
 - Docs: [MDN: @property](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@property)
-- Source: `research/stripe.md`, candidate 3
 
 ## 38. Whole card clickable from one link
 
@@ -1415,7 +1411,6 @@ Rules:
 Support: Chrome 105, Firefox 121, Safari 15.4.
 
 - Borrowed from: Heydon Pickering, [Cards](https://inclusive-components.design/cards/), for the stretched `::after` · Stripe, for moving the focus ring to the card with `:has()`
-- Source: `research/stripe.md`, candidate 5
 
 ## 39. Reveal with `clip-path`
 
@@ -1459,7 +1454,6 @@ Support: every browser.
 
 - Borrowed from: Stripe, in the navigation menu on stripe.com. The `visibility` part was added for this list.
 - Docs: [MDN: inset()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/basic-shape/inset)
-- Source: `research/stripe.md`, candidate 6
 
 ## 40. Shadow change that fades and does not repaint
 
@@ -1520,7 +1514,6 @@ Rules:
 Support: every browser.
 
 - Borrowed from: Stripe, on its resource cards · Tobias Ahlin, [How to animate box-shadow](https://tobiasahlin.com/blog/how-to-animate-box-shadow/), for the older form of the idea
-- Source: `research/stripe.md`, candidate 7
 
 ## Left out on purpose
 
@@ -1536,7 +1529,7 @@ Held for later:
 
 - Scroll-driven reveal with `animation-timeline: view()`. Chrome and Safari 26 have it. Firefox does not.
 - Customizable `<select>` with `appearance: base-select`. Safari 27 shipped it in September 2026 and Firefox has it behind a flag.
-- One `box-shadow` built from independent layers, from Stripe's docs site. Marked maybe on 2026-10-01. The write-up is candidate 4 in `research/stripe.md`.
+- One `box-shadow` built from independent layers, from Stripe's docs site. Marked maybe on 2026-10-01.
 
 ## References
 
