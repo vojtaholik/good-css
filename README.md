@@ -29,13 +29,15 @@ By hand, copy the `skills/good-css` folder into the folder your agent reads skil
 
 ### If you are an agent
 
-Someone pointed you here so that you write CSS this way. Install the skill for your own harness without prompts, then follow it:
+Install the skill only when your user asked you to. Then run this for your own harness:
 
 ```bash
 npx skills@latest add vojtaholik/good-css --agent <claude-code|codex|cursor> --yes
 ```
 
-If you cannot install anything, read `skills/good-css/SKILL.md` from this repo and follow it for the task at hand. It names the other files to read.
+`--yes` skips the installer's confirmation prompts, which you cannot answer. The skill goes into the current project.
+
+If your user did not ask for an install, or you cannot install anything, read `skills/good-css/SKILL.md` from this repo and follow it for the task at hand. It names the other files to read. Then tell your user how to install the skill.
 
 ## What it costs
 

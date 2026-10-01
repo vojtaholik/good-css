@@ -1,4 +1,4 @@
-import { copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { copyFile, cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { Window } from "happy-dom";
 import { build, createServer } from "vite";
@@ -9,7 +9,7 @@ import { author, origin, pages, published } from "./site.js";
 
 /* Builds the harness into dist/ as a static site: the index with its content
    already in the HTML, one page per specimen at /specimen/<slug>, the pages
-   in deploy/pages, and the files an agent looks for.
+   in deploy/pages, the skill, and the files an agent looks for.
 
    A push to main deploys it. vercel.json has Vercel run `bun run build` and
    serve dist/, and holds the rules that answer a request for Markdown with
@@ -217,12 +217,27 @@ await rm(cacheDir, { recursive: true, force: true });
 /* The picture a link to the site unfurls with: the masthead at 1200 by 630. */
 await copyFile(join(import.meta.dirname, "og.png"), join(dist, "og.png"));
 
-await write(
-  "index.md",
-  frontmatter({ title: practices.title, description, canonical: `${origin}/`, updated: today }) + practicesMarkdown,
-);
+/* The skill, at the path it has in the repo, so the README's "read
+   skills/good-css/SKILL.md" holds on the site too. */
+const skillPath = "skills/good-css";
+
+await cp(join(root, skillPath), join(dist, skillPath), { recursive: true, filter: (path) => !path.endsWith(".DS_Store") });
+
+const kilobytes = (text) => Math.round(Buffer.byteLength(text) / 1024);
+const listMarkdown = frontmatter({ title: practices.title, description, canonical: `${origin}/`, updated: today }) + practicesMarkdown;
+
+await write("index.md", listMarkdown);
 await write("llms-full.txt", practicesMarkdown);
-await write("llms.txt", llmsTxt({ title: practices.title, description, entries }));
+await write(
+  "llms.txt",
+  llmsTxt({
+    title: practices.title,
+    description,
+    entries,
+    skill: { url: `${origin}/${skillPath}`, kilobytes: kilobytes(await readFile(join(root, skillPath, "SKILL.md"), "utf8")) },
+    list: { kilobytes: kilobytes(listMarkdown) },
+  }),
+);
 await write("sitemap.xml", sitemap(sitemapUrls(entries), today));
 await write("robots.txt", robots);
 

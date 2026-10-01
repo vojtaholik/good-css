@@ -4,7 +4,7 @@
 
 ## If you were sent here to use the skill
 
-Install it the way `README.md` says. If you cannot install anything, read `skills/good-css/SKILL.md` and follow it.
+If your user asked you to install it, install it the way `README.md` says. If they did not, or you cannot install anything, read `skills/good-css/SKILL.md`, follow it for the task at hand, and tell your user how to install it.
 
 ## If you are changing the repo
 

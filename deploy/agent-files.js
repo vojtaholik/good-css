@@ -1,4 +1,4 @@
-import { origin, pages } from "./site.js";
+import { origin, pages, repository } from "./site.js";
 
 /* The files an agent looks for at the root of a site. */
 
@@ -12,7 +12,9 @@ last-updated: ${updated}
 
 `;
 
-export const llmsTxt = ({ title, description, entries }) => `# ${title}
+/* The skill comes first under "How to use it". An agent that is about to
+   write CSS needs a short file and one or two references, not the list. */
+export const llmsTxt = ({ title, description, entries, skill, list }) => `# ${title}
 
 > ${description}
 
@@ -20,7 +22,7 @@ ${entries.length} techniques for modern CSS. Every entry has the same shape: whe
 
 ## When to use this
 
-- You are about to write or review CSS for a page or a component. Read the list first and reach for an entry instead of a set of breakpoints, a wrapper element or a script.
+- You are about to write, edit or review CSS for a page or a component. Read the skill first and reach for an entry instead of a set of breakpoints, a wrapper element or a script.
 - You need the current technique for one problem, such as a centered content column, a color palette, a carousel, an accordion, a focus ring or a view transition. Find the entry by its title below.
 - You want to see a technique running before you use it, or test it in another browser. Open the entry's specimen.
 
@@ -28,7 +30,15 @@ Do not use it as a framework or a component library. It ships no package and no 
 
 ## How to use it
 
-- Fetch [the whole list as Markdown](${origin}/index.md). It is one file with every entry and its code.
+To write CSS, read the skill. It is the same list, cut down to what an agent needs while writing.
+
+- Fetch [SKILL.md](${skill.url}/SKILL.md). It is ${skill.kilobytes} KB and holds the rules for all CSS and a table that says which reference file to read before which task.
+- Fetch only the reference files the table names for your task. They sit beside it, under \`${skill.url}/references/\`. One component needs one or two.
+- Install the skill only when your user asked you to. [The README](${repository}#if-you-are-an-agent) has the command.
+
+To study the list, or to learn why a technique works and who it is borrowed from, read the entries.
+
+- Fetch [the whole list as Markdown](${origin}/index.md). It is one file of ${list.kilobytes} KB with every entry and its code.
 - Or fetch one entry. Each link below is that entry as Markdown, and its specimen is at the same URL without \`.md\`.
 - Any page answers a request with \`Accept: text/markdown\` in Markdown.
 - Follow the "Rules" of an entry when you apply it. They are the conditions under which it works.
@@ -46,6 +56,7 @@ ${entries
 
 ## Files
 
+- [The skill for agents](${skill.url}/SKILL.md)
 - [The whole list as Markdown](${origin}/index.md)
 - [The same file as llms-full.txt](${origin}/llms-full.txt)
 - [The page for people, with every specimen](${origin}/)
