@@ -28,13 +28,6 @@
   --bp-line-faint: color-mix(in oklch, var(--bp-ink) 10%, transparent);
   /* Thumb, then track, for scrollbar-color. */
   --bp-scrollbar: var(--bp-line) transparent;
-  /* Dark lines, so the hatch shows on the white of a panel. It stands in for
-     an image and marks padding. */
-  --bp-hatch: repeating-linear-gradient(
-    -45deg,
-    var(--bp-line-faint) 0 1px,
-    transparent 1px 7px
-  );
   /* The ground of a specimen: the gray with lighter lines across it. */
   --bp-ground:
     repeating-linear-gradient(

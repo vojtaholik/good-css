@@ -4,7 +4,13 @@
    It follows the list in how it is written, and on purpose it holds none of
    the entries: no reset, no press scale, and a focus ring that is not the one
    in entry 20. A specimen has to work on the entry's code alone, and a base
-   that already carried an entry would hide a broken one. */
+   that already carried an entry would hide a broken one.
+
+   The look: the frame is a hatched stage, and the hatch is the stage's alone.
+   Whatever lies on it is opaque: a white box, a white control, a flat gray
+   block where an image would be. Running text goes in a box. Only a caption
+   or a control sits on the stage itself. A specimen that is a whole page
+   covers the stage: it sets the root's background to `--bp-panel`. */
 @layer base, demo;
 
 @layer base {
@@ -17,6 +23,12 @@
   /* Smoothed like the page around the frame, so text has the same weight in
      both. */
   :root {
+    /* A flat gray for a block that stands in for an image, and for an area
+       a specimen marks, such as padding. */
+    --bp-fill: color-mix(in oklch, var(--bp-ink) 8%, var(--bp-panel));
+    /* One step darker, for a control held down. */
+    --bp-fill-strong: color-mix(in oklch, var(--bp-ink) 16%, var(--bp-panel));
+
     font-family: var(--bp-font-body);
     line-height: 1.5;
     color: var(--bp-ink);
@@ -45,46 +57,92 @@
     margin: 0;
   }
 
-  code,
-  .label {
+  code {
     font-family: var(--bp-font-mono);
     font-size: 0.8125rem;
+  }
+
+  /* A caption, in the type of the frame's toolbar. */
+  .label {
+    font-family: var(--bp-font-label);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--bp-ink-soft);
+
+    & code {
+      font: inherit;
+    }
+  }
+
+  /* A value a script reads off the specimen, as a white chip. */
+  output {
+    display: inline-block;
+    padding: 0.125rem 0.375rem;
+    border: 1px solid var(--bp-line-faint);
+    border-radius: 5px;
+    background: var(--bp-panel);
+    font-family: var(--bp-font-label);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.25;
+    font-variant-numeric: tabular-nums;
+    color: var(--bp-ink);
+  }
+
+  /* Several captions with their values, in a row that wraps. */
+  .readouts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
   }
 
   button {
     min-width: 2.25rem;
     min-height: 2.25rem;
     padding-inline: 0.75rem;
-    border: 1px solid var(--bp-ink);
+    border: 1px solid var(--bp-line);
     border-radius: 5px;
-    background: none;
+    background: var(--bp-panel);
     font: inherit;
     font-size: 0.875rem;
+    font-weight: 500;
     color: inherit;
     cursor: pointer;
 
-    &[aria-pressed="true"] {
-      background: var(--bp-ink);
-      color: var(--bp-paper);
-    }
-
     @media (hover: hover) and (pointer: fine) {
       &:hover:not(:disabled) {
-        background: var(--bp-ink);
-        color: var(--bp-paper);
+        background: var(--bp-fill);
       }
     }
 
     &:active:not(:disabled) {
-      background: var(--bp-ink-soft);
-      color: var(--bp-paper);
+      background: var(--bp-fill-strong);
+    }
+
+    &[aria-pressed="true"] {
+      border-color: var(--bp-ink);
+      background: var(--bp-ink);
+      color: var(--bp-panel);
     }
 
     &:disabled {
-      border-color: var(--bp-line-faint);
+      background: var(--bp-paper);
       color: var(--bp-line);
       cursor: default;
     }
+  }
+
+  /* A field is white with a line round it, like a button. */
+  input:not([type="range"], [type="checkbox"], [type="radio"]),
+  textarea,
+  select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--bp-line);
+    border-radius: 5px;
+    background: var(--bp-panel);
+    font: inherit;
+    color: inherit;
   }
 
   a:active {
@@ -96,17 +154,36 @@
     outline-offset: 2px;
   }
 
-  /* A white box on the gray ground, and the hatched fill that stands in for
-     an image. */
+  /* A white box on the stage, and the flat gray block that stands in for an
+     image. */
   .box {
     border: 1px solid var(--bp-line-faint);
     border-radius: 10px;
     background: var(--bp-panel);
   }
 
-  .hatch {
-    border: 1px solid var(--bp-line);
+  .placeholder {
     border-radius: 10px;
-    background: var(--bp-hatch), var(--bp-panel);
+    background: var(--bp-fill);
+  }
+
+  /* Inside a box the corner is tighter, so it sits within the box's own. */
+  .box .placeholder {
+    border-radius: 5px;
+  }
+
+  /* What opens over the page is a box with a shadow under it. */
+  dialog,
+  [popover] {
+    padding: 1.5rem;
+    border: 1px solid var(--bp-line-faint);
+    border-radius: 10px;
+    background: var(--bp-panel);
+    color: var(--bp-ink);
+    box-shadow: 0 0.75rem 2rem oklch(0 0 none / 0.14);
+  }
+
+  dialog::backdrop {
+    background: oklch(0 0 none / 0.3);
   }
 }

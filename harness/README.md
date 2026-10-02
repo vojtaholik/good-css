@@ -45,7 +45,8 @@ An entry with no fixture shows a hatched box that names the file to add. Create 
 - Put every style in `@layer demo`. The entry's CSS is unlayered, so it wins wherever the two meet and a fixture cannot mask a broken technique.
 - To change a value the entry sets, such as a width that must fit the frame, use an inline `style` and say so in a comment.
 - Write `<!-- html -->` where the entry's HTML blocks should go. Write it twice for two copies.
-- Build with what `demos/base.css` gives you: the `--bp-*` tokens, `.box`, `.hatch`, `.label` and the button style.
+- Build with what `demos/base.css` gives you: the `--bp-*` tokens, `.box` for a white surface, `.placeholder` for a block that stands in for an image, `.label` for a caption, `output` for a value a script reads, `.readouts` for a row of them, and the button and field styles.
+- The hatch is the stage's alone. Whatever lies on it is opaque, and running text goes in a `.box`. A specimen that is a whole page covers the stage with `:root { background: var(--bp-panel); }`.
 - Never restate the technique in a fixture. If the specimen needs a rule the entry lacks, the entry is missing it.
 - Write a fixture's own CSS the way the list says, as in the "In all CSS" rules of `skills/good-css/SKILL.md`: `inline` and `block` properties, colors in `oklch()` with `none` as the hue of a gray, each `:hover` inside `@media (hover: hover) and (pointer: fine)`, and `overflow: clip` unless something scrolls.
 
