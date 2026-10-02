@@ -946,9 +946,9 @@ pre {
 
 /* Text from Markdown ------------------------------------------------------ */
 
-/* The code of an entry, its notes, and the body of a page. The text keeps to
-   a measure and a code block takes the whole width. The blocks are spaced by
-   the parent, entry 45. */
+/* The code of an entry, the rest of its text, and the body of a page. The
+   text keeps to a measure and a code block takes the whole width. The blocks
+   are spaced by the parent, entry 45. */
 .prose {
   & > * {
     margin-block: 0;
@@ -998,13 +998,20 @@ pre {
   font-size: 0.875em;
 }
 
-/* The rest of an entry: why it works, the rules, the support and the credits.
-   It opens and closes with the accordion of entry 4. */
-.notes {
-  --flow-space: 1rem;
-
+/* The two accordions under a specimen: the entry's code, then why it works,
+   the rules, the support and the credits. Both start closed, and both open
+   and close as entry 4 has it. A closed one still holds its text in the page,
+   so find-in-page and a reader of the HTML reach it. */
+.fold {
   border: 2px solid var(--bp-paper);
   border-radius: 10px;
+  /* The gray of the code reaches the edges, and the corners cut it round. */
+  overflow: clip;
+
+  /* The second one sits close under the first. */
+  & + & {
+    --flow-space: 0.5rem;
+  }
 
   & summary {
     display: flex;
@@ -1012,7 +1019,6 @@ pre {
     justify-content: space-between;
     gap: 1rem;
     padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
     list-style: none;
     font-size: 0.875rem;
     font-weight: 500;
@@ -1034,7 +1040,30 @@ pre {
   }
 
   & .prose {
+    --flow-space: 1rem;
+
     padding: 0.5rem 1rem 1.25rem;
+  }
+}
+
+/* The code lies on its gray from edge to edge, like a specimen under the bar
+   of its frame. Text between two blocks keeps its padding, and a white line
+   parts two blocks that meet. */
+.fold-source .prose {
+  --flow-space: 0px;
+
+  padding: 0;
+
+  & > pre {
+    border-radius: 0;
+  }
+
+  & > pre + pre {
+    border-block-start: 2px solid var(--bp-panel);
+  }
+
+  & > :not(pre) {
+    padding: 0.75rem 1rem;
   }
 }
 
@@ -1056,12 +1085,12 @@ details[open]::details-content {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .notes summary:hover {
+  .fold summary:hover {
     background: var(--bp-paper);
   }
 }
 
-.notes summary:active {
+.fold summary:active {
   background: var(--fill-strong);
 }
 

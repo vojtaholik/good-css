@@ -82,9 +82,12 @@
 
         <div data-slot="specimen"></div>
 
-        <div class="prose" data-slot="source"></div>
+        <details class="fold fold-source">
+          <summary data-slot="source-title">The code</summary>
+          <div class="prose" data-slot="source"></div>
+        </details>
 
-        <details class="notes">
+        <details class="fold">
           <summary>Why it works, the rules and the credits</summary>
           <div class="prose" data-slot="notes"></div>
         </details>

@@ -43,6 +43,14 @@ function noSpecimen(entry) {
   return node;
 }
 
+/* Names the kinds of code an entry has, as in "The CSS, HTML and JS". */
+function sourceTitle(code) {
+  const kinds = ["css", "html", "js"].filter((kind) => code[kind].length > 0).map((kind) => kind.toUpperCase());
+  const last = kinds.pop();
+
+  return `The ${kinds.length > 0 ? `${kinds.join(", ")} and ${last}` : last}`;
+}
+
 function entry(entry) {
   const node = stamp("entry");
   const demo = demos[entry.slug];
@@ -51,6 +59,7 @@ function entry(entry) {
   slot(node, "title").innerHTML = entry.title;
   slot(node, "lede").innerHTML = entry.lede;
   slot(node, "specimen").replaceWith(demo ? specimen(entry, demo) : noSpecimen(entry));
+  slot(node, "source-title").textContent = sourceTitle(entry.code);
   slot(node, "source").innerHTML = entry.source;
   slot(node, "notes").innerHTML = entry.notes;
 
