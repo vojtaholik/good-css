@@ -167,7 +167,10 @@ const menu = document.getElementById("category-menu");
 slot(document, "cards").replaceChildren(...categories.map(card));
 slot(document, "total").textContent = pad(categories.length);
 slot(document, "categories").replaceChildren(...categories.map(category));
-slot(document, "category-names").append(...categories.map(currentName));
+/* The first name is "Categories", from the header. The rest follow it. The
+   built page already has them, so they are replaced and not added to. */
+const names = slot(document, "category-names");
+names.replaceChildren(names.firstElementChild, ...categories.map(currentName));
 slot(document, "category-menu").replaceChildren(...categories.map(menuItem));
 
 /* The header is outside the categories, so their timelines are named on the
