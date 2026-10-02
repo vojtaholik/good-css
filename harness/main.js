@@ -197,8 +197,11 @@ const step = (dir) => {
   carousel.scrollBy({ left: dir * card });
 };
 
-/* Every card can come to rest at the start of the row, so the scroll runs
-   from the first card to the last and the count follows it. */
+/* The bar fills from one card's share at the start to full at the end, where
+   the last card meets the end of the bar. The count is the same position as
+   a whole number, from 01 to 08. Where three cards show at once the row has
+   six stops for the eight numbers, so a press of an arrow moves the count by
+   one or by two. */
 const sync = () => {
   const max = carousel.scrollWidth - carousel.clientWidth;
   const scrolled = max > 0 ? Math.min(Math.abs(carousel.scrollLeft) / max, 1) : 0;

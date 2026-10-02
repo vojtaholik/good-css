@@ -741,11 +741,9 @@ pre {
 }
 
 /* The carousel of entry 9. It runs to both edges of the window, and its
-   padding brings the first card in line with the content. Three cards fill
-   the content column, and a card is never narrower than 15rem.
-
-   The padding at the end is the room the last card needs to come to rest at
-   the start, so the count under the row can reach every category. */
+   padding brings the first card in line with the content, and the last card
+   at the end of the scroll. Three cards fill the content column, and a card
+   is never narrower than 15rem. */
 .carousel {
   --gap: 1.3125rem;
   --pad: max(var(--gutter), (100cqi - var(--content)) / 2);
@@ -756,7 +754,7 @@ pre {
   gap: var(--gap);
   margin-block: 2.4375rem 0;
   padding-block: 0;
-  padding-inline: var(--pad) calc(100cqi - var(--pad) - var(--card));
+  padding-inline: var(--pad);
   list-style: none;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -780,26 +778,22 @@ pre {
 }
 
 /* The title is pushed to the bottom of the card by its auto margin, entry 46.
-   The ring is drawn inside the card, where the scroller cannot clip it. */
+   The focus ring is drawn inside the card, where the scroller cannot clip it. */
 .card {
   display: flex;
   flex-direction: column;
   aspect-ratio: 362 / 438;
-  padding: 19.9cqi 13.2cqi 16.1cqi;
+  padding: 13.2cqi 13.2cqi 16.1cqi;
   border-radius: 5px;
   background: var(--bp-panel);
   text-decoration: none;
   outline-offset: -0.5rem;
 }
 
-/* The ring around the drawing of a category. Each drawing is square and
-   leaves its own room inside the ring. */
+/* The drawing of a category. Each one is square and has a margin of its own
+   inside it, so it takes the whole width of the card's padding box. */
 .card-art {
-  align-self: center;
-  inline-size: 58.6cqi;
   aspect-ratio: 1;
-  border: 2px solid var(--bp-line);
-  border-radius: 50%;
   color: var(--bp-ink-soft);
 
   & > svg {
@@ -819,9 +813,10 @@ pre {
   text-box: trim-both cap alphabetic;
 }
 
+/* Under the pointer the drawing goes from gray to black. */
 @media (hover: hover) and (pointer: fine) {
   .card:hover .card-art {
-    border-color: var(--bp-ink);
+    color: var(--bp-ink);
   }
 }
 
