@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
     <title>good-css specimens</title>
+    <link rel="icon" href="/mark.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="./tokens.css">
@@ -11,111 +13,93 @@
     <script type="module" src="./main.js"></script>
   </head>
   <body>
-    <div class="guides content-grid" aria-hidden="true">
-      <i></i>
-    </div>
+    <!-- header -->
 
-    <header class="masthead content-grid">
-      <h1 data-slot="title"></h1>
-
-      <div class="masthead-body">
-        <div class="masthead-lead">
-          <p class="masthead-statement" data-slot="statement"></p>
-
-          <div class="install">
-            <p class="label">Install it as an agent skill</p>
-            <div class="install-command">
-              <code>npx skills@latest add vojtaholik/good-css</code>
-              <button type="button" aria-live="polite" data-copy>Copy</button>
-            </div>
-            <p>
-              For Claude Code, Codex, Cursor and any other agent that reads skills. The source and
-              the other ways to install are on
-              <a href="https://github.com/vojtaholik/good-css">GitHub</a>.
-            </p>
-          </div>
+    <main>
+      <section class="hero content-grid">
+        <div class="hero-title">
+          <h1><img src="/wordmark.svg" alt="good-css" width="711" height="95"></h1>
+          <p>From experts for agents.</p>
         </div>
 
-        <div class="prose" data-slot="intro"></div>
-      </div>
+        <!-- install-command -->
 
-      <div class="index" id="index">
-        <dl class="title-block">
-          <div>
-            <dt>Source</dt>
-            <dd>[ PRACTICES.md ]</dd>
-          </div>
-          <div>
-            <dt>Entries</dt>
-            <dd data-slot="entry-count"></dd>
-          </div>
-          <div>
-            <dt>With a specimen</dt>
-            <dd data-slot="specimen-count"></dd>
-          </div>
-        </dl>
-
-        <nav aria-label="Entries" data-slot="index"></nav>
-      </div>
-    </header>
-
-    <main data-slot="categories"></main>
-
-    <template id="index-category">
-      <section>
-        <h2><a data-slot="title"></a></h2>
-        <ol data-slot="entries"></ol>
+        <a class="badge" href="https://is-agentic.com/scan/good-css.vercel.app">
+          <strong>100/100</strong>
+          <span>Your agent can read this site.</span>
+        </a>
       </section>
+
+      <section class="categories content-grid" aria-labelledby="categories-title">
+        <h2 id="categories-title">Categories</h2>
+
+        <ul class="carousel" data-slot="cards"></ul>
+
+        <div class="carousel-controls">
+          <div class="carousel-progress" aria-hidden="true"></div>
+          <p class="carousel-count">
+            <b data-slot="current">01</b>
+            <span>/ <span data-slot="total"></span></span>
+          </p>
+          <div class="carousel-buttons">
+            <button type="button" data-carousel-dir="-1" aria-label="Previous category">
+              <img src="/arrow.svg" alt="">
+            </button>
+            <button type="button" data-carousel-dir="1" aria-label="Next category">
+              <img src="/arrow.svg" alt="">
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div data-slot="categories"></div>
+    </main>
+
+    <!-- footer -->
+
+    <template id="card">
+      <li>
+        <a class="card">
+          <span class="card-art" aria-hidden="true"></span>
+          <span class="card-title" data-slot="title"></span>
+        </a>
+      </li>
     </template>
 
     <template id="category">
-      <section class="category">
-        <header class="category-head content-grid">
-          <div class="category-bar">
-            <h2 data-slot="title"></h2>
-            <p class="label" data-slot="count"></p>
-            <a href="#index">Index</a>
-          </div>
-        </header>
-
-        <div data-slot="sheets"></div>
+      <section class="category content-grid">
+        <div class="category-layout">
+          <h2><span data-slot="title"></span></h2>
+          <div class="entries" data-slot="entries"></div>
+        </div>
       </section>
     </template>
 
-    <template id="sheet">
-      <section class="sheet content-grid">
-        <header class="sheet-head">
-          <p class="sheet-number" data-slot="number"></p>
-          <h3 data-slot="title"></h3>
-          <p class="sheet-lede" data-slot="lede"></p>
-        </header>
+    <template id="entry">
+      <article class="entry">
+        <h3 data-slot="title"></h3>
+        <p class="lede" data-slot="lede"></p>
 
         <div data-slot="specimen"></div>
 
-        <details class="entry">
-          <summary>
-            Read the entry
-            <span class="label" data-slot="code-count"></span>
-          </summary>
-          <div class="prose" data-slot="body"></div>
+        <div class="prose" data-slot="source"></div>
+
+        <details class="notes">
+          <summary>Why it works, the rules and the credits</summary>
+          <div class="prose" data-slot="notes"></div>
         </details>
-      </section>
+      </article>
     </template>
 
     <template id="specimen">
-      <figure class="specimen full-width">
-        <figcaption class="check">
-          <span class="label">Check</span>
-          <span data-slot="check"></span>
-        </figcaption>
-
-        <div class="viewport breakout">
+      <figure class="specimen">
+        <div class="viewport">
           <div class="viewport-bar">
             <span class="viewport-size" data-slot="size"></span>
             <div class="viewport-widths" role="group" aria-label="Frame width">
               <button type="button" data-width="360px">360</button>
               <button type="button" data-width="768px">768</button>
-              <button type="button" data-width="100%">Full</button>
+              <button type="button" data-width="100%">100%</button>
             </div>
             <a
               data-slot="open"
@@ -123,26 +107,21 @@
               title="Open in its own tab"
               aria-label="Open this specimen in its own tab"
             >
-              <svg
-                viewBox="0 0 16 16"
-                width="16"
-                height="16"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.25"
-                aria-hidden="true"
-              >
-                <path d="M6.5 3.5h-3v9h9v-3M9.5 3.5h3v3M12.5 3.5l-5 5" />
-              </svg>
+              <img src="/icons/link-square.svg" alt="">
             </a>
           </div>
           <iframe data-slot="frame"></iframe>
         </div>
+
+        <figcaption class="check">
+          <img src="/icons/info.svg" alt="Check:">
+          <span data-slot="check"></span>
+        </figcaption>
       </figure>
     </template>
 
     <template id="no-specimen">
-      <div class="no-specimen breakout">
+      <div class="no-specimen">
         <p>No specimen is drawn for this entry yet.</p>
         <p>Add <code data-slot="file"></code>.</p>
       </div>

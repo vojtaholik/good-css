@@ -3,9 +3,41 @@ import { author, authorProfile, origin, repository } from "./site.js";
 
 const attribute = (value) => value.replaceAll("&", "&amp;").replaceAll('"', "&quot;");
 
-/* What ends every page: who made it, then the site's links, kept quiet. */
-export const footer = `<footer class="footer content-grid">
-      <div class="footer-row">
+/* The command that installs the skill, with the button that copies it. The
+   prompt sign is drawn in CSS, so a copy takes the command alone. */
+export const installCommand = `<div class="install-command">
+          <code>npx skills@latest add vojtaholik/good-css</code>
+          <button type="button" aria-live="polite" data-copy>Copy</button>
+        </div>`;
+
+/* What opens every page: the mark, the link to the source, and the button
+   that opens the install command in a popover. */
+export const header = `<header class="site-header content-grid">
+      <div class="site-header-bar">
+        <a class="mark" href="/" aria-label="good-css">
+          <img src="/mark.svg" alt="" width="83" height="78">
+        </a>
+        <a class="github" href="${repository}">
+          <span class="icon"><img src="/icons/github.svg" alt=""></span>
+          GitHub
+        </a>
+        <button class="button" type="button" popovertarget="install">Install</button>
+      </div>
+
+      <div class="install" id="install" popover>
+        <p class="install-title">Install it as an agent skill</p>
+        ${installCommand}
+        <p>
+          For Claude Code, Codex, Cursor and any other agent that reads skills. The source and the
+          other ways to install are on <a href="${repository}">GitHub</a>.
+        </p>
+      </div>
+    </header>`;
+
+/* What ends every page: who made it, then the site's links. The script is
+   here because every page has a copy button, in the popover of the header. */
+export const footer = `<footer class="site-footer content-grid">
+      <div class="site-footer-row">
         <p>Made by <a href="${authorProfile}">${author}</a></p>
         <nav aria-label="Site">
           <a href="/">good-css</a>
@@ -16,7 +48,18 @@ export const footer = `<footer class="footer content-grid">
           <a href="${repository}">GitHub</a>
         </nav>
       </div>
-    </footer>`;
+    </footer>
+
+    <script type="module">
+      /* A copy button copies the command beside it and says so for a moment. */
+      for (const button of document.querySelectorAll("[data-copy]")) {
+        button.addEventListener("click", async () => {
+          await navigator.clipboard.writeText(button.previousElementSibling.textContent);
+          button.textContent = "Copied";
+          setTimeout(() => (button.textContent = "Copy"), 1500);
+        });
+      }
+    </script>`;
 
 /* A page in deploy/pages: the heading is its title, the first paragraph its
    statement, the rest its body. */
@@ -26,14 +69,15 @@ export function readPage(markdown) {
   return { title: heading.text, statement: statement.text, body };
 }
 
-/* Draws a page with the masthead of the index. A page with no path, the one for a missing page,
-   gets no canonical URL and no Markdown twin. */
-export function sitePage({ page, stylesheet, path }) {
+/* Draws a page between the header and the footer of the index. A page with no
+   path, the one for a missing page, gets no canonical URL and no Markdown twin. */
+export function sitePage({ page, stylesheets, path }) {
   return `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
     <title>${page.title} · good-css</title>
     <meta name="description" content="${attribute(page.statement)}">
     ${
@@ -42,22 +86,18 @@ export function sitePage({ page, stylesheet, path }) {
     <link rel="alternate" type="text/markdown" href="${path}.md">`
         : `<meta name="robots" content="noindex">`
     }
+    <link rel="icon" href="/mark.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="${stylesheet}">
+    ${stylesheets.map((href) => `<link rel="stylesheet" href="${href}">`).join("\n    ")}
   </head>
   <body>
-    <div class="guides content-grid" aria-hidden="true">
-      <i></i>
-    </div>
+    ${header}
 
-    <main class="masthead content-grid">
+    <main class="page content-grid">
       <h1>${page.title}</h1>
-
-      <div class="masthead-body">
-        <p class="masthead-statement">${marked.parseInline(page.statement)}</p>
-        <div class="prose">${marked.parser(page.body)}</div>
-      </div>
+      <p class="page-statement">${marked.parseInline(page.statement)}</p>
+      <div class="prose">${marked.parser(page.body)}</div>
     </main>
 
     ${footer}

@@ -1,6 +1,6 @@
-/* The harness page. It is built with the practices it previews, written out
-   by hand: the reset, the content grid, fluid sizes, color-mix, the animated
-   accordion. Specimens do not use this file. They run the entry's own code. */
+/* The page around the specimens. It is built with the practices it shows,
+   written out by hand, and each one is named where it is used. Specimens do
+   not use this file. They run the entry's own code. */
 
 /* The reset, entry 6, as the entry has it. */
 *,
@@ -60,55 +60,51 @@ button,
   -webkit-user-select: none;
 }
 
-/* The page's own tokens and base. */
+/* Tokens and base --------------------------------------------------------- */
+
 :root {
-  --text-display: clamp(5rem, 1rem + 17vw, 17rem);
-  --text-number: clamp(4rem, 2.5rem + 6vw, 8.5rem);
-  --text-title: clamp(2rem, 1.25rem + 3vw, 4rem);
-  --text-statement: clamp(1.25rem, 1rem + 1vw, 1.75rem);
-  --text-lede: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
-  --space-sheet: clamp(3rem, 1.5rem + 6vw, 7rem);
-  --space-block: clamp(1.5rem, 1rem + 2vw, 3rem);
-  --space-number: clamp(1.25rem, 0.5rem + 3vw, 3.5rem);
+  /* Sizes that grow with the screen, entry 7. Each one runs from a 360px
+     screen to the 1512px the design is drawn at, and holds still beyond. */
+  --text-title: clamp(1.625rem, 1.352rem + 1.215vw, 2.5rem);
+  --text-lede: clamp(1.0625rem, 1.004rem + 0.26vw, 1.25rem);
+  --text-tagline: clamp(1.125rem, 1.027rem + 0.434vw, 1.4375rem);
+  --text-heading: clamp(1.25rem, 1.17rem + 0.357vw, 1.507rem);
+  --text-count: clamp(2rem, 1.788rem + 0.944vw, 2.68rem);
+  --text-page: clamp(2.75rem, 1.734rem + 4.514vw, 6rem);
+  --wordmark: clamp(19.4375rem, 11.625rem + 34.722vw, 44.4375rem);
+  --mark: clamp(3.5rem, 2.973rem + 2.344vw, 5.1875rem);
+  --space-header: clamp(1.5rem, 0.465rem + 4.601vw, 4.8125rem);
+  --space-hero: clamp(4rem, 1.148rem + 12.674vw, 13.125rem);
+  --space-command: clamp(2rem, 1.512rem + 2.17vw, 3.5625rem);
+  --space-badge: clamp(3.5rem, 0.023rem + 15.451vw, 14.625rem);
+  --space-band: clamp(3rem, 2.141rem + 3.819vw, 5.75rem);
+  --space-band-end: clamp(3rem, 2.316rem + 3.038vw, 5.1875rem);
+  --space-entry: clamp(2.5rem, 2.07rem + 1.91vw, 3.875rem);
+  --space-category: clamp(3.5rem, 2.68rem + 3.646vw, 6.125rem);
+  --gutter: clamp(1rem, -0.084rem + 4.819vw, 3rem);
 
-  /* A guide line sits this far outside the content column, so text never
-     touches one. A block that should reach the guides uses the same length
-     as a negative margin. */
-  --gutter: clamp(1rem, 0.5rem + 2vw, 2.5rem);
-  --guide-gap: calc(var(--gutter) / 2);
+  /* How far below the top of the window a link into the page stops. The name
+     of a category stays there while its entries scroll. */
+  --anchor-offset: 2rem;
 
-  /* The height of the bar that names a category. It stays at the top of the
-     window, so a link into the page stops this far below it, less the one
-     pixel that puts a sheet's top line under the bar's own. */
-  --category-bar: 3rem;
-  --anchor-offset: calc(var(--category-bar) - 1px);
+  /* Every other color is mixed from the three in tokens.css, entry 2. */
+  --fill-strong: color-mix(in oklch, var(--bp-ink) 9.6%, var(--bp-panel));
+  --fill-track: color-mix(in oklch, var(--bp-ink) 11.5%, var(--bp-panel));
+  --tint: color-mix(in oklch, var(--bp-ink) 5%, transparent);
+  --tint-strong: color-mix(in oklch, var(--bp-ink) 9%, transparent);
+  --ink-hover: color-mix(in oklch, var(--bp-ink) 80%, var(--bp-panel));
+  --shadow-raised: 0 0 6px color-mix(in oklch, var(--bp-ink) 25%, transparent);
 
-  --title-code: color-mix(in oklch, var(--bp-ink) 16%, var(--bp-paper));
-
-  /* Hover and press fills stay see-through: they end on a guide and must not
-     hide it. */
-  --hover-fill: color-mix(in oklch, var(--bp-ink) 14%, transparent);
-  --press-fill: color-mix(in oklch, var(--bp-ink) 26%, transparent);
-
+  /* Entry 30. */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
-  color-scheme: dark;
+  color-scheme: light;
   scrollbar-color: var(--bp-scrollbar);
   scroll-padding-block-start: var(--anchor-offset);
   font-family: var(--bp-font-body);
   line-height: 1.5;
   color: var(--bp-ink);
-  background: var(--bp-paper);
-}
-
-html {
-  overscroll-behavior-y: none;
-}
-
-@media (any-pointer: coarse) {
-  html {
-    overscroll-behavior-y: auto;
-  }
+  background: var(--bp-panel);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -117,29 +113,26 @@ html {
   }
 }
 
+/* The footer sits at the bottom of the window on a page shorter than it,
+   pushed there by its auto margin, entry 46. */
 body {
-  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 h1,
 h2,
 h3,
 p,
-dl,
-dd,
-ol,
 figure {
   margin: 0;
 }
 
 h1,
 h2,
-h3,
-.sheet-number {
+h3 {
   font-family: var(--bp-font-display);
-  font-weight: 400;
-  text-transform: uppercase;
-  text-box: trim-both cap alphabetic;
+  letter-spacing: -0.033em;
 }
 
 a {
@@ -148,59 +141,48 @@ a {
 
 /* A link in running text. Its underline thickens under the pointer and
    under a press. */
-:is(.prose, .install, .footer p) a {
+:is(.prose, .install, .site-footer p) a {
   text-underline-offset: 0.2em;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  :is(.prose, .install, .footer p) a:hover {
+  :is(.prose, .install, .site-footer p) a:hover {
     text-decoration-thickness: 2px;
   }
 }
 
-:is(.prose, .install, .footer p) a:active {
+:is(.prose, .install, .site-footer p) a:active {
   text-decoration-thickness: 2px;
 }
 
 code,
-pre,
-.label,
-.title-block,
-.viewport-bar,
-.install-command,
-.category-bar {
+pre {
   font-family: var(--bp-font-mono);
-  font-size: 0.8125rem;
-}
-
-/* Code in a title is set in the title's own font, smaller and on a box. */
-:is(h3, .index a) code {
-  padding: 0.08em 0.3em;
-  background: var(--title-code);
-  font: inherit;
-  font-size: 0.8em;
-  box-decoration-break: clone;
 }
 
 ::selection {
   background: var(--bp-ink);
-  color: var(--bp-paper);
+  color: var(--bp-panel);
 }
 
+/* Entry 20. */
 :focus-visible {
   outline: max(2px, 0.08em) solid currentColor;
   outline-offset: 0.25em;
 }
 
+/* Entry 25. */
 @view-transition {
   navigation: auto;
 }
 
-/* Content grid ------------------------------------------------------------ */
+/* Content grid, entry 1 ---------------------------------------------------- */
 
+/* Nothing on the page is wider than the content and narrower than the
+   window, so the breakout is as wide as the content. */
 .content-grid {
-  --content: 64rem;
-  --breakout: 80rem;
+  --content: 70.625rem;
+  --breakout: 70.625rem;
 
   display: grid;
   grid-template-columns:
@@ -225,369 +207,62 @@ pre,
   grid-template-columns: inherit;
 }
 
-/* Construction lines on either side of the content column. They are drawn
-   on the page behind everything and scroll with it. */
-.guides {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
+/* Controls ---------------------------------------------------------------- */
 
-  & > * {
-    margin-inline: calc(var(--guide-gap) * -1);
-    border-inline: 1px solid var(--bp-line-faint);
+/* The filled button. Its label is centered on its letters, entry 33, so the
+   padding sets the height: 42px around the capitals of a 16px label. */
+.button {
+  display: inline-block;
+  flex: none;
+  padding: 0.95rem 1.4375rem;
+  border: 0;
+  border-radius: 5px;
+  background: var(--bp-ink);
+  font: inherit;
+  line-height: 1.4375;
+  color: var(--bp-panel);
+  text-box: trim-both cap alphabetic;
+  cursor: pointer;
+
+  /* A ring in the label's white would not show on the page. */
+  &:focus-visible {
+    outline-color: var(--bp-ink);
   }
-}
-
-/* Masthead ---------------------------------------------------------------- */
-
-.masthead {
-  row-gap: var(--space-block);
-  padding-block: var(--space-sheet);
-
-  & h1 {
-    font-size: var(--text-display);
-    line-height: 0.85;
-    letter-spacing: -0.01em;
-  }
-}
-
-.masthead-body {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
-  align-items: start;
-  gap: 1.5rem var(--space-block);
-
-  & .prose {
-    color: var(--bp-ink-soft);
-  }
-}
-
-.masthead-statement {
-  max-width: 28ch;
-  font-size: var(--text-statement);
-  font-weight: 500;
-  line-height: 1.3;
-  text-wrap: balance;
-}
-
-/* Under the statement: how to get the list into an agent. */
-.masthead-lead {
-  display: grid;
-  gap: var(--space-block);
-}
-
-.install {
-  display: grid;
-  gap: 0.75rem;
-  max-width: 28rem;
-  font-size: 0.875rem;
-  color: var(--bp-ink-soft);
-
-  & a {
-    color: var(--bp-ink);
-  }
-}
-
-/* The command and its copy button, drawn as one bar like the one on a frame.
-   A press on the command selects all of it. */
-.install-command {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  border: 1px solid var(--bp-line);
-  background: var(--bp-panel);
-  color: var(--bp-ink);
-
-  & code {
-    padding: 0.75rem 1rem;
-    font-size: inherit;
-    user-select: all;
-
-    &::before {
-      content: "$ ";
-      color: var(--bp-ink-soft);
-    }
-  }
-
-  /* Wide enough for "Copied", so the bar holds still when the label changes. */
-  & button {
-    min-width: calc(6ch + 1.5rem + 1px);
-  }
-}
-
-/* The index: a status row, then every entry under its category. Both are
-   laid out in the same columns, and the block reaches the guides on either
-   side. A category stays whole in one column. */
-.index {
-  margin-inline: calc(var(--guide-gap) * -1);
-  border-block-start: 1px solid var(--bp-line-faint);
-
-  & :is(.title-block, nav) {
-    columns: 3 16rem;
-    column-gap: 0;
-    column-rule: 1px dashed var(--bp-line-faint);
-  }
-
-  & section {
-    break-inside: avoid;
-  }
-
-  & ol {
-    padding: 0;
-    list-style: none;
-  }
-
-  & :is(.title-block > div, a) {
-    padding: 0.625rem var(--guide-gap);
-    border-block-end: 1px solid var(--bp-line-faint);
-    break-inside: avoid;
-  }
-
-  & a {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: baseline;
-    gap: 1rem;
-    outline-offset: -2px;
-    text-decoration: none;
-  }
-
-  /* A category's title is a row as tall as an entry's, and leads to the
-     category on the page. */
-  & h2 {
-    font-size: 1.25rem;
-    line-height: 1.2;
-    text-box: normal;
-  }
-}
-
-/* Every cell of the index is one line, so the rows line up across columns.
-   A title that does not fit is cut short, and the link's tooltip has it whole. */
-.index :is(dt, .index-title) {
-  overflow: clip;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.title-block > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  color: var(--bp-ink-soft);
-
-  & dd {
-    flex: none;
-    color: var(--bp-ink);
-  }
-}
-
-.index-number {
-  font-family: var(--bp-font-mono);
-  font-size: 0.8125rem;
-  color: var(--bp-ink-soft);
-}
-
-/* An entry with no specimen yet is hatched, here and on its sheet. */
-.index a[data-missing] {
-  background: var(--bp-hatch);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .index a:hover {
-    background: var(--hover-fill);
-
-    & .index-number {
-      color: var(--bp-ink);
-    }
+  .button:hover {
+    background: var(--ink-hover);
   }
 }
 
-.index a:active {
-  background: var(--press-fill);
+/* Press feedback, entry 31, on everything that is pressed like a button. */
+:is(.button, .install-command button, .carousel-buttons button, .card):active {
+  transform: scale(0.97);
 }
 
-/* Category ---------------------------------------------------------------- */
-
-/* A link to a category brings its bar to the top of the window. */
-.category {
-  scroll-margin-block-start: calc(var(--anchor-offset) * -1);
-}
-
-/* The bar that opens a category. It stays at the top of the window while the
-   category's sheets pass under it, so it always says where the reader is, and
-   its link leads back to the index and from there to any other category. */
-.category-head {
-  container-type: inline-size;
-  position: sticky;
-  inset-block-start: 0;
-  z-index: 1;
-  height: var(--category-bar);
-  border-block: 1px solid var(--bp-line-faint);
-  background: var(--bp-panel);
-}
-
-/* The bar covers the guides, so it draws them again at its own ends. */
-.category-bar {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-inline: calc(var(--guide-gap) * -1);
-  padding-inline-start: var(--guide-gap);
-  border-inline: 1px solid var(--bp-line-faint);
-
-  & h2 {
-    font-size: 1.5rem;
-  }
-
-  & .label {
-    color: var(--bp-ink-soft);
-  }
-
-  & a {
-    align-self: stretch;
-    margin-inline-start: auto;
-    padding-inline: var(--guide-gap);
-    border-inline-start-color: var(--bp-line-faint);
-    text-decoration: none;
+@media (prefers-reduced-motion: no-preference) {
+  :is(.button, .install-command button, .carousel-buttons button, .card) {
+    transition: transform 160ms var(--ease-out);
   }
 }
 
-/* On a phone the longest title and the link fill the bar, and the count goes. */
-@container (width < 30rem) {
-  .category-bar .label {
-    display: none;
-  }
-}
-
-/* The bar's own line closes it, so the first sheet under it draws none. */
-.category-head + .sheet {
-  border-block-start: 0;
-}
-
-/* Sheet ------------------------------------------------------------------- */
-
-/* A sheet starts close under its rule and ends well clear of the next one,
-   so the rule reads as the top of the sheet it opens. */
-.sheet {
-  container-type: inline-size;
-  row-gap: var(--space-block);
-  padding-block: var(--space-block) var(--space-sheet);
-  border-block-start: 1px solid var(--bp-line-faint);
-}
-
-/* The head stands a block and a half clear of the specimen it names. */
-.sheet-head {
+/* A drawing from the design keeps the size it was exported at, and sits in
+   the middle of a box sized by the line of text beside it, entry 47. */
+.icon {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1.5rem var(--space-number);
-  margin-block-end: calc(var(--space-block) / 2);
-
-  & h3 {
-    align-self: start;
-    font-size: var(--text-title);
-    line-height: 1;
-  }
-}
-
-.sheet-number {
-  grid-row: span 2;
-  font-size: var(--text-number);
-  line-height: 0.8;
-}
-
-.sheet-lede {
-  grid-column-end: -1;
-  max-width: 60ch;
-  font-size: var(--text-lede);
-  color: var(--bp-ink-soft);
-
-  &:empty {
-    display: none;
-  }
-}
-
-/* On a narrow sheet the lede runs under the number too. */
-@container (width < 48rem) {
-  .sheet-lede {
-    grid-column-start: 1;
-  }
-}
-
-/* Specimen ---------------------------------------------------------------- */
-
-.specimen {
-  row-gap: 1rem;
-}
-
-.check {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: baseline;
-  gap: 0 1rem;
-  max-width: 68ch;
-
-  & .label {
-    color: var(--bp-ink-soft);
-  }
-}
-
-/* The frame is a viewport with its controls in a bar on top. Its corner
-   resizes it, and so do the width buttons. */
-.viewport {
-  --bar: 2.25rem;
-
-  display: grid;
-  grid-template-rows: var(--bar) 1fr;
-  width: 100%;
-  max-width: 100%;
-  min-width: min(100%, 20rem);
-  height: calc(var(--frame-height) + var(--bar) + 2px);
-  min-height: 10rem;
-  border: 1px solid var(--bp-line);
-  /* `hidden`, not `clip`: the corner grip is only drawn on a scroll container. */
-  overflow: hidden;
-  resize: both;
-
-  /* A grip in the corner of the frame: two strokes on a paper square. */
-  &::-webkit-resizer {
-    border-block-start: 1px solid var(--bp-line);
-    border-inline-start: 1px solid var(--bp-line);
-    background:
-      linear-gradient(
-        135deg,
-        transparent 58%,
-        var(--bp-ink) 58% 65%,
-        transparent 65% 78%,
-        var(--bp-ink) 78% 85%,
-        transparent 85%
-      ),
-      var(--bp-paper);
-  }
-
-  & iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-}
-
-/* A control in a bar is a cell of it, divided from the rest by a line. Its
-   focus ring is drawn inside the cell, where the frame cannot clip it. */
-:is(.viewport-bar, .install-command, .category-bar) :is(button, a) {
-  display: grid;
+  flex: none;
   place-items: center;
-  padding-inline: 0.75rem;
-  border: 0;
-  border-inline-start: 1px solid var(--bp-line);
-  background: none;
-  font: inherit;
-  color: inherit;
-  outline-offset: -3px;
-  cursor: pointer;
+  inline-size: 1lh;
+  block-size: 1lh;
+
+  & img {
+    max-width: none;
+  }
 }
 
-/* The hit area of entry 27, for the controls that look smaller than 44px.
-   On a frame's bar the part above the bar is clipped by the frame. */
-:is(.viewport-bar :is(button, a), .footer nav a) {
+/* The hit area of entry 27, for what looks smaller than 44px. */
+:is(.github, .site-footer nav a, .viewport-bar :is(button, a), .badge) {
   position: relative;
 
   &::after {
@@ -597,49 +272,663 @@ pre,
   }
 }
 
-.viewport-bar {
+/* The command and the button that copies it. A press on the command selects
+   all of it. */
+.install-command {
   display: flex;
-  border-block-end: 1px solid var(--bp-line);
-  background: var(--bp-panel);
+  max-inline-size: 35.625rem;
+  border-radius: 5px;
+  background: var(--bp-paper);
 
-  & :is(button, a) {
-    min-width: var(--bar);
+  /* Smaller on a narrow screen, where the command then wraps once and not
+     twice. */
+  & code {
+    flex: 1;
+    padding: 0.75rem clamp(0.75rem, 0.594rem + 0.694vw, 1.25rem);
+    font-size: clamp(0.8125rem, 0.773rem + 0.174vw, 0.9375rem);
+    line-height: 1.4;
+    user-select: all;
+
+    &::before {
+      content: "$ ";
+    }
   }
+
+  /* Wide enough for "Copied", so the bar holds still when the label changes. */
+  & button {
+    flex: none;
+    min-inline-size: 5.6875rem;
+    border: 0;
+    border-start-end-radius: 5px;
+    border-end-end-radius: 5px;
+    background: var(--fill-strong);
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .install-command button:hover {
+    background: var(--fill-track);
+  }
+}
+
+/* Header ------------------------------------------------------------------ */
+
+.site-header {
+  padding-block-start: var(--space-header);
+}
+
+/* The mark is pushed away from the two links by its auto margin, entry 46. */
+.site-header-bar {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.mark {
+  flex: none;
+  margin-inline-end: auto;
+
+  & img {
+    inline-size: var(--mark);
+  }
+}
+
+.github {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .github:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+:is(.mark, .github):active {
+  opacity: 0.6;
+}
+
+/* The install command, opened by the button in the header. It fades and rises
+   in, entry 23, and sits under the button, entry 26. The button is at the end
+   of the row, so the popover runs back from the button's end edge. */
+.install {
+  inline-size: min(100% - 2rem, 30rem);
+  padding: 1.25rem;
+  border: 1px solid var(--bp-line-faint);
+  border-radius: 10px;
+  background: var(--bp-panel);
+  box-shadow: 0 12px 32px color-mix(in oklch, var(--bp-ink) 16%, transparent);
+  font-size: 0.875rem;
+  color: var(--bp-ink);
+
+  & > * + * {
+    margin-block-start: 0.75rem;
+  }
+}
+
+.install-title {
+  font-weight: 500;
+}
+
+.install > p:last-child {
+  color: var(--bp-ink-soft);
 
   & a {
-    padding-inline: 0;
+    color: var(--bp-ink);
+  }
+}
+
+[popover] {
+  opacity: 0;
+  transition:
+    opacity 0.2s var(--ease-out),
+    translate 0.2s var(--ease-out),
+    display 0.2s allow-discrete,
+    overlay 0.2s allow-discrete;
+}
+
+[popover]:popover-open {
+  opacity: 1;
+}
+
+@starting-style {
+  [popover]:popover-open {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [popover] {
+    translate: 0 0.5rem;
   }
 
-  & [aria-pressed="true"] {
-    background: var(--bp-ink);
-    color: var(--bp-paper);
+  [popover]:popover-open {
+    translate: 0 0;
+  }
 
-    &:active {
-      background: var(--bp-ink-soft);
+  @starting-style {
+    [popover]:popover-open {
+      translate: 0 0.5rem;
+    }
+  }
+}
+
+@supports (position-area: block-end) {
+  [popover] {
+    margin: 0;
+    margin-block-start: 0.5rem;
+    position-area: block-end span-inline-start;
+    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+  }
+}
+
+/* Hero -------------------------------------------------------------------- */
+
+.hero {
+  padding-block: var(--space-hero) 1.25rem;
+}
+
+/* The line sits on the baseline of the wordmark, and goes under it when the
+   two no longer fit one row. */
+.hero-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+
+  & h1 {
+    flex: none;
+    inline-size: min(100%, var(--wordmark));
+  }
+
+  /* The G is round, so it hangs a little over the edge of the column to
+     look in line with it. */
+  & img {
+    inline-size: 100%;
+    translate: -0.38% 0;
+  }
+
+  & p {
+    font-size: var(--text-tagline);
+    line-height: 1.2;
+    text-box: trim-both cap alphabetic;
+  }
+}
+
+.hero .install-command {
+  margin-block-start: var(--space-command);
+}
+
+/* The score an agent-readiness check gives the site, as a link to the report. */
+.badge {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  gap: 0.6875rem;
+  margin-block-start: var(--space-badge);
+  padding: 0.5625rem 1.125rem 0.5625rem 0.8125rem;
+  border-radius: 5px;
+  background: var(--tint);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-decoration: none;
+
+  & strong {
+    flex: none;
+    font-family: var(--bp-font-display);
+    font-size: 1.323rem;
+    font-weight: 700;
+    letter-spacing: -0.033em;
+  }
+
+  /* The short line between the score and what it means. */
+  & span {
+    display: flex;
+    align-items: center;
+    gap: 0.6875rem;
+
+    &::before {
+      content: "";
+      flex: none;
+      inline-size: 1px;
+      block-size: 0.6875rem;
+      background: var(--bp-line);
+    }
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .badge:hover {
+    background: var(--tint-strong);
+  }
+}
+
+.badge:active {
+  background: var(--tint-strong);
+}
+
+/* Categories -------------------------------------------------------------- */
+
+/* The band is a container, entry 12, so the row of cards can measure it. */
+.categories {
+  container-type: inline-size;
+  padding-block: var(--space-band) var(--space-band-end);
+  background: var(--bp-paper);
+
+  & h2 {
+    font-size: var(--text-heading);
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+    text-box: trim-both cap alphabetic;
+  }
+}
+
+/* The carousel of entry 9. It runs to both edges of the window, and its
+   padding brings the first card in line with the content. Three cards fill
+   the content column, and a card is never narrower than 15rem.
+
+   The padding at the end is the room the last card needs to come to rest at
+   the start, so the count under the row can reach every category. */
+.carousel {
+  --gap: 1.3125rem;
+  --pad: max(var(--gutter), (100cqi - var(--content)) / 2);
+  --card: max(15rem, (100cqi - var(--pad) * 2 - var(--gap) * 2) / 3);
+
+  grid-column: full-width;
+  display: flex;
+  gap: var(--gap);
+  margin-block: 2.4375rem 0;
+  padding-block: 0;
+  padding-inline: var(--pad) calc(100cqi - var(--pad) - var(--card));
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--pad);
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+
+  /* Each card is a container too, and sizes what it holds in `cqi`. */
+  & > * {
+    container-type: inline-size;
+    flex: none;
+    inline-size: var(--card);
+    scroll-snap-align: start;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .carousel {
+    scroll-behavior: smooth;
+  }
+}
+
+/* The title is pushed to the bottom of the card by its auto margin, entry 46.
+   The ring is drawn inside the card, where the scroller cannot clip it. */
+.card {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 362 / 438;
+  padding: 19.9cqi 13.2cqi 16.1cqi;
+  border-radius: 5px;
+  background: var(--bp-panel);
+  text-decoration: none;
+  outline-offset: -0.5rem;
+}
+
+/* The place of a drawing that is not made yet. */
+.card-art {
+  align-self: center;
+  inline-size: 58.6cqi;
+  aspect-ratio: 1;
+  border: 2px solid var(--bp-line);
+  border-radius: 50%;
+}
+
+.card-title {
+  margin-block-start: auto;
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.125rem, 0.75rem + 3.35cqi, 1.507rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.033em;
+  text-box: trim-both cap alphabetic;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .card-art {
+    border-color: var(--bp-ink);
+  }
+}
+
+/* The bar, then the count on one side and the buttons on the other. */
+.carousel-controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  row-gap: 0.8125rem;
+  margin-block-start: 2.8125rem;
+}
+
+.carousel-progress {
+  grid-column: 1 / -1;
+  block-size: 3px;
+  background: var(--fill-track);
+
+  &::before {
+    content: "";
+    display: block;
+    inline-size: calc(var(--progress, 0.125) * 100%);
+    block-size: 100%;
+    background: var(--bp-ink);
+  }
+}
+
+/* The two parts are trimmed to their capitals, entry 33, so their tops line
+   up. The count keeps the digits the design draws, which are not all one
+   width, so it has a width of its own and the total beside it holds still. */
+.carousel-count {
+  display: flex;
+  align-items: start;
+  gap: 0.5625rem;
+  font-family: var(--bp-font-display);
+  line-height: 1;
+  letter-spacing: -0.033em;
+
+  & b {
+    min-inline-size: 1.25em;
+    font-size: var(--text-count);
+    font-weight: 900;
+    text-box: trim-both cap alphabetic;
+  }
+
+  & > span {
+    font-size: 1.014rem;
+    font-weight: 600;
+    color: color-mix(in oklch, var(--bp-ink) 70%, transparent);
+    text-box: trim-both cap alphabetic;
+  }
+}
+
+/* A button that has nowhere to go is smaller and fainter. */
+.carousel-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.4375rem;
+  min-block-size: 3.125rem;
+
+  & button {
+    display: grid;
+    place-items: center;
+    inline-size: 3.125rem;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 2px solid var(--bp-ink);
+    border-radius: 50%;
+    background: none;
+    cursor: pointer;
+
+    &:disabled {
+      inline-size: 2.25rem;
+      border-color: color-mix(in oklch, var(--bp-ink) 40%, transparent);
+      cursor: default;
+    }
+  }
+
+  & [data-carousel-dir="-1"] img {
+    rotate: 180deg;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .carousel-buttons button:not(:disabled):hover {
+    background: var(--tint-strong);
+  }
+}
+
+/* Category ---------------------------------------------------------------- */
+
+/* A category is a container, entry 12. Where it is wide enough its name runs
+   up the side and stays in view while its entries scroll. Where it is not,
+   the name is a line above them. */
+.category {
+  container-type: inline-size;
+  padding-block-start: var(--space-category);
+
+  & + & {
+    margin-block-start: var(--space-category);
+  }
+
+  & h2 {
+    font-size: var(--text-heading);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--bp-line);
+    text-transform: uppercase;
+    text-box: trim-both cap alphabetic;
+  }
+}
+
+.category-layout {
+  display: grid;
+  gap: 2rem;
+}
+
+@container (width >= 56rem) {
+  .category-layout {
+    grid-template-columns: 17% 1fr;
+    align-items: start;
+    gap: 0;
+
+    & > h2 {
+      position: sticky;
+      inset-block-start: var(--anchor-offset);
+
+      & span {
+        display: block;
+        writing-mode: sideways-lr;
+      }
+    }
+  }
+}
+
+/* Entry ------------------------------------------------------------------- */
+
+/* The parts of an entry are spaced by the entry, entry 45, and a part that
+   wants another space says so. */
+.entry > * + * {
+  margin-block-start: var(--flow-space, 2.8125rem);
+}
+
+.entry + .entry {
+  margin-block-start: var(--space-entry);
+  padding-block-start: var(--space-entry);
+  border-block-start: 1px solid var(--bp-line-faint);
+}
+
+.entry h3 {
+  font-size: var(--text-title);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-box: trim-both cap alphabetic;
+
+  /* Code in a title is set as the title is. */
+  & code {
+    font: inherit;
+  }
+}
+
+.lede {
+  --flow-space: 2.0625rem;
+
+  max-inline-size: 46.625rem;
+  font-size: var(--text-lede);
+  line-height: 1.55;
+
+  &:empty {
+    display: none;
+  }
+}
+
+/* Specimen ---------------------------------------------------------------- */
+
+.specimen {
+  display: grid;
+  gap: 1.4375rem;
+}
+
+/* The frame is a viewport with its controls in a bar on top. Its corner
+   resizes it, and so do the width buttons. The bar's corners follow the
+   frame's, entry 29. */
+.viewport {
+  --bar: 2.8125rem;
+  --edge: 2px;
+  --radius: 0.5rem;
+
+  display: grid;
+  grid-template-rows: var(--bar) 1fr;
+  width: 100%;
+  max-width: 100%;
+  min-width: min(100%, 20rem);
+  height: calc(var(--frame-height) + var(--bar) + var(--edge) * 2);
+  min-height: 10rem;
+  border: var(--edge) solid var(--bp-paper);
+  border-radius: calc(var(--radius) + var(--edge));
+  background: var(--bp-paper);
+  /* `hidden`, not `clip`: the corner grip is only drawn on a scroll container. */
+  overflow: hidden;
+  resize: both;
+
+  &::-webkit-resizer {
+    background: url("/icons/resize.svg") center / 13.5px no-repeat;
+  }
+
+  & iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+.viewport-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding-inline: 0.75rem 0.625rem;
+  border-block-end: var(--edge) solid var(--bp-paper);
+  border-start-start-radius: var(--radius);
+  border-start-end-radius: var(--radius);
+  background: var(--bp-panel);
+  font-family: var(--bp-font-label);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+
+  /* The link that opens the specimen in its own tab. Its drawing is the size
+     it has in the design, a little over half the size it was exported at. */
+  & a {
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: 1.375rem;
+    block-size: 1.375rem;
+    border-radius: 5px;
+    background: var(--bp-panel);
+    box-shadow: var(--shadow-raised);
+
+    & img {
+      inline-size: 0.6875rem;
     }
   }
 }
 
 .viewport-size {
   flex: 1;
-  align-self: center;
-  padding-inline: 0.75rem;
   overflow: clip;
   white-space: nowrap;
+  color: var(--bp-ink-soft);
 }
 
+/* The three widths, with the one in use raised. The group's corners follow
+   its buttons', entry 29. */
 .viewport-widths {
-  display: flex;
-}
+  --pad: 3px;
+  --radius: 5px;
 
-@media (hover: hover) and (pointer: fine) {
-  :is(.viewport-bar, .install-command, .category-bar) :is(button:not([aria-pressed="true"]), a):hover {
-    background: var(--hover-fill);
+  display: flex;
+  flex: none;
+  padding: var(--pad);
+  border-radius: calc(var(--radius) + var(--pad));
+  background: var(--bp-paper);
+
+  & button {
+    min-inline-size: 2.5625rem;
+    block-size: 1.375rem;
+    padding: 0 0.375rem;
+    border: 0;
+    border-radius: var(--radius);
+    background: none;
+    font: inherit;
+    color: inherit;
+    outline-offset: -2px;
+    cursor: pointer;
+
+    &[aria-pressed="true"] {
+      background: var(--bp-panel);
+      box-shadow: var(--shadow-raised);
+    }
   }
 }
 
-:is(.viewport-bar, .install-command, .category-bar) :is(button:not([aria-pressed="true"]), a):active {
-  background: var(--press-fill);
+@media (hover: hover) and (pointer: fine) {
+  .viewport-widths button:not([aria-pressed="true"]):hover {
+    background: var(--tint-strong);
+  }
+
+  .viewport-bar a:hover {
+    background: var(--bp-paper);
+  }
+}
+
+.viewport-widths button:not([aria-pressed="true"]):active {
+  background: var(--fill-track);
+}
+
+.viewport-bar a:active {
+  background: var(--fill-strong);
+}
+
+/* What a pass looks like, under the frame. The sign is as tall as a line of
+   the text and stays beside the first one, entry 47. */
+.check {
+  display: flex;
+  align-items: start;
+  gap: 0.5rem;
+  max-inline-size: 51.75rem;
+  font-size: 0.875rem;
+  line-height: 1.643;
+  color: var(--bp-ink-soft);
+
+  & img {
+    flex: none;
+    inline-size: 1lh;
+    block-size: 1lh;
+    object-fit: none;
+    opacity: 0.6;
+  }
 }
 
 .no-specimen {
@@ -648,89 +937,27 @@ pre,
   gap: 0.5rem;
   min-height: 16rem;
   padding: 1.5rem;
-  border: 1px solid var(--bp-line);
-  background: var(--bp-hatch), var(--bp-panel);
+  border-radius: 10px;
+  background: var(--bp-ground);
   text-align: center;
 }
 
-/* Entry text -------------------------------------------------------------- */
+/* Text from Markdown ------------------------------------------------------ */
 
-.entry {
-  margin-inline: calc(var(--guide-gap) * -1);
-  border-block: 1px solid var(--bp-line-faint);
-
-  &::details-content {
-    height: 0;
-    overflow: clip;
-  }
-
-  &[open]::details-content {
-    height: auto;
-  }
-
-  & summary {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: baseline;
-    gap: 1rem;
-    padding: 1rem var(--guide-gap);
-    list-style: none;
-    font-weight: 600;
-    outline-offset: -2px;
-    cursor: pointer;
-
-    &::-webkit-details-marker {
-      display: none;
-    }
-
-    &::after {
-      content: "+";
-      font-family: var(--bp-font-mono);
-      font-weight: 400;
-    }
-
-    & .label {
-      font-weight: 400;
-      color: var(--bp-ink-soft);
-    }
-  }
-
-  &[open] summary::after {
-    content: "\2212";
-  }
-
-  & .prose {
-    max-width: calc(68ch + var(--guide-gap) * 2);
-    padding-block: 0.5rem 2rem;
-    padding-inline: var(--guide-gap);
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .entry summary:hover {
-    background: var(--hover-fill);
-  }
-}
-
-.entry summary:active {
-  background: var(--press-fill);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .entry::details-content {
-    transition:
-      height 0.3s var(--ease-out),
-      content-visibility 0.3s allow-discrete;
-  }
-}
-
+/* The code of an entry, its notes, and the body of a page. The text keeps to
+   a measure and a code block takes the whole width. The blocks are spaced by
+   the parent, entry 45. */
 .prose {
-  display: grid;
-  gap: 1rem;
-  max-width: 68ch;
+  & > * {
+    margin-block: 0;
+  }
 
-  & :is(p, ul, ol, pre) {
-    margin: 0;
+  & > * + * {
+    margin-block-start: var(--flow-space, 1em);
+  }
+
+  & > :not(pre) {
+    max-inline-size: 46.625rem;
   }
 
   & :is(ul, ol) {
@@ -745,38 +972,135 @@ pre,
 
   & :not(pre) > code {
     padding: 0.0625rem 0.25rem;
-    background: var(--bp-panel);
-  }
-
-  & pre code {
-    font-size: inherit;
+    border-radius: 3px;
+    background: var(--bp-paper);
   }
 
   & pre {
-    padding: 1rem;
-    border: 1px solid var(--bp-line-faint);
-    background: var(--bp-panel);
+    padding: 1.25rem;
+    border-radius: 10px;
+    background: var(--bp-paper);
+    font-size: 0.8125rem;
     line-height: 1.6;
     overflow-x: auto;
     tab-size: 2;
+
+    & code {
+      font-size: inherit;
+    }
   }
+}
+
+.lede code,
+.check code {
+  font-size: 0.875em;
+}
+
+/* The rest of an entry: why it works, the rules, the support and the credits.
+   It opens and closes with the accordion of entry 4. */
+.notes {
+  --flow-space: 1rem;
+
+  border: 2px solid var(--bp-paper);
+  border-radius: 10px;
+
+  & summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    list-style: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    outline-offset: -2px;
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      content: "+";
+      font-family: var(--bp-font-label);
+    }
+  }
+
+  &[open] summary::after {
+    content: "\2212";
+  }
+
+  & .prose {
+    padding: 0.5rem 1rem 1.25rem;
+  }
+}
+
+details::details-content {
+  height: 0;
+  overflow: clip;
+}
+
+details[open]::details-content {
+  height: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  details::details-content {
+    transition:
+      height 0.3s var(--ease-out),
+      content-visibility 0.3s allow-discrete;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .notes summary:hover {
+    background: var(--bp-paper);
+  }
+}
+
+.notes summary:active {
+  background: var(--fill-strong);
+}
+
+/* Page -------------------------------------------------------------------- */
+
+/* A page of deploy/pages: its title, its statement, its text. */
+.page {
+  padding-block-start: var(--space-hero);
+
+  & h1 {
+    font-size: var(--text-page);
+    font-weight: 800;
+    line-height: 1;
+    text-box: trim-both cap alphabetic;
+  }
+
+  & .prose {
+    margin-block-start: 2.5rem;
+  }
+}
+
+.page-statement {
+  max-inline-size: 36rem;
+  margin-block-start: var(--space-command);
+  font-size: var(--text-tagline);
+  line-height: 1.35;
+  text-wrap: balance;
 }
 
 /* Footer ------------------------------------------------------------------ */
 
-/* Who made the page, then the site's links. The links are small and soft:
-   they are there for whoever looks for them, and are not part of the list. */
-.footer {
-  padding-block: var(--space-block);
-  border-block-start: 1px solid var(--bp-line-faint);
+.site-footer {
+  margin-block-start: auto;
+  padding-block: var(--space-category) 2.5rem;
+  font-size: 0.875rem;
 
   & nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 1.25rem;
-    font-family: var(--bp-font-mono);
-    font-size: 0.8125rem;
-    color: var(--bp-ink-soft);
+    gap: 0 1.5rem;
+    font-weight: 500;
 
     & a {
       padding-block: 0.375rem;
@@ -785,22 +1109,23 @@ pre,
   }
 }
 
-.footer-row {
+.site-footer-row {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.5rem var(--space-block);
+  gap: 0.5rem 2rem;
+  padding-block-start: 1.5rem;
+  border-block-start: 1px solid var(--bp-line-faint);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .footer nav a:hover {
-    color: var(--bp-ink);
+  .site-footer nav a:hover {
     text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 }
 
-.footer nav a:active {
-  color: var(--bp-ink);
-  text-decoration: underline;
+.site-footer nav a:active {
+  opacity: 0.6;
 }

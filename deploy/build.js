@@ -4,7 +4,7 @@ import { Window } from "happy-dom";
 import { build, createServer } from "vite";
 import { marked } from "marked";
 import { frontmatter, llmsTxt, robots, sitemap, sitemapUrls } from "./agent-files.js";
-import { footer, readPage, sitePage } from "./page.js";
+import { readPage, sitePage } from "./page.js";
 import { author, origin, pages, published } from "./site.js";
 
 /* Builds the harness into dist/ as a static site: the index with its content
@@ -184,9 +184,6 @@ await server.ssrLoadModule("/main.js");
 /* A frame the browser drops a moment later should not load its specimen. */
 for (const frame of document.querySelectorAll("iframe")) frame.setAttribute("loading", "lazy");
 
-/* main.js redraws <main>, so the footer sits after it. */
-document.querySelector("main").insertAdjacentHTML("afterend", footer);
-
 await write("index.html", `<!doctype html>\n${document.documentElement.outerHTML}\n`);
 
 /* An entry is published twice: the specimen that runs it, and beside it the
@@ -201,7 +198,7 @@ for (const [index, entry] of entries.entries()) {
   );
 }
 
-const stylesheet = document.querySelector('link[rel="stylesheet"]').getAttribute("href");
+const stylesheets = [document.querySelector('link[rel="stylesheet"]').getAttribute("href")];
 const pageMarkdown = (name) => readFile(join(import.meta.dirname, "pages", `${name}.md`), "utf8");
 
 for (const name of pages) {
@@ -209,14 +206,14 @@ for (const name of pages) {
   const page = readPage(markdown);
   const meta = { title: page.title, description: text(marked.parseInline(page.statement)), canonical: `${origin}/${name}`, updated: today };
 
-  await write(`${name}/index.html`, sitePage({ page, stylesheet, path: `/${name}` }));
+  await write(`${name}/index.html`, sitePage({ page, stylesheets, path: `/${name}` }));
   await write(`${name}.md`, frontmatter(meta) + markdown);
 }
 
 /* What vercel.json answers a missing page with, as HTML or as Markdown. */
 const notFound = await pageMarkdown("not-found");
 
-await write("not-found.html", sitePage({ page: readPage(notFound), stylesheet }));
+await write("not-found.html", sitePage({ page: readPage(notFound), stylesheets }));
 await write("not-found.md", notFound);
 
 await server.close();
