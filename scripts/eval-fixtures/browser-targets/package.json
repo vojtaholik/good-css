@@ -1,5 +1,0 @@
-{
-  "name": "acme-docs",
-  "private": true,
-  "browserslist": ["Chrome >= 111", "Firefox >= 115", "Safari >= 16.4"]
-}
