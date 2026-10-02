@@ -39,24 +39,6 @@ npx skills@latest add vojtaholik/good-css --agent <claude-code|codex|cursor> --y
 
 If your user did not ask for an install, or you cannot install anything, read `skills/good-css/SKILL.md` from this repo and follow it for the task at hand. It names the other files to read. Then tell your user how to install the skill.
 
-## What it costs
-
-The agent loads the skill in three steps and pays only for the ones a task reaches. Token counts are from the `o200k_base` tokenizer, so treat them as close and not exact.
-
-| File | Loaded | Lines | Tokens |
-| --- | --- | --- | --- |
-| The description in `SKILL.md` | in every session | 1 | 70 |
-| `SKILL.md` | when a task involves CSS | 49 | 1,060 |
-| `references/foundation.md` | reset, color tokens, dark mode, fluid sizes and scales | 183 | 2,540 |
-| `references/layout.md` | page and component layout | 320 | 3,010 |
-| `references/controls.md` | buttons, links, cards, inputs, icons | 318 | 2,590 |
-| `references/content.md` | text and images from a user or a CMS | 70 | 1,000 |
-| `references/disclosure.md` | dialogs, popovers, menus, accordions, tabs | 209 | 1,830 |
-| `references/scroll.md` | carousels, overflowing rows, scrolling panels, app shells | 222 | 1,830 |
-| `references/motion.md` | transitions and animations | 155 | 1,290 |
-
-`PRACTICES.md` is 24,300 tokens. The seven reference files together are 14,100. A component reads two or three of them and a whole page reads most.
-
 ## Working on the list
 
 `PRACTICES.md` is the only place an entry is written. The files in `skills/good-css/references` are generated from it and drop "Why it works" and the credits:
