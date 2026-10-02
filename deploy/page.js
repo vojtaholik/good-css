@@ -10,16 +10,30 @@ export const installCommand = `<div class="install-command">
           <button type="button" aria-live="polite" data-copy>Copy</button>
         </div>`;
 
+/* What the index adds to the header on a narrow screen: the category the
+   reader is in, as a button that opens the list of all of them. main.js fills
+   both from categories.js. Until a category is in view the button says
+   "Categories". */
+export const categoryNav = `<button class="current" type="button" popovertarget="category-menu">
+          <span class="current-names" data-slot="category-names">
+            <span style="animation-timeline: --in-categories">Categories</span>
+          </span>
+        </button>
+        <nav class="menu" id="category-menu" popover aria-label="Categories">
+          <ol data-slot="category-menu"></ol>
+        </nav>`;
+
 /* What opens every page: the mark, the link to the source, and the button
    that opens the install command in a popover. */
-export const header = `<header class="site-header content-grid">
+export const header = (nav = "") => `<header class="site-header content-grid">
       <div class="site-header-bar">
         <a class="mark" href="/" aria-label="good-css">
           <img src="/mark.svg" alt="" width="83" height="78">
         </a>
+        ${nav}
         <a class="github" href="${repository}">
           <span class="icon"><img src="/icons/github.svg" alt=""></span>
-          GitHub
+          <span class="github-label">GitHub</span>
         </a>
         <button class="button" type="button" popovertarget="install">Install</button>
       </div>
@@ -92,7 +106,7 @@ export function sitePage({ page, stylesheets, path }) {
     ${stylesheets.map((href) => `<link rel="stylesheet" href="${href}">`).join("\n    ")}
   </head>
   <body>
-    ${header}
+    ${header()}
 
     <main class="page content-grid">
       <h1>${page.title}</h1>

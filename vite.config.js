@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { defineConfig } from "vite";
-import { footer, header, installCommand, readPage, sitePage } from "./deploy/page.js";
+import { categoryNav, footer, header, installCommand, readPage, sitePage } from "./deploy/page.js";
 import { pages } from "./deploy/site.js";
 
 /* Serves each specimen as a page of its own at /specimen/<slug>, built on
@@ -28,7 +28,7 @@ const chrome = () => ({
   name: "chrome",
   transformIndexHtml: (html) =>
     html
-      .replace("<!-- header -->", header)
+      .replace("<!-- header -->", header(categoryNav))
       .replace("<!-- install-command -->", installCommand)
       .replace("<!-- footer -->", footer),
 });

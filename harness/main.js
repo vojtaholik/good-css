@@ -112,10 +112,16 @@ function entry(entry) {
   return node;
 }
 
+/* Each category has a timeline that runs while it is under the header, and
+   the header's button and list read it. The name is all the script gives:
+   the CSS does the rest. */
+const timeline = (category) => `--in-${category.slug}`;
+
 function category(category) {
   const node = stamp("category");
 
   node.firstElementChild.id = category.slug;
+  node.firstElementChild.setAttribute("style", `view-timeline-name: ${timeline(category)}`);
   slot(node, "title").textContent = category.title;
   slot(node, "entries").replaceChildren(...category.entries.map(entry));
 
@@ -132,11 +138,47 @@ function card(category) {
   return node;
 }
 
+/* The name of a category in the header's button. Only the one whose category
+   is in view shows. */
+function currentName(category) {
+  const name = document.createElement("span");
+
+  name.textContent = category.title;
+  name.setAttribute("style", `animation-timeline: ${timeline(category)}`);
+
+  return name;
+}
+
+function menuItem(category) {
+  const item = document.createElement("li");
+  const link = document.createElement("a");
+
+  link.href = `#${category.slug}`;
+  link.textContent = category.title;
+  link.setAttribute("style", `animation-timeline: ${timeline(category)}`);
+  item.append(link);
+
+  return item;
+}
+
 const { categories } = practices;
+const menu = document.getElementById("category-menu");
 
 slot(document, "cards").replaceChildren(...categories.map(card));
 slot(document, "total").textContent = pad(categories.length);
 slot(document, "categories").replaceChildren(...categories.map(category));
+slot(document, "category-names").append(...categories.map(currentName));
+slot(document, "category-menu").replaceChildren(...categories.map(menuItem));
+
+/* The header is outside the categories, so their timelines are named on the
+   body for it to see. `timeline-scope: all` would need no list, and Chrome
+   does not have it. */
+document.body.setAttribute("style", `timeline-scope: --in-categories, ${categories.map(timeline).join(", ")}`);
+
+/* A tap on a category in the list goes there and closes the list. */
+menu.addEventListener("click", (event) => {
+  if (event.target.closest("a")) menu.hidePopover();
+});
 
 for (const link of document.querySelectorAll('.prose a[href^="http"]')) link.target = "_blank";
 
