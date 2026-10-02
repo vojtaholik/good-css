@@ -220,7 +220,7 @@ await server.close();
 await window.happyDOM.close();
 await rm(cacheDir, { recursive: true, force: true });
 
-/* The picture a link to the site unfurls with: the masthead at 1200 by 630. */
+/* The picture a link to the site unfurls with: the top of the index at 1200 by 630. */
 await copyFile(join(import.meta.dirname, "og.png"), join(dist, "og.png"));
 
 /* The skill, at the path it has in the repo, so the README's "read
