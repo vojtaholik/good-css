@@ -98,6 +98,13 @@ const entries = practices.entries.map((entry) => ({
   specimen: demos[entry.slug] ? `${origin}/specimen/${entry.slug}` : null,
 }));
 
+/* The same entries by category, in the order the page shows them. */
+const bySlug = Object.fromEntries(entries.map((entry) => [entry.slug, entry]));
+const categories = practices.categories.map((category) => ({
+  title: category.title,
+  entries: category.entries.map((entry) => bySlug[entry.slug]),
+}));
+
 const person = { "@type": "Person", name: author, url: `${origin}/about` };
 
 const jsonLd = {
@@ -119,12 +126,14 @@ const jsonLd = {
   mainEntity: {
     "@type": "ItemList",
     numberOfItems: entries.length,
-    itemListElement: entries.map((entry) => ({
-      "@type": "ListItem",
-      position: entry.number,
-      name: entry.title,
-      url: `${origin}/#${entry.slug}`,
-    })),
+    itemListElement: categories
+      .flatMap((category) => category.entries)
+      .map((entry, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: entry.title,
+        url: `${origin}/#${entry.slug}`,
+      })),
   },
 };
 
@@ -233,7 +242,7 @@ await write(
   llmsTxt({
     title: practices.title,
     description,
-    entries,
+    categories,
     skill: { url: `${origin}/${skillPath}`, kilobytes: kilobytes(await readFile(join(root, skillPath, "SKILL.md"), "utf8")) },
     list: { kilobytes: kilobytes(listMarkdown) },
   }),

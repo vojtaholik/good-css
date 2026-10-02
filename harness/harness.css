@@ -77,6 +77,12 @@ button,
   --gutter: clamp(1rem, 0.5rem + 2vw, 2.5rem);
   --guide-gap: calc(var(--gutter) / 2);
 
+  /* The height of the bar that names a category. It stays at the top of the
+     window, so a link into the page stops this far below it, less the one
+     pixel that puts a sheet's top line under the bar's own. */
+  --category-bar: 3rem;
+  --anchor-offset: calc(var(--category-bar) - 1px);
+
   --title-code: color-mix(in oklch, var(--bp-ink) 16%, var(--bp-paper));
 
   /* Hover and press fills stay see-through: they end on a guide and must not
@@ -88,7 +94,7 @@ button,
 
   color-scheme: dark;
   scrollbar-color: var(--bp-scrollbar);
-  scroll-padding-block-start: 1rem;
+  scroll-padding-block-start: var(--anchor-offset);
   font-family: var(--bp-font-body);
   line-height: 1.5;
   color: var(--bp-ink);
@@ -117,6 +123,7 @@ body {
 
 h1,
 h2,
+h3,
 p,
 dl,
 dd,
@@ -127,6 +134,7 @@ figure {
 
 h1,
 h2,
+h3,
 .sheet-number {
   font-family: var(--bp-font-display);
   font-weight: 400;
@@ -159,13 +167,14 @@ pre,
 .label,
 .title-block,
 .viewport-bar,
-.install-command {
+.install-command,
+.category-bar {
   font-family: var(--bp-font-mono);
   font-size: 0.8125rem;
 }
 
 /* Code in a title is set in the title's own font, smaller and on a box. */
-:is(h2, .index a) code {
+:is(h3, .index a) code {
   padding: 0.08em 0.3em;
   background: var(--title-code);
   font: inherit;
@@ -305,16 +314,21 @@ pre,
   }
 }
 
-/* The index: a status row, then every entry. Both are laid out in the same
-   columns, and the block reaches the guides on either side. */
+/* The index: a status row, then every entry under its category. Both are
+   laid out in the same columns, and the block reaches the guides on either
+   side. A category stays whole in one column. */
 .index {
   margin-inline: calc(var(--guide-gap) * -1);
   border-block-start: 1px solid var(--bp-line-faint);
 
-  & :is(.title-block, ol) {
+  & :is(.title-block, nav) {
     columns: 3 16rem;
     column-gap: 0;
     column-rule: 1px dashed var(--bp-line-faint);
+  }
+
+  & section {
+    break-inside: avoid;
   }
 
   & ol {
@@ -330,10 +344,19 @@ pre,
 
   & a {
     display: grid;
-    grid-template-columns: 2.25rem 1fr;
+    grid-template-columns: 1fr auto;
     align-items: baseline;
+    gap: 1rem;
     outline-offset: -2px;
     text-decoration: none;
+  }
+
+  /* A category's title is a row as tall as an entry's, and leads to the
+     category on the page. */
+  & h2 {
+    font-size: 1.25rem;
+    line-height: 1.2;
+    text-box: normal;
   }
 }
 
@@ -382,6 +405,64 @@ pre,
   background: var(--press-fill);
 }
 
+/* Category ---------------------------------------------------------------- */
+
+/* A link to a category brings its bar to the top of the window. */
+.category {
+  scroll-margin-block-start: calc(var(--anchor-offset) * -1);
+}
+
+/* The bar that opens a category. It stays at the top of the window while the
+   category's sheets pass under it, so it always says where the reader is, and
+   its link leads back to the index and from there to any other category. */
+.category-head {
+  container-type: inline-size;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  height: var(--category-bar);
+  border-block: 1px solid var(--bp-line-faint);
+  background: var(--bp-panel);
+}
+
+/* The bar covers the guides, so it draws them again at its own ends. */
+.category-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-inline: calc(var(--guide-gap) * -1);
+  padding-inline-start: var(--guide-gap);
+  border-inline: 1px solid var(--bp-line-faint);
+
+  & h2 {
+    font-size: 1.5rem;
+  }
+
+  & .label {
+    color: var(--bp-ink-soft);
+  }
+
+  & a {
+    align-self: stretch;
+    margin-inline-start: auto;
+    padding-inline: var(--guide-gap);
+    border-inline-start-color: var(--bp-line-faint);
+    text-decoration: none;
+  }
+}
+
+/* On a phone the longest title and the link fill the bar, and the count goes. */
+@container (width < 30rem) {
+  .category-bar .label {
+    display: none;
+  }
+}
+
+/* The bar's own line closes it, so the first sheet under it draws none. */
+.category-head + .sheet {
+  border-block-start: 0;
+}
+
 /* Sheet ------------------------------------------------------------------- */
 
 /* A sheet starts close under its rule and ends well clear of the next one,
@@ -400,7 +481,7 @@ pre,
   gap: 1.5rem var(--space-number);
   margin-block-end: calc(var(--space-block) / 2);
 
-  & h2 {
+  & h3 {
     align-self: start;
     font-size: var(--text-title);
     line-height: 1;
@@ -491,7 +572,7 @@ pre,
 
 /* A control in a bar is a cell of it, divided from the rest by a line. Its
    focus ring is drawn inside the cell, where the frame cannot clip it. */
-:is(.viewport-bar, .install-command) :is(button, a) {
+:is(.viewport-bar, .install-command, .category-bar) :is(button, a) {
   display: grid;
   place-items: center;
   padding-inline: 0.75rem;
@@ -552,12 +633,12 @@ pre,
 }
 
 @media (hover: hover) and (pointer: fine) {
-  :is(.viewport-bar, .install-command) :is(button:not([aria-pressed="true"]), a):hover {
+  :is(.viewport-bar, .install-command, .category-bar) :is(button:not([aria-pressed="true"]), a):hover {
     background: var(--hover-fill);
   }
 }
 
-:is(.viewport-bar, .install-command) :is(button:not([aria-pressed="true"]), a):active {
+:is(.viewport-bar, .install-command, .category-bar) :is(button:not([aria-pressed="true"]), a):active {
   background: var(--press-fill);
 }
 

@@ -39,7 +39,7 @@
         <div class="prose" data-slot="intro"></div>
       </div>
 
-      <div class="index">
+      <div class="index" id="index">
         <dl class="title-block">
           <div>
             <dt>Source</dt>
@@ -55,19 +55,38 @@
           </div>
         </dl>
 
-        <nav aria-label="Entries">
-          <ol data-slot="index"></ol>
-        </nav>
+        <nav aria-label="Entries" data-slot="index"></nav>
       </div>
     </header>
 
-    <main data-slot="sheets"></main>
+    <main data-slot="categories"></main>
+
+    <template id="index-category">
+      <section>
+        <h2><a data-slot="title"></a></h2>
+        <ol data-slot="entries"></ol>
+      </section>
+    </template>
+
+    <template id="category">
+      <section class="category">
+        <header class="category-head content-grid">
+          <div class="category-bar">
+            <h2 data-slot="title"></h2>
+            <p class="label" data-slot="count"></p>
+            <a href="#index">Index</a>
+          </div>
+        </header>
+
+        <div data-slot="sheets"></div>
+      </section>
+    </template>
 
     <template id="sheet">
       <section class="sheet content-grid">
         <header class="sheet-head">
           <p class="sheet-number" data-slot="number"></p>
-          <h2 data-slot="title"></h2>
+          <h3 data-slot="title"></h3>
           <p class="sheet-lede" data-slot="lede"></p>
         </header>
 

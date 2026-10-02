@@ -67,6 +67,8 @@ function sheet(entry) {
   return node;
 }
 
+/* The number comes after the title. Within a category the numbers do not run
+   in order, so here one is a reference to look up and not a place in a row. */
 function indexItem(entry) {
   const item = document.createElement("li");
   const link = document.createElement("a");
@@ -80,13 +82,35 @@ function indexItem(entry) {
   title.className = "index-title";
   title.innerHTML = entry.title;
   link.title = title.textContent;
-  link.append(number, title);
+  link.append(title, number);
   item.append(link);
 
   return item;
 }
 
-const { entries } = practices;
+function indexCategory(category) {
+  const node = stamp("index-category");
+  const title = slot(node, "title");
+
+  title.href = `#${category.slug}`;
+  title.textContent = category.title;
+  slot(node, "entries").replaceChildren(...category.entries.map(indexItem));
+
+  return node;
+}
+
+function category(category) {
+  const node = stamp("category");
+
+  node.firstElementChild.id = category.slug;
+  slot(node, "title").textContent = category.title;
+  slot(node, "count").textContent = `[ ${category.entries.length} entries ]`;
+  slot(node, "sheets").replaceWith(...category.entries.map(sheet));
+
+  return node;
+}
+
+const { entries, categories } = practices;
 const drawn = entries.filter((entry) => demos[entry.slug]);
 
 slot(document, "title").textContent = practices.title;
@@ -94,8 +118,8 @@ slot(document, "statement").innerHTML = practices.statement;
 slot(document, "intro").innerHTML = practices.intro;
 slot(document, "entry-count").textContent = `[ ${entries.length} ]`;
 slot(document, "specimen-count").textContent = `[ ${drawn.length} / ${entries.length} ]`;
-slot(document, "index").replaceChildren(...entries.map(indexItem));
-slot(document, "sheets").replaceChildren(...entries.map(sheet));
+slot(document, "index").replaceChildren(...categories.map(indexCategory));
+slot(document, "categories").replaceChildren(...categories.map(category));
 
 for (const link of document.querySelectorAll('.prose a[href^="http"]')) link.target = "_blank";
 
