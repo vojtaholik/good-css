@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-33 -32 1089 1089" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="3 4 1017 1017" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
 <g id="geometric-diagram" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
     <path vector-effect="non-scaling-stroke" id="shaded-upper-left-panel" d="M199.5 200H401V405.5H199.5Z" fill="currentColor" fill-opacity="0.12" stroke="none"/>
     <g id="rectangular-framework" fill="none">
@@ -11,15 +11,15 @@
       <path vector-effect="non-scaling-stroke" id="lower-right-arc" d="M401 405.5C624 421 805 596 824 824"/>
     </g>
     <g id="intersection-markers" fill="#fff">
-      <circle vector-effect="non-scaling-stroke" id="top-left-marker" cx="199.5" cy="200" r="11.2"/>
-      <circle vector-effect="non-scaling-stroke" id="top-partition-marker" cx="401" cy="200" r="11.2"/>
-      <circle vector-effect="non-scaling-stroke" id="top-right-marker" cx="824" cy="200" r="11.2"/>
-      <circle vector-effect="non-scaling-stroke" id="middle-left-marker" cx="199.5" cy="405.5" r="11.2"/>
-      <circle vector-effect="non-scaling-stroke" id="central-marker" cx="401" cy="405.5" r="11.2"/>
-      <circle vector-effect="non-scaling-stroke" id="middle-right-marker" cx="824" cy="405.5" r="11.2"/>
-      <circle vector-effect="non-scaling-stroke" id="bottom-left-marker" cx="199.5" cy="824" r="11.2"/>
-      <circle vector-effect="non-scaling-stroke" id="bottom-partition-marker" cx="401" cy="824" r="11.2"/>
-      <circle vector-effect="non-scaling-stroke" id="bottom-right-marker" cx="824" cy="824" r="11.2"/>
+      <circle vector-effect="non-scaling-stroke" id="top-left-marker" cx="199.5" cy="200" r="12.5"/>
+      <circle vector-effect="non-scaling-stroke" id="top-partition-marker" cx="401" cy="200" r="12.5"/>
+      <circle vector-effect="non-scaling-stroke" id="top-right-marker" cx="824" cy="200" r="12.5"/>
+      <circle vector-effect="non-scaling-stroke" id="middle-left-marker" cx="199.5" cy="405.5" r="12.5"/>
+      <circle vector-effect="non-scaling-stroke" id="central-marker" cx="401" cy="405.5" r="12.5"/>
+      <circle vector-effect="non-scaling-stroke" id="middle-right-marker" cx="824" cy="405.5" r="12.5"/>
+      <circle vector-effect="non-scaling-stroke" id="bottom-left-marker" cx="199.5" cy="824" r="12.5"/>
+      <circle vector-effect="non-scaling-stroke" id="bottom-partition-marker" cx="401" cy="824" r="12.5"/>
+      <circle vector-effect="non-scaling-stroke" id="bottom-right-marker" cx="824" cy="824" r="12.5"/>
     </g>
   </g>
 </svg>

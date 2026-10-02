@@ -1,19 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-210 -281 1448 1448" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-<g id="overlapping-circles" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-    <ellipse vector-effect="non-scaling-stroke" id="upper-filled-circle" cx="860" cy="164.5" rx="116" ry="116.5" fill="currentColor" fill-opacity="0.12"/>
-    <circle vector-effect="non-scaling-stroke" id="upper-middle-circle" cx="741.5" cy="252" r="124" fill="none"/>
-    <ellipse vector-effect="non-scaling-stroke" id="central-circle" cx="502" cy="444.5" rx="124" ry="125" fill="none"/>
-    <ellipse vector-effect="non-scaling-stroke" id="lower-middle-circle" cx="290.5" cy="656.5" rx="118" ry="118.5" fill="none"/>
-    <ellipse vector-effect="non-scaling-stroke" id="bottom-circle" cx="174.5" cy="716.5" rx="122" ry="122" fill="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-203 -278 1423 1423" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle vector-effect="non-scaling-stroke" id="last-circle-tint" cx="839.4" cy="99.8" r="120" fill="currentColor" fill-opacity="0.12"/>
+  <g id="circles" fill="none" stroke="currentColor">
+    <circle vector-effect="non-scaling-stroke" cx="176.6" cy="767.2" r="120"/>
+    <circle vector-effect="non-scaling-stroke" cx="286.6" cy="699.4" r="120"/>
+    <circle vector-effect="non-scaling-stroke" cx="508" cy="433.5" r="120"/>
+    <circle vector-effect="non-scaling-stroke" cx="729.4" cy="167.6" r="120"/>
+    <circle vector-effect="non-scaling-stroke" cx="839.4" cy="99.8" r="120"/>
+    <path vector-effect="non-scaling-stroke" id="easing-curve" d="M73 787C440 787 576 80 943 80" stroke-linecap="round"/>
   </g>
-  <path vector-effect="non-scaling-stroke" id="ascending-connecting-curve" d="m73 787c29-34 65-53 102-71 39-19 82-38 114-60 51-38 85-93 115-134 28-36 63-62 98-77 58-15 101-47 130-97 28-44 68-73 109-96 39-25 79-56 114-87 34-29 66-60 88-85" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-  <g id="curve-control-markers" fill="#fff" stroke="currentColor">
-    <circle vector-effect="non-scaling-stroke" id="bottom-endpoint" cx="73" cy="787" r="11.5"/>
-    <circle vector-effect="non-scaling-stroke" id="bottom-circle-center-marker" cx="175" cy="716" r="11.5"/>
-    <circle vector-effect="non-scaling-stroke" id="lower-middle-center-marker" cx="289" cy="656" r="11.5"/>
-    <circle vector-effect="non-scaling-stroke" id="central-center-marker" cx="502" cy="445" r="11.5"/>
-    <circle vector-effect="non-scaling-stroke" id="upper-middle-center-marker" cx="741" cy="252" r="11.5"/>
-    <circle vector-effect="non-scaling-stroke" id="upper-circle-center-marker" cx="855" cy="165" r="11.5"/>
-    <circle vector-effect="non-scaling-stroke" id="top-endpoint" cx="943" cy="80" r="11.5"/>
+  <g id="nodes" fill="#fff" stroke="currentColor">
+    <circle vector-effect="non-scaling-stroke" cx="73" cy="787" r="17.5"/>
+    <circle vector-effect="non-scaling-stroke" cx="176.6" cy="767.2" r="17.5"/>
+    <circle vector-effect="non-scaling-stroke" cx="286.6" cy="699.4" r="17.5"/>
+    <circle vector-effect="non-scaling-stroke" cx="508" cy="433.5" r="17.5"/>
+    <circle vector-effect="non-scaling-stroke" cx="729.4" cy="167.6" r="17.5"/>
+    <circle vector-effect="non-scaling-stroke" cx="839.4" cy="99.8" r="17.5"/>
+    <circle vector-effect="non-scaling-stroke" cx="943" cy="80" r="17.5"/>
   </g>
 </svg>
