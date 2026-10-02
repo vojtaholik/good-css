@@ -65,6 +65,95 @@ Rules:
 - Leave the background color off an image that has transparent areas. It shows through them.
 - A fixed-size image in a flex row needs both sizes, as the avatar has. With only a width it stretches to the height of the row.
 - In Safari a failed image ignores `aspect-ratio` and draws a square box. Where a failed load must not move the layout, put the ratio on a wrapper and give the image `inline-size: 100%` and `block-size: 100%`.
-- `light-dark()` needs the `color-scheme` from entry 8 (`foundation.md`). Without it the outline stays black on a dark page.
+- `light-dark()` needs the `color-scheme` from entry 8 (`foundations.md`). Without it the outline stays black on a dark page.
 
 Support: `aspect-ratio` in Chrome 88, Firefox 89, Safari 15. An outline that follows the radius in Chrome 94, Firefox 88, Safari 16.4. `light-dark()` in Chrome 123, Firefox 120, Safari 17.5. The square box of a failed image is from real Safari 27, tested on 2026-10-01. Chrome 150 keeps the ratio.
+
+## 28. Tabular numbers
+
+Use it on any number that changes or sits in a column, such as prices, tables, timers and counters.
+
+```css
+.price,
+td,
+time { font-variant-numeric: tabular-nums; }
+```
+
+Rules:
+
+- Do not set it globally. Proportional digits read better in prose.
+- The font must ship tabular figures, or nothing changes.
+
+Support: Chrome 52, Firefox 34, Safari 9.1.
+
+## 33. Label centered on its letters with `text-box`
+
+Use it on single-line labels in buttons, badges and chips, so equal padding looks equal in any font.
+
+```css
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  text-box: trim-both cap alphabetic;
+}
+
+.button-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.button-with-icon > span { text-box: trim-both cap alphabetic; }
+```
+
+Rules:
+
+- It does nothing on a flex or grid container. A button that is `inline-flex` because it holds an icon needs the declaration on the element that wraps the text, as in the second rule of the block.
+- The button gets shorter, because the padding now starts at the letters. With `0.75rem` of padding it went from 48px tall to 35px in Chrome and Safari. Raise the padding to keep the height.
+- Use it for one line. Descenders hang into the bottom padding, which is the intent.
+- Scope it to labels. Never set it on `*`, because it shrinks every text block. A one-line paragraph at 16px/1.5 went from 25px tall to 11px.
+- Write no fallback. Without support the label keeps its normal line box.
+
+Support: Chrome 133, Firefox 154, Safari 18.2.
+
+## 47. Icon sized by the text beside it
+
+Use it on every icon that sits next to a label, in buttons, links, list rows and notices. The icon takes its size from the font, so it follows the text and never needs a size per variant.
+
+```css
+.with-icon {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+
+.with-icon > svg {
+  flex: none;
+  block-size: 1cap;
+  inline-size: auto;
+}
+
+.notice {
+  display: flex;
+  align-items: start;
+  gap: 0.5em;
+}
+
+.notice > svg {
+  flex: none;
+  inline-size: 1em;
+  block-size: 1lh;
+}
+```
+
+Rules:
+
+- Never size an icon in `px`. A 16px icon that matches 16px text is 5px to 7px shorter than the capitals of 32px text.
+- Keep `flex: none`. Without it a long label squeezes the icon.
+- The `svg` needs a `viewBox`. `inline-size: auto` then follows the drawing's ratio.
+- Many icon sets leave padding inside the drawing, and `1cap` looks small on those. Raise the number and keep the unit, as in `1.2cap`.
+- Do not use `align-items: center` on a label that can wrap. The icon then sits beside the middle line.
+- With entry 33 the trimmed label is `1cap` tall, so `align-items: center` lines the icon up with it at both edges.
+
+Support: `cap` in Chrome 118, Firefox 97, Safari 17.2. `lh` in Chrome 109, Firefox 120, Safari 16.4. Tested in Chrome 150 and real Safari 27 on 2026-10-01, where the icon came out within 0.01px of the capital height at 16px and at 32px.

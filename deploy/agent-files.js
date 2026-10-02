@@ -13,7 +13,7 @@ last-updated: ${updated}
 `;
 
 /* The skill comes first under "How to use it". An agent that is about to
-   write CSS needs a short file and one or two references, not the list. */
+   write CSS needs a short file and two or three references, not the list. */
 export const llmsTxt = ({ title, description, entries, skill, list }) => `# ${title}
 
 > ${description}
@@ -33,7 +33,7 @@ Do not use it as a framework or a component library. It ships no package and no 
 To write CSS, read the skill. It is the same list, cut down to what an agent needs while writing.
 
 - Fetch [SKILL.md](${skill.url}/SKILL.md). It is ${skill.kilobytes} KB and holds the rules for all CSS and a table that says which reference file to read before which task.
-- Fetch only the reference files the table names for your task. They sit beside it, under \`${skill.url}/references/\`. One component needs one or two.
+- Fetch only the reference files the table names for your task. They sit beside it, under \`${skill.url}/references/\`. One component needs two or three.
 - Install the skill only when your user asked you to. [The README](${repository}#if-you-are-an-agent) has the command.
 
 To study the list, or to learn why a technique works and who it is borrowed from, read the entries.

@@ -136,7 +136,7 @@ Use it on cards that lift on hover, most of all in a grid of many cards or with 
 Rules:
 
 - The card needs its own background. The pseudo-elements have none.
-- It uses both pseudo-elements of the card. Entry 27 (`controls.md`) uses `::after` for the hit area and entry 38 (`controls.md`) for the link, so do not combine them on one element.
+- It uses both pseudo-elements of the card. Entry 27 (`interaction.md`) uses `::after` for the hit area and entry 38 (`interaction.md`) for the link, so do not combine them on one element.
 - For a single small element, transition `box-shadow` directly. The saving is real but small per card.
 
 Support: every browser.
@@ -155,3 +155,56 @@ Rules:
 - The default crossfade adds no movement and needs no reduced-motion guard. If you add slides, put the rule inside `@media (prefers-reduced-motion: no-preference)`.
 
 Support: Chrome 126, Safari 18.2. Firefox navigates as normal.
+
+## 35. Indicator that slides to the active item
+
+Use it for the underline on a tab row or the bar beside a side nav. It replaces a script that measures the active item and writes a `transform` and a width.
+
+```html
+<nav class="tabs">
+  <ul>
+    <li><a href="/overview" aria-current="page">Overview</a></li>
+    <li><a href="/pricing">Pricing and billing</a></li>
+    <li><a href="/docs">Docs</a></li>
+  </ul>
+</nav>
+```
+
+```css
+.tabs { anchor-scope: --active; }
+
+.tabs ul {
+  position: relative;
+  display: flex;
+}
+
+.tabs [aria-current="page"] { anchor-name: --active; }
+
+.tabs ul::after {
+  content: "";
+  position: absolute;
+  position-anchor: --active;
+  inset-block-end: 0;
+  inset-inline-start: anchor(start);
+  inline-size: anchor-size(inline);
+  block-size: 2px;
+  background: currentColor;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tabs ul::after {
+    transition:
+      inset-inline-start 0.25s var(--ease-out, ease-out),
+      inline-size 0.25s var(--ease-out, ease-out);
+  }
+}
+```
+
+Rules:
+
+- Keep `anchor-scope` on the component root. Without it an anchor name is global, and two navs on one page both follow the last active item.
+- The list needs `position: relative`, so the bar is positioned against the box that holds the items.
+- For a vertical list swap the axes. Use `inset-block-start: anchor(top)` and `block-size: anchor-size(height)`, and transition those two.
+- Give the active item a second cue such as weight or color. A browser without anchor positioning drops the `anchor()` declarations and the bar has no width.
+
+Support: Chrome 131, Firefox 147, Safari 26. Firefox places the bar and does not slide it.

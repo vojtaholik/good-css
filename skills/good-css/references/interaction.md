@@ -50,7 +50,7 @@ Use it on every button and anything else that can be pressed.
 Rules:
 
 - Keep the scale between 0.95 and 0.98.
-- The reset in entry 6 (`foundation.md`) removes the browser's tap highlight. Without this entry a tap gives no feedback at all.
+- The reset in entry 6 (`foundations.md`) removes the browser's tap highlight. Without this entry a tap gives no feedback at all.
 - When feedback needs a script, listen for `pointerdown`, not `click`.
 
 Support: every browser.
@@ -135,7 +135,7 @@ html:has(dialog:modal) { overflow: hidden; }
 Rules:
 
 - `:modal` matches `showModal()` only, so a non-modal dialog does not lock the page.
-- Keep `scrollbar-gutter: stable` with the scroll lock. Without it the page shifts sideways when the scrollbar disappears. Entry 6 (`foundation.md`) sets it in the reset.
+- Keep `scrollbar-gutter: stable` with the scroll lock. Without it the page shifts sideways when the scrollbar disappears. Entry 6 (`foundations.md`) sets it in the reset.
 - `:has()` cannot be nested inside `:has()`.
 
 Support: Chrome 105, Firefox 121, Safari 15.4.
@@ -206,113 +206,3 @@ Rules:
 - Write no fallback. A browser without `field-sizing` shows a fixed textarea that scrolls.
 
 Support: Chrome 123, Safari 26.2, Firefox 152. Baseline newly available since June 2026.
-
-## 33. Label centered on its letters with `text-box`
-
-Use it on single-line labels in buttons, badges and chips, so equal padding looks equal in any font.
-
-```css
-.button {
-  display: inline-block;
-  padding: 0.75rem 1.25rem;
-  text-box: trim-both cap alphabetic;
-}
-
-.button-with-icon {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-}
-
-.button-with-icon > span { text-box: trim-both cap alphabetic; }
-```
-
-Rules:
-
-- It does nothing on a flex or grid container. A button that is `inline-flex` because it holds an icon needs the declaration on the element that wraps the text, as in the second rule of the block.
-- The button gets shorter, because the padding now starts at the letters. With `0.75rem` of padding it went from 48px tall to 35px in Chrome and Safari. Raise the padding to keep the height.
-- Use it for one line. Descenders hang into the bottom padding, which is the intent.
-- Scope it to labels. Never set it on `*`, because it shrinks every text block. A one-line paragraph at 16px/1.5 went from 25px tall to 11px.
-- Write no fallback. Without support the label keeps its normal line box.
-
-Support: Chrome 133, Firefox 154, Safari 18.2.
-
-## 47. Icon sized by the text beside it
-
-Use it on every icon that sits next to a label, in buttons, links, list rows and notices. The icon takes its size from the font, so it follows the text and never needs a size per variant.
-
-```css
-.with-icon {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.5em;
-}
-
-.with-icon > svg {
-  flex: none;
-  block-size: 1cap;
-  inline-size: auto;
-}
-
-.notice {
-  display: flex;
-  align-items: start;
-  gap: 0.5em;
-}
-
-.notice > svg {
-  flex: none;
-  inline-size: 1em;
-  block-size: 1lh;
-}
-```
-
-Rules:
-
-- Never size an icon in `px`. A 16px icon that matches 16px text is 5px to 7px shorter than the capitals of 32px text.
-- Keep `flex: none`. Without it a long label squeezes the icon.
-- The `svg` needs a `viewBox`. `inline-size: auto` then follows the drawing's ratio.
-- Many icon sets leave padding inside the drawing, and `1cap` looks small on those. Raise the number and keep the unit, as in `1.2cap`.
-- Do not use `align-items: center` on a label that can wrap. The icon then sits beside the middle line.
-- With entry 33 the trimmed label is `1cap` tall, so `align-items: center` lines the icon up with it at both edges.
-
-Support: `cap` in Chrome 118, Firefox 97, Safari 17.2. `lh` in Chrome 109, Firefox 120, Safari 16.4. Tested in Chrome 150 and real Safari 27 on 2026-10-01, where the icon came out within 0.01px of the capital height at 16px and at 32px.
-
-## 28. Tabular numbers
-
-Use it on any number that changes or sits in a column, such as prices, tables, timers and counters.
-
-```css
-.price,
-td,
-time { font-variant-numeric: tabular-nums; }
-```
-
-Rules:
-
-- Do not set it globally. Proportional digits read better in prose.
-- The font must ship tabular figures, or nothing changes.
-
-Support: Chrome 52, Firefox 34, Safari 9.1.
-
-## 29. Concentric nested radius
-
-Use it wherever a rounded element sits inside a padded rounded parent, such as an image in a card or a button in an input.
-
-```css
-.card {
-  --radius: 0.75rem;
-  --pad: 0.5rem;
-  padding: var(--pad);
-  border-radius: calc(var(--radius) + var(--pad));
-}
-
-.card > * { border-radius: var(--radius); }
-```
-
-Rules:
-
-- Derive the outer radius from the inner one. The other way round reaches zero once the padding exceeds the radius.
-
-Support: every browser.

@@ -91,38 +91,6 @@ Rules:
 
 Support: Chrome 133, Firefox 147, Safari 26.
 
-## 39. Reveal with `clip-path`
-
-Use it for dropdowns, menus and panels that open over the page and whose height is not known. It unrolls the panel without animating `height`, and it works in every browser.
-
-```css
-.menu {
-  clip-path: inset(0 -3rem 100%);
-  visibility: hidden;
-}
-
-.menu.is-open {
-  clip-path: inset(0 -3rem -3rem);
-  visibility: visible;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .menu {
-    transition:
-      clip-path 0.25s var(--ease-out, ease-out),
-      visibility 0.25s;
-  }
-}
-```
-
-Rules:
-
-- The negative inset must be larger than the shadow's blur plus its offset.
-- Use it for panels that overlap the page. A closed panel in the normal flow leaves a gap, so an accordion uses entry 4.
-- Add `round` with a radius inside `inset()` only when the clip itself should have round corners. The element's own `border-radius` still applies.
-
-Support: every browser.
-
 ## 4. Accordion that animates its height
 
 Use it for FAQs and any other disclosure. `<details>` already gives you the toggle, keyboard support and find-in-page. These rules animate the open and the close with no JavaScript.
@@ -155,55 +123,34 @@ Rules:
 
 Support: `::details-content` in Chrome 131, Safari 18.4, Firefox 143. `interpolate-size` in Chrome 129 only.
 
-## 35. Indicator that slides to the active item
+## 39. Reveal with `clip-path`
 
-Use it for the underline on a tab row or the bar beside a side nav. It replaces a script that measures the active item and writes a `transform` and a width.
-
-```html
-<nav class="tabs">
-  <ul>
-    <li><a href="/overview" aria-current="page">Overview</a></li>
-    <li><a href="/pricing">Pricing and billing</a></li>
-    <li><a href="/docs">Docs</a></li>
-  </ul>
-</nav>
-```
+Use it for dropdowns, menus and panels that open over the page and whose height is not known. It unrolls the panel without animating `height`, and it works in every browser.
 
 ```css
-.tabs { anchor-scope: --active; }
-
-.tabs ul {
-  position: relative;
-  display: flex;
+.menu {
+  clip-path: inset(0 -3rem 100%);
+  visibility: hidden;
 }
 
-.tabs [aria-current="page"] { anchor-name: --active; }
-
-.tabs ul::after {
-  content: "";
-  position: absolute;
-  position-anchor: --active;
-  inset-block-end: 0;
-  inset-inline-start: anchor(start);
-  inline-size: anchor-size(inline);
-  block-size: 2px;
-  background: currentColor;
+.menu.is-open {
+  clip-path: inset(0 -3rem -3rem);
+  visibility: visible;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .tabs ul::after {
+  .menu {
     transition:
-      inset-inline-start 0.25s var(--ease-out, ease-out),
-      inline-size 0.25s var(--ease-out, ease-out);
+      clip-path 0.25s var(--ease-out, ease-out),
+      visibility 0.25s;
   }
 }
 ```
 
 Rules:
 
-- Keep `anchor-scope` on the component root. Without it an anchor name is global, and two navs on one page both follow the last active item.
-- The list needs `position: relative`, so the bar is positioned against the box that holds the items.
-- For a vertical list swap the axes. Use `inset-block-start: anchor(top)` and `block-size: anchor-size(height)`, and transition those two.
-- Give the active item a second cue such as weight or color. A browser without anchor positioning drops the `anchor()` declarations and the bar has no width.
+- The negative inset must be larger than the shadow's blur plus its offset.
+- Use it for panels that overlap the page. A closed panel in the normal flow leaves a gap, so an accordion uses entry 4.
+- Add `round` with a radius inside `inset()` only when the clip itself should have round corners. The element's own `border-radius` still applies.
 
-Support: Chrome 131, Firefox 147, Safari 26. Firefox places the bar and does not slide it.
+Support: every browser.

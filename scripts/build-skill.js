@@ -1,6 +1,7 @@
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { marked } from "marked";
+import { categories } from "../categories.js";
 import { check } from "./check-css.mjs";
 
 /* Writes the skill's reference files from PRACTICES.md, so an entry is
@@ -18,86 +19,27 @@ const root = join(import.meta.dirname, "..");
 const skill = join(root, "skills/good-css");
 const references = join(skill, "references");
 
-/* One file per kind of task, so a task reads one or two of them. Entries are
-   named by the slug of their title, as the harness fixtures are, so
-   renumbering PRACTICES.md changes nothing here. An unnumbered section goes
-   in by the slug of its heading. */
-const files = {
-  foundation: [
-    "the-reset",
-    "oklch-color",
-    "one-set-of-color-tokens-for-light-and-dark",
-    "fluid-sizes-with-clamp",
-    "one-fluid-scale-for-type-and-space",
-    "left-out-on-purpose",
-  ],
-  layout: [
-    "content-grid-with-breakouts",
-    "section-spacing-that-depends-on-its-neighbors",
-    "space-between-siblings-set-by-the-parent",
-    "push-one-item-away-with-an-auto-margin",
-    "intrinsic-grid",
-    "subgrid-rows-shared-across-cards",
-    "container-queries-with-container-units",
-    "sidebar-that-wraps-on-its-own",
-    "stack-layers-with-grid",
-    "safe-alignment",
-    "logical-properties",
-    "overflow-clip-over-hidden",
-  ],
-  controls: [
-    "one-focus-ring-with-focus-visible",
-    "hover-styles-only-where-hover-exists",
-    "press-feedback",
-    "hit-area-larger-than-the-visual",
-    "whole-card-clickable-from-one-link",
-    "has-for-parent-and-page-state",
-    "form-feedback-with-user-invalid",
-    "textarea-that-grows-with-its-content",
-    "label-centered-on-its-letters-with-text-box",
-    "icon-sized-by-the-text-beside-it",
-    "tabular-numbers",
-    "concentric-nested-radius",
-  ],
-  content: [
-    "long-text-that-wraps-truncates-or-clamps",
-    "image-box-that-holds-any-upload",
-  ],
-  motion: [
-    "opt-in-motion",
-    "motion-tokens",
-    "transition-a-custom-property-with-property",
-    "shadow-change-that-fades-and-does-not-repaint",
-    "cross-document-view-transitions",
-  ],
-  disclosure: [
-    "enter-and-exit-transitions-from-display-none",
-    "popover-anchored-to-its-trigger",
-    "reveal-with-clip-path",
-    "accordion-that-animates-its-height",
-    "indicator-that-slides-to-the-active-item",
-  ],
-  scroll: [
-    "carousel-on-native-scroll",
-    "scroll-area-between-a-fixed-header-and-footer",
-    "styles-that-apply-only-when-a-scroller-overflows",
-    "anchor-targets-that-clear-a-sticky-header",
-    "no-rubber-band-bounce-on-desktop",
-    "content-clear-of-the-notch",
-  ],
-};
+const slugify = (text) =>
+  text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+/* One file per category, so a task reads two or three of them. An unnumbered
+   section of PRACTICES.md goes in by the slug of its heading. */
+const unnumbered = { foundations: ["left-out-on-purpose"] };
+const files = Object.fromEntries(
+  categories.map(({ title, entries }) => {
+    const file = slugify(title);
+    return [file, [...entries, ...(unnumbered[file] ?? [])]];
+  }),
+);
 
 /* Sections of PRACTICES.md that are about the list and not for its reader. */
 const skipped = ["next", "references"];
 
 const credit = /^(Borrowed from|Docs|Background|Source):/;
 const localPath = /^- Source:|~\/|\/Users\//m;
-
-const slugify = (text) =>
-  text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
 
 function readSections(source) {
   const sections = [];
@@ -143,8 +85,8 @@ const fileOf = new Map(Object.entries(files).flatMap(([file, slugs]) => slugs.ma
 const unplaced = sections.filter((section) => !fileOf.has(section.slug) && !skipped.includes(section.slug));
 const missing = [...fileOf.keys()].filter((slug) => !sections.some((section) => section.slug === slug));
 if (unplaced.length || missing.length) {
-  for (const section of unplaced) console.error(`No file for "${section.slug}". Add it to \`files\`.`);
-  for (const slug of missing) console.error(`"${slug}" is in \`files\` and not in PRACTICES.md.`);
+  for (const section of unplaced) console.error(`No category for "${section.slug}". Add it to categories.js.`);
+  for (const slug of missing) console.error(`"${slug}" is in categories.js and not in PRACTICES.md.`);
   process.exit(1);
 }
 

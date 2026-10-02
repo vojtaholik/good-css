@@ -51,7 +51,7 @@ Rules:
 
 - Load every weight and style the design uses. With `font-synthesis: none` a missing bold renders as regular.
 - With `min-width: 0` on everything, a sized image, icon or avatar in a flex row shrinks to make room for the text beside it. Give it `flex: none`.
-- The reset removes the tap highlight, so every pressable element needs its own `:active` state. Entry 31 (`controls.md`) has it.
+- The reset removes the tap highlight, so every pressable element needs its own `:active` state. Entry 31 (`interaction.md`) has it.
 - Never fix input zoom with `user-scalable=no` or `maximum-scale=1`. That takes zoom away from people who need it.
 - Keep `user-select: none` to controls. Never set it on `body` or on links, because people copy text.
 - Text the user types inherits `pretty`, in `textarea` and `contenteditable`. If lines shift while typing, set `text-wrap: stable` on that element.
@@ -59,6 +59,32 @@ Rules:
 - `svh` is for documents and heroes. An app shell with UI pinned to the bottom uses `height: 100dvh`, so it tracks the toolbar. Emil Kowalski draws this line in his mobile-native skill.
 
 Support: `text-wrap: pretty` in Chrome 117 and Safari 26, ignored by Firefox. `scrollbar-gutter` in Chrome 94, Firefox 97, Safari 18.2. `interpolate-size` in Chrome 129 only. The rest works everywhere.
+
+## 16. Logical properties
+
+Use them in place of every left, right, top and bottom, in spacing, borders, offsets and alignment.
+
+```css
+.card {
+  position: relative;
+  padding-inline: 1.5rem;
+  margin-block-end: 2rem;
+  border-inline-start: 4px solid;
+  text-align: start;
+}
+
+.card .close {
+  position: absolute;
+  inset-block-start: 1rem;
+  inset-inline-end: 1rem;
+}
+```
+
+Rules:
+
+- The four-value `margin`, `padding` and `inset` shorthands stay physical. Use the `-inline` and `-block` shorthands.
+
+Support: Chrome 87, Firefox 66, Safari 14.1.
 
 ## 2. OKLCH color
 
@@ -179,5 +205,5 @@ Support: Chrome 120, Firefox 118, Safari 15.4, set by `pow()`. Tested in Chrome 
 Decided on 2026-10-01. Do not add these back.
 
 - **The layout half of Travis Arnold's reset.** `* { grid-area: 1 / 1 / 1 / 1 }`, a 12-column grid on `body`, and `display: contents` on `div` and every sectioning element. It stacks everything in one cell and removes the box of every container, which breaks the content grid in entry 1 (`layout.md`) and any component that styles a `div`.
-- **`* { text-box: trim-both cap alphabetic }`** in the reset. It shrinks every text block. A one-line paragraph at 16px/1.5 went from 25px tall to 11px and a button from 40px to 27px. Entry 33 (`controls.md`) is the scoped version, for labels only.
+- **`* { text-box: trim-both cap alphabetic }`** in the reset. It shrinks every text block. A one-line paragraph at 16px/1.5 went from 25px tall to 11px and a button from 40px to 27px. Entry 33 (`text-and-media.md`) is the scoped version, for labels only.
 - **`text-rendering: optimizeLegibility`.** MDN recommends `auto` for body text.

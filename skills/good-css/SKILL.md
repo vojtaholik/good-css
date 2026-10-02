@@ -28,17 +28,18 @@ Each file holds entries with the CSS and its rules. The rules are the conditions
 
 | Read | Before you write |
 | --- | --- |
-| `references/foundation.md` | a reset or base stylesheet, a set of color tokens, dark mode, a type or spacing scale |
-| `references/layout.md` | a page container or wrapper, a grid of cards, cards whose parts line up, a sidebar, a component placed in slots of different widths, overlapping layers, spacing between sections, elements stacked one above another, one item pushed to the far end of a row or column, centered content that can overflow |
-| `references/controls.md` | the focus, hover and press states of a button, link, input or card, a small tap target, a clickable card, form validation, a textarea, an icon next to a label, a label that looks off-center, numbers in a column, nested rounded corners, a parent styled by what it contains, page scroll locked behind a modal |
-| `references/content.md` | text or images that come from a user or a CMS, such as names, titles, excerpts, thumbnails, avatars and embeds |
-| `references/disclosure.md` | a dialog, popover, dropdown menu or accordion, or the indicator under an active tab |
-| `references/scroll.md` | a carousel, a row that may overflow, a modal body, chat list or drawer that scrolls between a header and a footer, in-page links under a sticky header, an app shell on desktop or on a phone |
-| `references/motion.md` | easing and duration tokens, one state change that drives several values, a shadow that changes on hover, a transition between pages |
+| `references/foundations.md` | a reset or base stylesheet, a set of color tokens, dark mode, a type or spacing scale |
+| `references/layout.md` | a page container or wrapper, a grid of cards, cards whose parts line up, a sidebar, a component placed in slots of different widths, overlapping layers, centered content that can overflow |
+| `references/spacing-and-shape.md` | spacing between sections, elements stacked one above another, one item pushed to the far end of a row or column, nested rounded corners |
+| `references/text-and-media.md` | text or images that come from a user or a CMS, such as names, titles, excerpts, thumbnails, avatars and embeds, an icon next to a label, a label that looks off-center, numbers in a column |
+| `references/interaction.md` | the focus, hover and press states of a button, link, input or card, a small tap target, a clickable card, form validation, a textarea, a parent styled by what it contains, page scroll locked behind a modal |
+| `references/motion.md` | easing and duration tokens, one state change that drives several values, a shadow that changes on hover, a transition between pages, the indicator under an active tab |
+| `references/show-and-hide.md` | a dialog, popover, dropdown menu or accordion |
+| `references/scroll-and-viewport.md` | a carousel, a row that may overflow, a modal body, chat list or drawer that scrolls between a header and a footer, in-page links under a sticky header, an app shell on desktop or on a phone |
 
 ## Left out on purpose
 
-Never add `text-box` trim on `*`, `text-rendering: optimizeLegibility`, or a reset that puts `display: contents` or one shared grid cell on every element. `references/foundation.md` has the reasons.
+Never add `text-box` trim on `*`, `text-rendering: optimizeLegibility`, or a reset that puts `display: contents` or one shared grid cell on every element. `references/foundations.md` has the reasons.
 
 ## Browser support
 
