@@ -3,6 +3,10 @@ import { demos } from "./demos/index.js";
 
 const practices = readPractices();
 
+/* The drawing of each category, named by the slug of its title. It goes into
+   the page as markup, so its strokes take the color of the card. */
+const drawings = import.meta.glob("./categories/*.svg", { query: "?raw", import: "default", eager: true });
+
 const stamp = (id) => document.getElementById(id).content.cloneNode(true);
 const slot = (root, name) => root.querySelector(`[data-slot="${name}"]`);
 const pad = (number) => String(number).padStart(2, "0");
@@ -122,6 +126,7 @@ function card(category) {
   const node = stamp("card");
 
   node.querySelector("a").href = `#${category.slug}`;
+  slot(node, "art").innerHTML = drawings[`./categories/${category.slug}.svg`] ?? "";
   slot(node, "title").textContent = category.title;
 
   return node;

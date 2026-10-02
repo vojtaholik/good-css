@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-262 -204 1433 1433" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<g id="shaded-triangles" fill="currentColor" fill-opacity="0.12">
+    <path vector-effect="non-scaling-stroke" id="upper-triangle" d="m73 606 455-260v260z"/>
+    <path vector-effect="non-scaling-stroke" id="lower-triangle" d="m73 606h455l-105 345z"/>
+  </g>
+  <g id="geometric-construction" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path vector-effect="non-scaling-stroke" id="outer-arc" d="m73 122c85-43 165-63 260-62 146-1 264 47 356 137 121 117 180 305 146 465"/>
+    <path vector-effect="non-scaling-stroke" id="upper-rectangle" d="M73 606V122H528V606Z"/>
+    <path vector-effect="non-scaling-stroke" id="upper-diagonals" d="m73 606 455-260 307 316"/>
+    <path vector-effect="non-scaling-stroke" id="lower-outline" d="m73 606 350 345 412-289"/>
+    <path vector-effect="non-scaling-stroke" id="lower-divider" d="m528 606-105 345"/>
+  </g>
+  <g id="vertex-markers" fill="#fff" stroke="currentColor">
+    <circle vector-effect="non-scaling-stroke" id="top-left-vertex" cx="73" cy="122" r="15"/>
+    <circle vector-effect="non-scaling-stroke" id="top-right-vertex" cx="528" cy="122" r="15"/>
+    <circle vector-effect="non-scaling-stroke" id="upper-center-vertex" cx="528" cy="346" r="15"/>
+    <circle vector-effect="non-scaling-stroke" id="left-center-vertex" cx="73" cy="606" r="15"/>
+    <circle vector-effect="non-scaling-stroke" id="center-vertex" cx="528" cy="606" r="15"/>
+    <circle vector-effect="non-scaling-stroke" id="right-vertex" cx="835" cy="662" r="15"/>
+    <circle vector-effect="non-scaling-stroke" id="bottom-vertex" cx="423" cy="951" r="15"/>
+  </g>
+</svg>

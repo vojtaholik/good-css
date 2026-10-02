@@ -588,13 +588,21 @@ pre {
   outline-offset: -0.5rem;
 }
 
-/* The place of a drawing that is not made yet. */
+/* The ring around the drawing of a category. Each drawing is square and
+   leaves its own room inside the ring. */
 .card-art {
   align-self: center;
   inline-size: 58.6cqi;
   aspect-ratio: 1;
   border: 2px solid var(--bp-line);
   border-radius: 50%;
+  color: var(--bp-ink-soft);
+
+  & > svg {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
 }
 
 .card-title {

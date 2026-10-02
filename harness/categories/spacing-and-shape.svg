@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-59 -78 1141 1141" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<g id="rounded-square-ring" stroke="currentColor" stroke-linejoin="round">
+    <path vector-effect="non-scaling-stroke" id="outer-ring-and-open-center" d="m320 153h384c81 0 146 65 146 146v385c0 82-63 147-146 147h-386c-80 0-145-63-145-145v-386c0-80 65-147 147-147zm94 147c-51 0-92 40-92 90v205c0 51 35 90 85 90h209c48 0 86-39 86-89v-205c0-51-39-91-89-91z" fill="currentColor" fill-opacity="0.12" fill-rule="evenodd"/>
+    <path vector-effect="non-scaling-stroke" id="middle-rounded-contour" d="m350 233h327c53 0 94 41 94 92v335c0 52-32 92-80 92h-357c-45 0-81-38-81-88v-339c0-52 44-92 97-92z" fill="none"/>
+  </g>
+  <g id="diagonal-with-circular-markers" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path vector-effect="non-scaling-stroke" id="diagonal-connector" d="m220 194 131 129 81 82 81 86 88 94 75 76 69 68 62 62" fill="none"/>
+    <g id="white-circular-markers" fill="#fff">
+      <circle vector-effect="non-scaling-stroke" id="upper-left-outer-marker" cx="220" cy="194" r="11"/>
+      <circle vector-effect="non-scaling-stroke" id="upper-left-inner-marker" cx="351" cy="323" r="11.4"/>
+      <circle vector-effect="non-scaling-stroke" id="upper-center-marker" cx="432" cy="405" r="11.2"/>
+      <circle vector-effect="non-scaling-stroke" id="center-marker" cx="513" cy="491" r="11.4"/>
+      <circle vector-effect="non-scaling-stroke" id="lower-center-marker" cx="601.5" cy="585" r="11.4"/>
+      <circle vector-effect="non-scaling-stroke" id="lower-right-inner-marker" cx="676" cy="661" r="11.3"/>
+      <circle vector-effect="non-scaling-stroke" id="lower-right-middle-marker" cx="745" cy="729" r="10.9"/>
+      <circle vector-effect="non-scaling-stroke" id="lower-right-outer-marker" cx="807" cy="791" r="11.2"/>
+    </g>
+  </g>
+</svg>

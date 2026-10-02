@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-89 -264 1202 1202" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<g id="geometric-diagram" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse vector-effect="non-scaling-stroke" id="central-disc-fill" cx="511" cy="336.5" rx="152" ry="159" fill="currentColor" fill-opacity="0.12" stroke="none"/>
+    <g id="overlapping-circular-outlines" fill="none">
+      <ellipse vector-effect="non-scaling-stroke" id="left-circle" cx="261" cy="337.5" rx="153.5" ry="160"/>
+      <ellipse vector-effect="non-scaling-stroke" id="middle-circle" cx="511" cy="336.5" rx="152" ry="159"/>
+      <ellipse vector-effect="non-scaling-stroke" id="right-circle" cx="761.5" cy="337" rx="153.5" ry="160"/>
+    </g>
+    <rect vector-effect="non-scaling-stroke" id="rectangular-frame" x="350" y="149.5" width="322" height="375" fill="none"/>
+    <path vector-effect="non-scaling-stroke" id="horizontal-axis" d="m58 338h908" fill="none"/>
+    <g id="frame-corner-nodes" fill="#fff">
+      <circle vector-effect="non-scaling-stroke" id="upper-left-node" cx="350" cy="149.5" r="11"/>
+      <circle vector-effect="non-scaling-stroke" id="upper-right-node" cx="672" cy="149.5" r="11"/>
+      <circle vector-effect="non-scaling-stroke" id="lower-left-node" cx="350" cy="524.5" r="11"/>
+      <circle vector-effect="non-scaling-stroke" id="lower-right-node" cx="672" cy="524.5" r="11"/>
+    </g>
+    <g id="horizontal-axis-nodes" fill="#fff">
+      <circle vector-effect="non-scaling-stroke" id="left-terminal" cx="58" cy="338" r="10"/>
+      <circle vector-effect="non-scaling-stroke" id="left-circle-node" cx="245" cy="338" r="11"/>
+      <circle vector-effect="non-scaling-stroke" id="left-frame-intersection" cx="350" cy="338" r="11.5"/>
+      <circle vector-effect="non-scaling-stroke" id="central-node" cx="511" cy="338" r="11"/>
+      <circle vector-effect="non-scaling-stroke" id="right-frame-intersection" cx="672" cy="338" r="11.5"/>
+      <circle vector-effect="non-scaling-stroke" id="right-circle-node" cx="776" cy="338" r="11"/>
+      <circle vector-effect="non-scaling-stroke" id="right-terminal" cx="966" cy="338" r="10"/>
+    </g>
+  </g>
+</svg>
