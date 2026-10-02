@@ -787,19 +787,29 @@ pre {
 
 /* Specimen ---------------------------------------------------------------- */
 
+/* The one column is as wide as the entry and no wider, whatever the frame in
+   it asks for. That is what holds the frame's width to 100%. */
 .specimen {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.4375rem;
 }
 
-/* The frame is a viewport with its controls in a bar on top. Its corner
-   resizes it, and so do the width buttons. The bar's corners follow the
-   frame's, entry 29. */
+/* The frame is a viewport with its controls in a bar on top. The width
+   buttons resize it, and so does a drag of its corner. It is centered in its
+   column, so it grows and shrinks from its middle. The bar's corners follow
+   the frame's, entry 29.
+
+   A resize stops at these sizes. The frame is never wider than its column,
+   and never narrower than 20rem unless the column is. It is never shorter
+   than 10rem, and never taller than the window less 4rem, so all of it can
+   be seen at once. */
 .viewport {
   --bar: 2.8125rem;
   --edge: 2px;
   --radius: 0.5rem;
 
+  position: relative;
   display: grid;
   grid-template-rows: var(--bar) 1fr;
   width: 100%;
@@ -807,21 +817,57 @@ pre {
   min-width: min(100%, 20rem);
   height: calc(var(--frame-height) + var(--bar) + var(--edge) * 2);
   min-height: 10rem;
+  max-height: calc(100svh - 4rem);
+  margin-inline: auto;
   border: var(--edge) solid var(--bp-paper);
   border-radius: calc(var(--radius) + var(--edge));
   background: var(--bp-paper);
-  /* `hidden`, not `clip`: the corner grip is only drawn on a scroll container. */
-  overflow: hidden;
-  resize: both;
+  overflow: clip;
 
-  &::-webkit-resizer {
-    background: url("/icons/resize.svg") center / 13.5px no-repeat;
-  }
-
+  /* It may shrink below the 150px an iframe has by default. */
   & iframe {
     width: 100%;
     height: 100%;
+    min-height: 0;
     border: 0;
+  }
+
+  /* While the corner is dragged the specimen takes no pointer events, so the
+     drag is not lost when the pointer crosses it. */
+  &[data-resizing] iframe {
+    pointer-events: none;
+  }
+}
+
+/* The corner that resizes the frame. A touch on it drags and does not scroll
+   the page. */
+.viewport-grip {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  display: grid;
+  place-items: center;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  outline-offset: -3px;
+  cursor: nwse-resize;
+  touch-action: none;
+
+  &:active {
+    opacity: 0.5;
+  }
+}
+
+/* The hit area of entry 27, for a finger only. It reaches over the corner of
+   the specimen, where a mouse should still get to a scrollbar. */
+@media (pointer: coarse) {
+  .viewport-grip::after {
+    content: "";
+    position: absolute;
+    inset: min(0px, (100% - 44px) / 2);
   }
 }
 

@@ -83,7 +83,7 @@
         <div data-slot="specimen"></div>
 
         <details class="fold fold-source">
-          <summary data-slot="source-title">The code</summary>
+          <summary>Code</summary>
           <div class="prose" data-slot="source"></div>
         </details>
 
@@ -100,9 +100,9 @@
           <div class="viewport-bar">
             <span class="viewport-size" data-slot="size"></span>
             <div class="viewport-widths" role="group" aria-label="Frame width">
-              <button type="button" data-width="360px">360</button>
-              <button type="button" data-width="768px">768</button>
-              <button type="button" data-width="100%">100%</button>
+              <button type="button" data-width="360">360</button>
+              <button type="button" data-width="768">768</button>
+              <button type="button" data-width="full">100%</button>
             </div>
             <a
               data-slot="open"
@@ -114,6 +114,13 @@
             </a>
           </div>
           <iframe data-slot="frame"></iframe>
+          <button
+            class="viewport-grip"
+            type="button"
+            aria-label="Resize the frame, by dragging or with the arrow keys"
+          >
+            <img src="/icons/resize.svg" alt="">
+          </button>
         </div>
 
         <figcaption class="check">
