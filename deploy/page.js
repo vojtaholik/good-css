@@ -12,8 +12,8 @@ export const installCommand = `<div class="install-command">
 
 /* What the index adds to the header on a narrow screen: the category the
    reader is in, as a button that opens the list of all of them. main.js fills
-   both from categories.js. Until a category is in view the button says
-   "Categories". */
+   both from the categories of PRACTICES.md. Until a category is in view the
+   button says "Categories". */
 export const categoryNav = `<button class="current" type="button" popovertarget="category-menu">
           <span class="current-names" data-slot="category-names">
             <span style="animation-timeline: --in-categories">Categories</span>

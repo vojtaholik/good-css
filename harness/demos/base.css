@@ -3,8 +3,9 @@
 
    It follows the list in how it is written, and on purpose it holds none of
    the entries: no reset, no press scale, and a focus ring that is not the one
-   in entry 20. A specimen has to work on the entry's code alone, and a base
-   that already carried an entry would hide a broken one.
+   in "One focus ring with :focus-visible". A specimen has to work on the
+   entry's code alone, and a base that already carried an entry would hide a
+   broken one.
 
    The look is the page's own, drawn from the tokens the two share. The frame
    is a hatched stage, and the hatch is the stage's alone. Whatever lies on it

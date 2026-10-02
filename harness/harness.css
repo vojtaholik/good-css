@@ -2,7 +2,7 @@
    written out by hand, and each one is named where it is used. Specimens do
    not use this file. They run the entry's own code. */
 
-/* The reset, entry 6, as the entry has it. */
+/* The reset, as the entry "The reset" has it. */
 *,
 *::before,
 *::after {
@@ -63,8 +63,9 @@ button,
 /* Tokens and base --------------------------------------------------------- */
 
 :root {
-  /* Sizes that grow with the screen, entry 7. Each one runs from a 360px
-     screen to the 1512px the design is drawn at, and holds still beyond. */
+  /* Sizes that grow with the screen, as in "Fluid sizes with clamp()". Each
+     one runs from a 360px screen to the 1512px the design is drawn at, and
+     holds still beyond. */
   --text-title: clamp(1.625rem, 1.352rem + 1.215vw, 2.5rem);
   --text-lede: clamp(1.0625rem, 1.004rem + 0.26vw, 1.25rem);
   --text-tagline: clamp(1.125rem, 1.027rem + 0.434vw, 1.4375rem);
@@ -91,7 +92,8 @@ button,
      narrow screen. */
   --header-bar: 3.25rem;
 
-  /* Every other color is mixed from the three in tokens.css, entry 2. */
+  /* Every other color is mixed from the three in tokens.css, as in "OKLCH
+     color". */
   --fill-strong: color-mix(in oklch, var(--bp-ink) 9.6%, var(--bp-panel));
   --fill-track: color-mix(in oklch, var(--bp-ink) 11.5%, var(--bp-panel));
   --tint: color-mix(in oklch, var(--bp-ink) 5%, transparent);
@@ -99,7 +101,7 @@ button,
   --ink-hover: color-mix(in oklch, var(--bp-ink) 80%, var(--bp-panel));
   --shadow-raised: 0 0 6px color-mix(in oklch, var(--bp-ink) 25%, transparent);
 
-  /* Entry 30. */
+  /* From "Motion tokens". */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
   color-scheme: light;
@@ -118,7 +120,8 @@ button,
 }
 
 /* The footer sits at the bottom of the window on a page shorter than it,
-   pushed there by its auto margin, entry 46. */
+   pushed there by its auto margin, as in "Push one item away with an auto
+   margin". */
 body {
   display: flex;
   flex-direction: column;
@@ -169,18 +172,18 @@ pre {
   color: var(--bp-panel);
 }
 
-/* Entry 20. */
+/* "One focus ring with :focus-visible". */
 :focus-visible {
   outline: max(2px, 0.08em) solid currentColor;
   outline-offset: 0.25em;
 }
 
-/* Entry 25. */
+/* "Cross-document view transitions". */
 @view-transition {
   navigation: auto;
 }
 
-/* Content grid, entry 1 ---------------------------------------------------- */
+/* Content grid with breakouts ---------------------------------------------- */
 
 /* Nothing on the page is wider than the content and narrower than the
    window, so the breakout is as wide as the content. */
@@ -213,8 +216,9 @@ pre {
 
 /* Controls ---------------------------------------------------------------- */
 
-/* The filled button. Its label is centered on its letters, entry 33, so the
-   padding sets the height: 42px around the capitals of a 16px label. */
+/* The filled button. Its label is centered on its letters, as in "Label
+   centered on its letters with text-box", so the padding sets the height:
+   42px around the capitals of a 16px label. */
 .button {
   display: inline-block;
   flex: none;
@@ -240,7 +244,7 @@ pre {
   }
 }
 
-/* Press feedback, entry 31, on everything that is pressed like a button. */
+/* "Press feedback", on everything that is pressed like a button. */
 :is(.button, .install-command button, .carousel-buttons button, .card):active {
   transform: scale(0.97);
 }
@@ -252,7 +256,8 @@ pre {
 }
 
 /* A drawing from the design keeps the size it was exported at, and sits in
-   the middle of a box sized by the line of text beside it, entry 47. */
+   the middle of a box sized by the line of text beside it, as in "Icon sized
+   by the text beside it". */
 .icon {
   display: grid;
   flex: none;
@@ -265,7 +270,8 @@ pre {
   }
 }
 
-/* The hit area of entry 27, for what looks smaller than 44px. */
+/* The hit area of "Hit area larger than the visual", for what looks smaller
+   than 44px. */
 :is(.github, .site-footer nav a, .viewport-bar :is(button, a), .badge, .site-header .button, .current) {
   position: relative;
 
@@ -325,7 +331,7 @@ pre {
 }
 
 /* The two links are pushed to the far end by the auto margin of the first,
-   entry 46. */
+   as in "Push one item away with an auto margin". */
 .site-header-bar {
   display: flex;
   align-items: center;
@@ -364,8 +370,9 @@ pre {
 }
 
 /* The install command, opened by the button in the header. It fades and rises
-   in, entry 23, and sits under the button, entry 26. The button is at the end
-   of the row, so the popover runs back from the button's end edge. */
+   in, as in "Enter and exit transitions from display: none", and sits under
+   the button, as in "Popover anchored to its trigger". The button is at the
+   end of the row, so the popover runs back from the button's end edge. */
 .install {
   inline-size: min(100% - 2rem, 30rem);
   padding: 1.25rem;
@@ -471,7 +478,8 @@ pre {
 }
 
 @media (width < 56rem) {
-  /* A link into the page stops below the bar, entry 24. */
+  /* A link into the page stops below the bar, as in "Anchor targets that
+     clear a sticky header". */
   :root {
     --anchor-offset: calc(var(--header-bar) + 1rem);
   }
@@ -512,8 +520,9 @@ pre {
 
   /* A category's timeline runs while the category crosses the line under the
      bar. The two insets leave one pixel of the window there. It is the
-     technique of entry 36, with the page as the scroller: a timeline switches
-     a value on and no script watches the scroll. */
+     technique of "Styles that apply only when a scroller overflows", with the
+     page as the scroller: a timeline switches a value on and no script
+     watches the scroll. */
   .category,
   [data-slot="categories"] {
     view-timeline-axis: block;
@@ -576,9 +585,9 @@ pre {
     }
   }
 
-  /* The list of all eight, under the button, entry 26. It fades and rises in
-     with the rules every popover has, entry 23. Its corners follow those of
-     its links, entry 29. */
+  /* The list of all eight, under the button, as in "Popover anchored to its
+     trigger". It fades and rises in with the rules every popover has. Its
+     corners follow those of its links, as in "Concentric nested radius". */
   .menu {
     --radius: 0.375rem;
     --pad: 0.25rem;
@@ -725,7 +734,8 @@ pre {
 
 /* Categories -------------------------------------------------------------- */
 
-/* The band is a container, entry 12, so the row of cards can measure it. */
+/* The band is a container, as in "Container queries with container units",
+   so the row of cards can measure it. */
 .categories {
   container-type: inline-size;
   padding-block: var(--space-band) var(--space-band-end);
@@ -740,10 +750,10 @@ pre {
   }
 }
 
-/* The carousel of entry 9. It runs to both edges of the window, and its
-   padding brings the first card in line with the content, and the last card
-   at the end of the scroll. Three cards fill the content column, and a card
-   is never narrower than 15rem. */
+/* The carousel of "Carousel on native scroll". It runs to both edges of the
+   window, and its padding brings the first card in line with the content,
+   and the last card at the end of the scroll. Three cards fill the content
+   column, and a card is never narrower than 15rem. */
 .carousel {
   --gap: 1.3125rem;
   --pad: max(var(--gutter), (100cqi - var(--content)) / 2);
@@ -777,8 +787,9 @@ pre {
   }
 }
 
-/* The title is pushed to the bottom of the card by its auto margin, entry 46.
-   The focus ring is drawn inside the card, where the scroller cannot clip it. */
+/* The title is pushed to the bottom of the card by its auto margin, as in
+   "Push one item away with an auto margin". The focus ring is drawn inside
+   the card, where the scroller cannot clip it. */
 .card {
   display: flex;
   flex-direction: column;
@@ -843,9 +854,10 @@ pre {
   }
 }
 
-/* The two parts are trimmed to their capitals, entry 33, so their tops line
-   up. The count keeps the digits the design draws, which are not all one
-   width, so it has a width of its own and the total beside it holds still. */
+/* The two parts are trimmed to their capitals, as in "Label centered on its
+   letters with text-box", so their tops line up. The count keeps the digits
+   the design draws, which are not all one width, so it has a width of its
+   own and the total beside it holds still. */
 .carousel-count {
   display: flex;
   align-items: start;
@@ -907,9 +919,10 @@ pre {
 
 /* Category ---------------------------------------------------------------- */
 
-/* A category is a container, entry 12. Where it is wide enough its name runs
-   up the side and stays in view while its entries scroll. Where it is not,
-   the name is a line above them. */
+/* A category is a container, as in "Container queries with container
+   units". Where it is wide enough its name runs up the side and stays in
+   view while its entries scroll. Where it is not, the name is a line above
+   them. */
 .category {
   container-type: inline-size;
   padding-block-start: var(--space-category);
@@ -959,8 +972,8 @@ pre {
 
 /* Entry ------------------------------------------------------------------- */
 
-/* The parts of an entry are spaced by the entry, entry 45, and a part that
-   wants another space says so. */
+/* The parts of an entry are spaced by the entry, as in "Space between
+   siblings set by the parent", and a part that wants another space says so. */
 .entry > * + * {
   margin-block-start: var(--flow-space, 2.8125rem);
 }
@@ -1009,7 +1022,7 @@ pre {
 /* The frame is a viewport with its controls in a bar on top. The width
    buttons resize it, and so does a drag of its corner. It is centered in its
    column, so it grows and shrinks from its middle. The bar's corners follow
-   the frame's, entry 29.
+   the frame's, as in "Concentric nested radius".
 
    A resize stops at these sizes. The frame is never wider than its column,
    and never narrower than 20rem unless the column is. It is never shorter
@@ -1072,8 +1085,9 @@ pre {
   }
 }
 
-/* The hit area of entry 27, for a finger only. It reaches over the corner of
-   the specimen, where a mouse should still get to a scrollbar. */
+/* The hit area of "Hit area larger than the visual", for a finger only. It
+   reaches over the corner of the specimen, where a mouse should still get to
+   a scrollbar. */
 @media (pointer: coarse) {
   .viewport-grip::after {
     content: "";
@@ -1122,7 +1136,7 @@ pre {
 }
 
 /* The three widths, with the one in use raised. The group's corners follow
-   its buttons', entry 29. */
+   its buttons', as in "Concentric nested radius". */
 .viewport-widths {
   --pad: 3px;
   --radius: 5px;
@@ -1171,7 +1185,8 @@ pre {
 }
 
 /* What a pass looks like, under the frame. The sign is as tall as a line of
-   the text and stays beside the first one, entry 47. */
+   the text and stays beside the first one, as in "Icon sized by the text
+   beside it". */
 .check {
   display: flex;
   align-items: start;
@@ -1205,7 +1220,8 @@ pre {
 
 /* The code of an entry, the rest of its text, and the body of a page. The
    text keeps to a measure and a code block takes the whole width. The blocks
-   are spaced by the parent, entry 45. */
+   are spaced by the parent, as in "Space between siblings set by the
+   parent". */
 .prose {
   & > * {
     margin-block: 0;
@@ -1257,8 +1273,9 @@ pre {
 
 /* The two accordions under a specimen: the entry's code, then why it works,
    the rules, the support and the credits. Both start closed, and both open
-   and close as entry 4 has it. A closed one still holds its text in the page,
-   so find-in-page and a reader of the HTML reach it. */
+   and close as "Accordion that animates its height" has it. A closed one
+   still holds its text in the page, so find-in-page and a reader of the HTML
+   reach it. */
 .fold {
   border: 2px solid var(--bp-paper);
   border-radius: 10px;
