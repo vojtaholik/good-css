@@ -1,7 +1,9 @@
-/* Blueprint fonts and tokens, shared by the harness page and every specimen.
-   The tokens are prefixed so they never collide with a token an entry
-   defines. */
-@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Bebas+Neue&display=swap");
+/* Fonts and tokens, shared by the page and every specimen. The tokens are
+   prefixed so they never collide with a token an entry defines. */
+
+/* Geist for text and Geist Mono for the labels of a frame's toolbar. Montserrat
+   stands in for Code Next, in the four weights the headings use. */
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&family=Montserrat:wght@600;700;800;900&display=swap");
 
 /* Paper Mono, served from public/fonts. It has no italic, and the reset
    specimen uses that to show font-synthesis: none. */
@@ -13,24 +15,39 @@
 }
 
 :root {
-  --bp-paper: oklch(0.54 0.19 264);
-  /* White with no hue of its own, so a mix with the paper keeps the paper's
-     hue. `oklch(1 0 0)` would pull every mix toward red. */
-  --bp-ink: oklch(1 0 none);
-  --bp-ink-soft: color-mix(in oklch, var(--bp-ink) 82%, var(--bp-paper));
-  --bp-line: color-mix(in oklch, var(--bp-ink) 60%, transparent);
-  --bp-line-faint: color-mix(in oklch, var(--bp-ink) 24%, transparent);
-  /* A lighter paper for surfaces. It is opaque, so no line shows through. */
-  --bp-panel: color-mix(in oklch, var(--bp-ink) 9%, var(--bp-paper));
+  /* Black, white and a gray, with no hue of their own, so a mix with a color
+     keeps that color's hue. `oklch(1 0 0)` would pull every mix toward red. */
+  --bp-ink: oklch(0 0 none);
+  /* White: the page, and any surface that lies on the gray. */
+  --bp-panel: oklch(1 0 none);
+  /* The gray of the categories band, of a code block and of the ground a
+     specimen is drawn on. */
+  --bp-paper: oklch(0.961 0 none);
+  --bp-ink-soft: color-mix(in oklch, var(--bp-ink) 60%, transparent);
+  --bp-line: color-mix(in oklch, var(--bp-ink) 20%, transparent);
+  --bp-line-faint: color-mix(in oklch, var(--bp-ink) 10%, transparent);
   /* Thumb, then track, for scrollbar-color. */
-  --bp-scrollbar: var(--bp-line) var(--bp-panel);
+  --bp-scrollbar: var(--bp-line) transparent;
+  /* Dark lines, so the hatch shows on the white of a panel. It stands in for
+     an image and marks padding. */
   --bp-hatch: repeating-linear-gradient(
     -45deg,
     var(--bp-line-faint) 0 1px,
     transparent 1px 7px
   );
+  /* The ground of a specimen: the gray with lighter lines across it. */
+  --bp-ground:
+    repeating-linear-gradient(
+      -45deg,
+      color-mix(in oklch, var(--bp-panel) 60%, transparent) 0 2px,
+      transparent 2px 8px
+    )
+    var(--bp-paper);
 
-  --bp-font-display: "Bebas Neue", "DIN Condensed", "Arial Narrow", sans-serif;
-  --bp-font-body: "Barlow", system-ui, sans-serif;
+  /* Code Next is a commercial font and is not served. A reader who has it
+     installed sees it, and everyone else sees Montserrat. */
+  --bp-font-display: "Code Next", "Montserrat", sans-serif;
+  --bp-font-body: "Geist", system-ui, sans-serif;
   --bp-font-mono: "Paper Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --bp-font-label: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
