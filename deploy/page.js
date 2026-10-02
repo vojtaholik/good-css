@@ -48,7 +48,6 @@ export function sitePage({ page, stylesheet, path }) {
   </head>
   <body>
     <div class="guides content-grid" aria-hidden="true">
-      <i class="breakout"></i>
       <i></i>
     </div>
 

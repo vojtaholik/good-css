@@ -71,9 +71,9 @@ button,
   --space-block: clamp(1.5rem, 1rem + 2vw, 3rem);
   --space-number: clamp(1.25rem, 0.5rem + 3vw, 3.5rem);
 
-  /* Every guide line sits this far outside its column, so text and frames
-     never touch one. A block that should reach the guides uses the same
-     length as a negative margin. */
+  /* A guide line sits this far outside the content column, so text never
+     touches one. A block that should reach the guides uses the same length
+     as a negative margin. */
   --gutter: clamp(1rem, 0.5rem + 2vw, 2.5rem);
   --guide-gap: calc(var(--gutter) / 2);
 
@@ -129,7 +129,7 @@ h1,
 h2,
 .sheet-number {
   font-family: var(--bp-font-display);
-  font-weight: 700;
+  font-weight: 400;
   text-transform: uppercase;
   text-box: trim-both cap alphabetic;
 }
@@ -216,22 +216,16 @@ pre,
   grid-template-columns: inherit;
 }
 
-/* Construction lines around the breakout column, solid, and the content
-   column, dashed. They are drawn on the page behind everything and scroll
-   with it. */
+/* Construction lines on either side of the content column. They are drawn
+   on the page behind everything and scroll with it. */
 .guides {
   position: absolute;
   inset: 0;
   z-index: -1;
 
   & > * {
-    grid-row: 1;
     margin-inline: calc(var(--guide-gap) * -1);
-    border-inline: 1px dashed var(--bp-line-faint);
-  }
-
-  & > .breakout {
-    border-inline-style: solid;
+    border-inline: 1px solid var(--bp-line-faint);
   }
 }
 

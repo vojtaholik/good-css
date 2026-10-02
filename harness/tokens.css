@@ -1,7 +1,7 @@
 /* Blueprint fonts and tokens, shared by the harness page and every specimen.
    The tokens are prefixed so they never collide with a token an entry
    defines. */
-@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Bebas+Neue&display=swap");
 
 /* Paper Mono, served from public/fonts. It has no italic, and the reset
    specimen uses that to show font-synthesis: none. */
@@ -30,7 +30,7 @@
     transparent 1px 7px
   );
 
-  --bp-font-display: "Barlow Condensed", "DIN Condensed", "Arial Narrow", sans-serif;
+  --bp-font-display: "Bebas Neue", "DIN Condensed", "Arial Narrow", sans-serif;
   --bp-font-body: "Barlow", system-ui, sans-serif;
   --bp-font-mono: "Paper Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
