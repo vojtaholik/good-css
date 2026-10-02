@@ -1,6 +1,6 @@
 <!-- Generated from PRACTICES.md by scripts/build-skill.js. Do not edit. -->
 
-## 41. Long text that wraps, truncates or clamps
+## Long text that wraps, truncates or clamps
 
 Use it on any text that comes from a user or a CMS, such as names, titles, URLs and excerpts. Decide for each one what happens when the content is longer than the design. It wraps, it is cut to one line, or it is cut to a few lines.
 
@@ -33,7 +33,7 @@ Rules:
 
 Support: `text-overflow`, `-webkit-line-clamp` and `overflow-wrap: break-word` work everywhere. With `overflow: clip` the ellipsis and the clamp draw in Chrome 150 and Safari 27, tested on 2026-10-01. Firefox is untested, and `overflow: hidden` is the form to fall back to. `overflow-wrap: anywhere` in Chrome 80, Firefox 65, Safari 15.4.
 
-## 42. Image box that holds any upload
+## Image box that holds any upload
 
 Use it on every image, video or embed whose file you do not control, such as thumbnails, cover photos and avatars. The box keeps its shape whatever the file's ratio, and it has that shape before the file loads.
 
@@ -65,11 +65,11 @@ Rules:
 - Leave the background color off an image that has transparent areas. It shows through them.
 - A fixed-size image in a flex row needs both sizes, as the avatar has. With only a width it stretches to the height of the row.
 - In Safari a failed image ignores `aspect-ratio` and draws a square box. Where a failed load must not move the layout, put the ratio on a wrapper and give the image `inline-size: 100%` and `block-size: 100%`.
-- `light-dark()` needs the `color-scheme` from entry 8 (`foundations.md`). Without it the outline stays black on a dark page.
+- `light-dark()` needs the `color-scheme` from "One set of color tokens for light and dark" (`foundations.md`). Without it the outline stays black on a dark page.
 
 Support: `aspect-ratio` in Chrome 88, Firefox 89, Safari 15. An outline that follows the radius in Chrome 94, Firefox 88, Safari 16.4. `light-dark()` in Chrome 123, Firefox 120, Safari 17.5. The square box of a failed image is from real Safari 27, tested on 2026-10-01. Chrome 150 keeps the ratio.
 
-## 28. Tabular numbers
+## Tabular numbers
 
 Use it on any number that changes or sits in a column, such as prices, tables, timers and counters.
 
@@ -86,7 +86,7 @@ Rules:
 
 Support: Chrome 52, Firefox 34, Safari 9.1.
 
-## 33. Label centered on its letters with `text-box`
+## Label centered on its letters with `text-box`
 
 Use it on single-line labels in buttons, badges and chips, so equal padding looks equal in any font.
 
@@ -117,7 +117,7 @@ Rules:
 
 Support: Chrome 133, Firefox 154, Safari 18.2.
 
-## 47. Icon sized by the text beside it
+## Icon sized by the text beside it
 
 Use it on every icon that sits next to a label, in buttons, links, list rows and notices. The icon takes its size from the font, so it follows the text and never needs a size per variant.
 
@@ -154,6 +154,6 @@ Rules:
 - The `svg` needs a `viewBox`. `inline-size: auto` then follows the drawing's ratio.
 - Many icon sets leave padding inside the drawing, and `1cap` looks small on those. Raise the number and keep the unit, as in `1.2cap`.
 - Do not use `align-items: center` on a label that can wrap. The icon then sits beside the middle line.
-- With entry 33 the trimmed label is `1cap` tall, so `align-items: center` lines the icon up with it at both edges.
+- With "Label centered on its letters with `text-box`" the trimmed label is `1cap` tall, so `align-items: center` lines the icon up with it at both edges.
 
 Support: `cap` in Chrome 118, Firefox 97, Safari 17.2. `lh` in Chrome 109, Firefox 120, Safari 16.4. Tested in Chrome 150 and real Safari 27 on 2026-10-01, where the icon came out within 0.01px of the capital height at 16px and at 32px.

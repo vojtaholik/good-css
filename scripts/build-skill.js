@@ -1,7 +1,6 @@
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { marked } from "marked";
-import { categories } from "../categories.js";
 import { check } from "./check-css.mjs";
 
 /* Writes the skill's reference files from PRACTICES.md, so an entry is
@@ -25,22 +24,17 @@ const slugify = (text) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-/* One file per category, so a task reads two or three of them. An unnumbered
-   section of PRACTICES.md goes in by the slug of its heading. */
-const unnumbered = { foundations: ["left-out-on-purpose"] };
-const files = Object.fromEntries(
-  categories.map(({ title, entries }) => {
-    const file = slugify(title);
-    return [file, [...entries, ...(unnumbered[file] ?? [])]];
-  }),
-);
-
-/* Sections of PRACTICES.md that are about the list and not for its reader. */
+/* A `##` section of PRACTICES.md with no entries under it is about the list.
+   It goes into the file of a category, or is left out. */
+const appended = { "left-out-on-purpose": "foundations" };
 const skipped = ["next", "references"];
 
 const credit = /^(Borrowed from|Docs|Background|Source):/;
 const localPath = /^- Source:|~\/|\/Users\//m;
 
+/* A `##` section with `###` sections under it is a category, and each `###`
+   is an entry. Both are named by the slug of their heading, as the harness
+   fixtures are. */
 function readSections(source) {
   const sections = [];
   let line = 1;
@@ -49,21 +43,20 @@ function readSections(source) {
     token.line = line;
     line += token.raw.split("\n").length - 1;
 
+    const section = sections.at(-1);
     if (token.type === "heading" && token.depth === 2) {
-      const numbered = token.text.match(/^(\d+)\.\s+(.+)$/);
-      sections.push({
-        number: numbered ? Number(numbered[1]) : null,
-        slug: slugify(numbered ? numbered[2] : token.text),
-        tokens: [token],
-      });
-    } else sections.at(-1)?.tokens.push(token);
+      sections.push({ slug: slugify(token.text), tokens: [token], entries: [] });
+    } else if (token.type === "heading" && token.depth === 3 && section) {
+      section.entries.push({ slug: slugify(token.text), tokens: [token] });
+    } else (section?.entries.at(-1) ?? section)?.tokens.push(token);
   }
 
   return sections;
 }
 
 /* Drops "Why it works" with its list, and the credit lines. A list of rules
-   and the credits under it can lex as one list, so credits go item by item. */
+   and the credits under it can lex as one list, so credits go item by item.
+   A file has no category above its entries, so every heading is a `##`. */
 function trim(tokens) {
   const body = tokens.filter((token) => token.type !== "space");
   const why = body.findIndex((token) => token.type === "paragraph" && token.text === "Why it works:");
@@ -71,6 +64,7 @@ function trim(tokens) {
 
   return body
     .map((token) => {
+      if (token.type === "heading") return `## ${token.text}`;
       if (token.type !== "list") return token.raw.trim();
       const items = token.items.filter((item) => !credit.test(item.text));
       return items.map((item) => item.raw.trim()).join("\n");
@@ -80,43 +74,48 @@ function trim(tokens) {
 }
 
 const sections = readSections(await readFile(join(root, "PRACTICES.md"), "utf8"));
-const fileOf = new Map(Object.entries(files).flatMap(([file, slugs]) => slugs.map((slug) => [slug, file])));
+const categories = sections.filter((section) => section.entries.length);
+const about = sections.filter((section) => !section.entries.length);
 
-const unplaced = sections.filter((section) => !fileOf.has(section.slug) && !skipped.includes(section.slug));
-const missing = [...fileOf.keys()].filter((slug) => !sections.some((section) => section.slug === slug));
-if (unplaced.length || missing.length) {
-  for (const section of unplaced) console.error(`No category for "${section.slug}". Add it to categories.js.`);
-  for (const slug of missing) console.error(`"${slug}" is in categories.js and not in PRACTICES.md.`);
+const unplaced = about.filter((section) => !(section.slug in appended) && !skipped.includes(section.slug));
+if (unplaced.length) {
+  for (const section of unplaced) console.error(`"${section.slug}" has no entries. Add it to \`appended\` or \`skipped\`.`);
   process.exit(1);
 }
 
 /* An agent copies an entry's code as written, so the code has to follow the
    rules itself. A fence opens one line above its code. */
-const broken = sections.flatMap((section) =>
-  section.tokens
-    .filter((token) => token.type === "code" && token.lang === "css")
-    .flatMap((token) => check(token.text).map((violation) => `PRACTICES.md:${token.line + violation.line} ${violation.message}`)),
+const broken = categories.flatMap((category) =>
+  category.entries.flatMap((entry) =>
+    entry.tokens
+      .filter((token) => token.type === "code" && token.lang === "css")
+      .flatMap((token) => check(token.text).map((violation) => `PRACTICES.md:${token.line + violation.line} ${violation.message}`)),
+  ),
 );
 if (broken.length) {
   for (const violation of broken) console.error(violation);
   process.exit(1);
 }
 
-/* "Entry 31" means nothing to a reader holding one file, so a reference to
-   an entry in another file names that file. */
-const fileOfNumber = new Map(sections.map((section) => [section.number, fileOf.get(section.slug)]));
+/* An entry names another one with a link to its heading. A reader holding one
+   file cannot follow it, so the link becomes the title in quotes, with the
+   file when the entry is in another one. */
+const fileOf = new Map(categories.flatMap((category) => category.entries.map((entry) => [entry.slug, category.slug])));
 const locate = (text, file) =>
-  text.replace(/\bentry (\d+)\b/gi, (match, number) => {
-    const target = fileOfNumber.get(Number(number));
-    return target && target !== file ? `${match} (\`${target}.md\`)` : match;
+  text.replace(/\[([^\]]+)\]\(#([a-z0-9-]+)\)/g, (link, title, slug) => {
+    const target = fileOf.get(slug);
+    if (!target) throw new Error(`${link} in PRACTICES.md points at no entry.`);
+    return target === file ? `"${title}"` : `"${title}" (\`${target}.md\`)`;
   });
 
+/* One file per category, so a task reads two or three of them. */
 const output = new Map(
-  Object.entries(files).map(([file, slugs]) => {
-    const body = slugs.map((slug) => trim(sections.find((section) => section.slug === slug).tokens));
+  categories.map((category) => {
+    const extra = about.filter((section) => appended[section.slug] === category.slug);
+    const body = [...category.entries, ...extra].map((section) => trim(section.tokens));
     return [
-      `${file}.md`,
-      `<!-- Generated from PRACTICES.md by scripts/build-skill.js. Do not edit. -->\n\n${locate(body.join("\n\n"), file)}\n`,
+      `${category.slug}.md`,
+      `<!-- Generated from PRACTICES.md by scripts/build-skill.js. Do not edit. -->\n\n${locate(body.join("\n\n"), category.slug)}\n`,
     ];
   }),
 );

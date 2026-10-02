@@ -22,7 +22,7 @@ export function specimenPage(slug) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="${viewport}">
-<title>${entry.number}. ${entry.slug}</title>
+<title>${entry.slug}</title>
 <style>
 ${tokens}
 ${base}

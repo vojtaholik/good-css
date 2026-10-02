@@ -16,11 +16,11 @@ The dev server also serves the pages of `deploy/pages`, at `/about`, `/contact`,
 
 ## How it works
 
-`PRACTICES.md` is the only source. A numbered `##` section is an entry. Any other `##` section is shown as text at the end.
+`PRACTICES.md` is the only source. A `##` section with `###` sections under it is a category, and each `###` is an entry. Any other `##` section is about the list and is not shown.
 
 A specimen runs the entry's own code blocks, verbatim: the CSS, the HTML and the JS. Nothing is copied into the harness, so what you see is what the entry says. Each specimen is also a page of its own at `/specimen/<slug>`. The button at the end of a frame's bar opens it. Use that URL to test in another browser or on a touch device.
 
-The page lists the entries by category, in the order `categories.js` gives.
+The page lists the entries by category, in the order of the file. An entry's number is its place in its category. An entry names another one with a link to its heading, such as `[The reset](#the-reset)`, and each entry sits on the page under that same slug.
 
 ## Adding a specimen
 
@@ -52,13 +52,13 @@ An entry with no fixture shows a hatched box that names the file to add. Create 
 - Never restate the technique in a fixture. If the specimen needs a rule the entry lacks, the entry is missing it.
 - Write a fixture's own CSS the way the list says, as in the "In all CSS" rules of `skills/good-css/SKILL.md`: `inline` and `block` properties, colors in `oklch()` with `none` as the hue of a gray, each `:hover` inside `@media (hover: hover) and (pointer: fine)`, and `overflow: clip` unless something scrolls.
 
-The page in `harness.css` follows the list too, and starts with the reset of entry 6 as written. `demos/base.css` follows the same rules but holds none of the entries, so a specimen never works because of something its fixture brought.
+The page in `harness.css` follows the list too, and starts with the reset as the entry has it. `demos/base.css` follows the same rules but holds none of the entries, so a specimen never works because of something its fixture brought.
 
 Renaming an entry's title changes its slug. Rename the fixture to match.
 
 ## Files
 
-- `practices.js` reads the numbered entries of `PRACTICES.md`. Its other sections are about the list and are not shown.
+- `practices.js` reads the categories and entries of `PRACTICES.md`. Its other sections are about the list and are not shown.
 - `frame.js` builds a specimen page from an entry and its fixture.
 - `main.js`, `index.html`, `harness.css` are the page around the specimens.
 - `tokens.css` holds the fonts and colors, shared by the page and the specimens.

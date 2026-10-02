@@ -1,6 +1,6 @@
 <!-- Generated from PRACTICES.md by scripts/build-skill.js. Do not edit. -->
 
-## 9. Carousel on native scroll
+## Carousel on native scroll
 
 Use it for any horizontal row of cards. The carousel is a real scroll container, so swipe, trackpad, keyboard and momentum all work before any script loads.
 
@@ -60,7 +60,7 @@ Rules:
 - Match `scroll-padding-inline` to `padding-inline` so a snapped card lines up with the page content.
 - Chrome 135 can draw the arrows and dots in CSS with `::scroll-button()` and `::scroll-marker`. Firefox and Safari have neither, so use the script.
 
-## 43. Scroll area between a fixed header and footer
+## Scroll area between a fixed header and footer
 
 Use it for the body of a modal, a chat list, a drawer or a sidebar. The panel grows with its content up to a limit, then the middle scrolls and the header and footer stay put.
 
@@ -96,7 +96,7 @@ Rules:
 
 Support: `scrollbar-gutter` in Chrome 94, Firefox 97, Safari 18.2. `overscroll-behavior` in Chrome 63, Firefox 59, Safari 16. `dvh` in Chrome 108, Firefox 101, Safari 15.4.
 
-## 36. Styles that apply only when a scroller overflows
+## Styles that apply only when a scroller overflows
 
 Use it on any row that may or may not fit, such as tabs, a toolbar or a table wrapper. It fades the edges only when there is something to scroll to. It replaces a `ResizeObserver` that compares `scrollWidth` with `clientWidth`.
 
@@ -164,7 +164,7 @@ Rules:
 
 Support: `animation-timeline` in Chrome 115 and Safari 26. Firefox has it in Nightly only.
 
-## 24. Anchor targets that clear a sticky header
+## Anchor targets that clear a sticky header
 
 Use it on any page with in-page links and a fixed or sticky header.
 
@@ -183,7 +183,7 @@ Rules:
 
 Support: Chrome 69, Firefox 68, Safari 14.1.
 
-## 5. No rubber-band bounce on desktop
+## No rubber-band bounce on desktop
 
 Use it on app-like pages with fixed UI, such as a sidebar or a sticky header. On macOS a trackpad scroll stretches the whole page past its edge and drags the fixed UI along.
 
@@ -201,7 +201,7 @@ Rules:
 - Use the `-y` longhand. `overscroll-behavior-x: none` also turns off swipe to go back.
 - Give inner scroll containers, such as a sheet, a chat list or a sidebar, `overscroll-behavior: contain`. They keep their own bounce and stop the page behind them from moving. Never use a `touchmove` listener with `preventDefault()` for this.
 
-## 32. Content clear of the notch
+## Content clear of the notch
 
 Use it on fixed headers, bottom bars, toasts and sheets in anything that should feel like an app on a phone. Add `viewport-fit=cover` to the viewport meta tag, then pad those elements by the safe-area insets.
 

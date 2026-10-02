@@ -1,6 +1,6 @@
 <!-- Generated from PRACTICES.md by scripts/build-skill.js. Do not edit. -->
 
-## 22. Opt-in motion
+## Opt-in motion
 
 Use it for every transition or animation that moves or scales something.
 
@@ -22,7 +22,7 @@ Rules:
 
 Support: Chrome 74, Firefox 63, Safari 10.1.
 
-## 30. Motion tokens
+## Motion tokens
 
 Use them in every transition and animation. Two easing curves, defined once, and a rule for durations.
 
@@ -45,7 +45,7 @@ Rules:
 
 Support: every browser.
 
-## 37. Transition a custom property with `@property`
+## Transition a custom property with `@property`
 
 Use it when one state change should drive several values together, or when a script feeds a number such as pointer position or progress into CSS and the result should ease.
 
@@ -89,7 +89,7 @@ Rules:
 
 Support: Chrome 85, Firefox 128, Safari 16.4.
 
-## 40. Shadow change that fades and does not repaint
+## Shadow change that fades and does not repaint
 
 Use it on cards that lift on hover, most of all in a grid of many cards or with a large blur.
 
@@ -136,12 +136,12 @@ Use it on cards that lift on hover, most of all in a grid of many cards or with 
 Rules:
 
 - The card needs its own background. The pseudo-elements have none.
-- It uses both pseudo-elements of the card. Entry 27 (`interaction.md`) uses `::after` for the hit area and entry 38 (`interaction.md`) for the link, so do not combine them on one element.
+- It uses both pseudo-elements of the card. "Hit area larger than the visual" (`interaction.md`) uses `::after` for the hit area and "Whole card clickable from one link" (`interaction.md`) uses it for the link, so do not combine them on one element.
 - For a single small element, transition `box-shadow` directly. The saving is real but small per card.
 
 Support: every browser.
 
-## 25. Cross-document view transitions
+## Cross-document view transitions
 
 Use it on any multi-page site to crossfade between pages. It replaces a client-side router or a page-transition script.
 
@@ -156,7 +156,7 @@ Rules:
 
 Support: Chrome 126, Safari 18.2. Firefox navigates as normal.
 
-## 35. Indicator that slides to the active item
+## Indicator that slides to the active item
 
 Use it for the underline on a tab row or the bar beside a side nav. It replaces a script that measures the active item and writes a `transform` and a width.
 

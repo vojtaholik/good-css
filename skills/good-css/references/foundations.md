@@ -1,6 +1,6 @@
 <!-- Generated from PRACTICES.md by scripts/build-skill.js. Do not edit. -->
 
-## 6. The reset
+## The reset
 
 Start every new project with it. In an existing project add one rule at a time and look at the result, because `min-width: 0` and the font rules change how things already render.
 
@@ -51,7 +51,7 @@ Rules:
 
 - Load every weight and style the design uses. With `font-synthesis: none` a missing bold renders as regular.
 - With `min-width: 0` on everything, a sized image, icon or avatar in a flex row shrinks to make room for the text beside it. Give it `flex: none`.
-- The reset removes the tap highlight, so every pressable element needs its own `:active` state. Entry 31 (`interaction.md`) has it.
+- The reset removes the tap highlight, so every pressable element needs its own `:active` state. "Press feedback" (`interaction.md`) has it.
 - Never fix input zoom with `user-scalable=no` or `maximum-scale=1`. That takes zoom away from people who need it.
 - Keep `user-select: none` to controls. Never set it on `body` or on links, because people copy text.
 - Text the user types inherits `pretty`, in `textarea` and `contenteditable`. If lines shift while typing, set `text-wrap: stable` on that element.
@@ -60,7 +60,7 @@ Rules:
 
 Support: `text-wrap: pretty` in Chrome 117 and Safari 26, ignored by Firefox. `scrollbar-gutter` in Chrome 94, Firefox 97, Safari 18.2. `interpolate-size` in Chrome 129 only. The rest works everywhere.
 
-## 16. Logical properties
+## Logical properties
 
 Use them in place of every left, right, top and bottom, in spacing, borders, offsets and alignment.
 
@@ -86,7 +86,7 @@ Rules:
 
 Support: Chrome 87, Firefox 66, Safari 14.1.
 
-## 2. OKLCH color
+## OKLCH color
 
 Write colors in `oklch()` and derive every related color from a base with `color-mix(in oklch, …)`. Never hardcode a second hex or an `rgba()` for a hover, tint or transparent version.
 
@@ -102,7 +102,7 @@ Rules:
 
 - Write grays, white and black with `none` as the hue, as in `oklch(98% 0 none)`. A written hue of `0` is red, and it pulls every mix toward red. Half white `oklch(1 0 0)` and half a blue at hue 264 came out at hue 312 in Chrome and Safari. With `none`, or with the keyword `white`, it stayed at 264.
 
-## 8. One set of color tokens for light and dark
+## One set of color tokens for light and dark
 
 Use it on any site with a dark mode. Each token holds both values, so there is no second block of variables under a media query or a `.dark` class.
 
@@ -120,13 +120,13 @@ Use it on any site with a dark mode. Each token holds both values, so there is n
 Rules:
 
 - Switch themes by setting `color-scheme`. Never redefine the tokens.
-- The grays use `none` for the hue, so they can be mixed with a color later without drifting toward red. Entry 2 has the measurement.
+- The grays use `none` for the hue, so they can be mixed with a color later without drifting toward red. "OKLCH color" has the measurement.
 - `light-dark()` takes two colors. Anything else that differs by theme, such as an image, needs its own rule.
 - Add `<meta name="color-scheme" content="light dark">` so the browser paints the right background before the CSS loads.
 
 Support: Chrome 123, Firefox 120, Safari 17.5. Baseline since May 2024.
 
-## 7. Fluid sizes with `clamp()`
+## Fluid sizes with `clamp()`
 
 Use it for anything that should grow with the screen, starting with font sizes and section spacing. One declaration replaces a ladder of breakpoint overrides.
 
@@ -144,9 +144,9 @@ Rules:
 - Keep both bounds in `rem` so they follow the reader's font size.
 - For a font size, keep the maximum at or below 2.5 times the minimum. The `vw` part does not grow when the reader zooms, so fluid text grows less than the page. Past 2.5 times, 500% zoom cannot double the text at some widths, and that fails WCAG 1.4.4.
 - Put fluid values in tokens. Components use the token and never repeat the math.
-- For more than two or three sizes, derive a whole scale as entry 44 does.
+- For more than two or three sizes, derive a whole scale as "One fluid scale for type and space" does.
 
-## 44. One fluid scale for type and space
+## One fluid scale for type and space
 
 Use it when a design has more than two or three font sizes. Six numbers describe every size, and the browser derives the steps. It replaces a table of sizes per breakpoint, and it replaces a generator that someone has to find and run again.
 
@@ -193,9 +193,9 @@ Rules:
 - Write the inputs as plain numbers. With `20rem` and `77.5rem` the `--fluid` line divides a length by a length, and Firefox does not support that.
 - Change an input in the rule that declares the steps. A step takes its value where it is declared, so a ratio set on a descendant changes nothing below it.
 - Derive sizes below step 0 from step 0 and the narrow ratio, as `--step--1` does. With both ratios a small size shrinks as the screen grows.
-- Check the top step against the limit in entry 7. Step `n` passes when `(size-wide / size-narrow) × (ratio-wide / ratio-narrow)ⁿ` is 2.5 or less. The example gives 1.31 at step 4.
+- Check the top step against the limit in "Fluid sizes with `clamp()`". Step `n` passes when `(size-wide / size-narrow) × (ratio-wide / ratio-narrow)ⁿ` is 2.5 or less. The example gives 1.31 at step 4.
 - Write a pair only where a layout uses it, and never use one for a font size. A pair is steep on purpose and breaks that limit.
-- For a scale that follows the container, write `100cqi` in place of `100vw`. Entry 12 (`layout.md`) has the rules.
+- For a scale that follows the container, write `100cqi` in place of `100vw`. "Container queries with container units" (`layout.md`) has the rules.
 - Components use the tokens and never repeat the math.
 
 Support: Chrome 120, Firefox 118, Safari 15.4, set by `pow()`. Tested in Chrome 150 and real Safari 27 on 2026-10-01, where every step came out within 0.001px of the formula.
@@ -204,6 +204,6 @@ Support: Chrome 120, Firefox 118, Safari 15.4, set by `pow()`. Tested in Chrome 
 
 Decided on 2026-10-01. Do not add these back.
 
-- **The layout half of Travis Arnold's reset.** `* { grid-area: 1 / 1 / 1 / 1 }`, a 12-column grid on `body`, and `display: contents` on `div` and every sectioning element. It stacks everything in one cell and removes the box of every container, which breaks the content grid in entry 1 (`layout.md`) and any component that styles a `div`.
-- **`* { text-box: trim-both cap alphabetic }`** in the reset. It shrinks every text block. A one-line paragraph at 16px/1.5 went from 25px tall to 11px and a button from 40px to 27px. Entry 33 (`text-and-media.md`) is the scoped version, for labels only.
+- **The layout half of Travis Arnold's reset.** `* { grid-area: 1 / 1 / 1 / 1 }`, a 12-column grid on `body`, and `display: contents` on `div` and every sectioning element. It stacks everything in one cell and removes the box of every container, which breaks "Content grid with breakouts" (`layout.md`) and any component that styles a `div`.
+- **`* { text-box: trim-both cap alphabetic }`** in the reset. It shrinks every text block. A one-line paragraph at 16px/1.5 went from 25px tall to 11px and a button from 40px to 27px. "Label centered on its letters with `text-box`" (`text-and-media.md`) is the scoped version, for labels only.
 - **`text-rendering: optimizeLegibility`.** MDN recommends `auto` for body text.

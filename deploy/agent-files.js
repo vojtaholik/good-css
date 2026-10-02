@@ -13,7 +13,7 @@ last-updated: ${updated}
 `;
 
 const entryLine = (entry) =>
-  `- [${entry.number}. ${entry.title}](${entry.markdown}): ${entry.lede}` + (entry.specimen ? ` [Specimen](${entry.specimen})` : "");
+  `- [${entry.title}](${entry.markdown}): ${entry.lede}` + (entry.specimen ? ` [Specimen](${entry.specimen})` : "");
 
 /* The skill comes first under "How to use it". An agent that is about to
    write CSS needs a short file and two or three references, not the list.

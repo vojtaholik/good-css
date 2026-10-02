@@ -1,6 +1,6 @@
 <!-- Generated from PRACTICES.md by scripts/build-skill.js. Do not edit. -->
 
-## 23. Enter and exit transitions from `display: none`
+## Enter and exit transitions from `display: none`
 
 Use it for dialogs, popovers and anything else toggled with `display`. It replaces a script that adds classes and waits for `transitionend`.
 
@@ -59,7 +59,7 @@ Rules:
 
 Support: both directions in Chrome 117. In Safari 27 the entry animates and `<dialog>` and popovers close at once, tested in real Safari on 2026-10-01. An element toggled with a class animates both ways there. Firefox 129 animates the entry only.
 
-## 26. Popover anchored to its trigger
+## Popover anchored to its trigger
 
 Use it for dropdown menus and other popovers opened by a click. It replaces a positioning library or a script that reads `getBoundingClientRect()`.
 
@@ -91,7 +91,7 @@ Rules:
 
 Support: Chrome 133, Firefox 147, Safari 26.
 
-## 4. Accordion that animates its height
+## Accordion that animates its height
 
 Use it for FAQs and any other disclosure. `<details>` already gives you the toggle, keyboard support and find-in-page. These rules animate the open and the close with no JavaScript.
 
@@ -123,7 +123,7 @@ Rules:
 
 Support: `::details-content` in Chrome 131, Safari 18.4, Firefox 143. `interpolate-size` in Chrome 129 only.
 
-## 39. Reveal with `clip-path`
+## Reveal with `clip-path`
 
 Use it for dropdowns, menus and panels that open over the page and whose height is not known. It unrolls the panel without animating `height`, and it works in every browser.
 
@@ -150,7 +150,7 @@ Use it for dropdowns, menus and panels that open over the page and whose height 
 Rules:
 
 - The negative inset must be larger than the shadow's blur plus its offset.
-- Use it for panels that overlap the page. A closed panel in the normal flow leaves a gap, so an accordion uses entry 4.
+- Use it for panels that overlap the page. A closed panel in the normal flow leaves a gap, so an accordion uses "Accordion that animates its height".
 - Add `round` with a radius inside `inset()` only when the clip itself should have round corners. The element's own `border-radius` still applies.
 
 Support: every browser.

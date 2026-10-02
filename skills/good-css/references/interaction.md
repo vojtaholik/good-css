@@ -1,6 +1,6 @@
 <!-- Generated from PRACTICES.md by scripts/build-skill.js. Do not edit. -->
 
-## 20. One focus ring with `:focus-visible`
+## One focus ring with `:focus-visible`
 
 Use it as the focus style for every interactive element. Never write `outline: none`.
 
@@ -18,7 +18,7 @@ Rules:
 
 Support: Chrome 86, Firefox 85, Safari 15.4.
 
-## 21. Hover styles only where hover exists
+## Hover styles only where hover exists
 
 Use it on every `:hover` rule, so a tap on a touch screen does not leave the hover state stuck.
 
@@ -35,7 +35,7 @@ Rules:
 
 Support: Chrome 38, Firefox 64, Safari 9.
 
-## 31. Press feedback
+## Press feedback
 
 Use it on every button and anything else that can be pressed.
 
@@ -50,12 +50,12 @@ Use it on every button and anything else that can be pressed.
 Rules:
 
 - Keep the scale between 0.95 and 0.98.
-- The reset in entry 6 (`foundations.md`) removes the browser's tap highlight. Without this entry a tap gives no feedback at all.
+- "The reset" (`foundations.md`) removes the browser's tap highlight. Without this entry a tap gives no feedback at all.
 - When feedback needs a script, listen for `pointerdown`, not `click`.
 
 Support: every browser.
 
-## 27. Hit area larger than the visual
+## Hit area larger than the visual
 
 Use it on icon buttons, close buttons and any target that looks smaller than 44px.
 
@@ -76,7 +76,7 @@ Rules:
 
 Support: Chrome 87, Firefox 66, Safari 14.1.
 
-## 38. Whole card clickable from one link
+## Whole card clickable from one link
 
 Use it for cards, list rows and tiles where the whole area should navigate. It replaces an `<a>` wrapped around the card, which makes a screen reader read every word as the link text, and it replaces a click handler on a `div`.
 
@@ -113,13 +113,13 @@ Use it for cards, list rows and tiles where the whole area should navigate. It r
 Rules:
 
 - No element between the card and the link may be positioned. The overlay would size itself to that element.
-- The link's own ring is made transparent, never removed, as entry 20 requires. Write the full `2px solid transparent`. Safari ignores `outline-color` on its default ring.
+- The link's own ring is made transparent, never removed, as "One focus ring with `:focus-visible`" requires. Write the full `2px solid transparent`. Safari ignores `outline-color` on its default ring.
 - Text under the overlay cannot be selected. Accept it.
-- Put hover styles on `.card:hover`, inside the query from entry 21.
+- Put hover styles on `.card:hover`, inside the query from "Hover styles only where hover exists".
 
 Support: Chrome 105, Firefox 121, Safari 15.4.
 
-## 18. `:has()` for parent and page state
+## `:has()` for parent and page state
 
 Use it wherever a script adds a class to a parent because of what it contains or what state a child is in.
 
@@ -135,12 +135,12 @@ html:has(dialog:modal) { overflow: hidden; }
 Rules:
 
 - `:modal` matches `showModal()` only, so a non-modal dialog does not lock the page.
-- Keep `scrollbar-gutter: stable` with the scroll lock. Without it the page shifts sideways when the scrollbar disappears. Entry 6 (`foundations.md`) sets it in the reset.
+- Keep `scrollbar-gutter: stable` with the scroll lock. Without it the page shifts sideways when the scrollbar disappears. "The reset" (`foundations.md`) sets it.
 - `:has()` cannot be nested inside `:has()`.
 
 Support: Chrome 105, Firefox 121, Safari 15.4.
 
-## 19. Form feedback with `:user-invalid`
+## Form feedback with `:user-invalid`
 
 Use it for inline form validation, in place of blur listeners and a "touched" class.
 
@@ -160,7 +160,7 @@ Rules:
 
 Support: Chrome 119, Firefox 88, Safari 16.5.
 
-## 3. Textarea that grows with its content
+## Textarea that grows with its content
 
 Use it for any multi-line input, such as a chat composer or a comment box. `field-sizing: content` sizes the textarea to its text, so there is no auto-grow script and no hidden mirror element.
 

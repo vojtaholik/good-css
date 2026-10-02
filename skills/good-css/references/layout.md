@@ -1,6 +1,6 @@
 <!-- Generated from PRACTICES.md by scripts/build-skill.js. Do not edit. -->
 
-## 1. Content grid with breakouts
+## Content grid with breakouts
 
 Use it wherever you would reach for a centered max-width container. One grid on the section replaces the `section > .container` wrapper pair, and any child can be content width, wider, or edge to edge. Put it on `main` for a page of flowing content, or on each section. It suits CMS content well, because an editor widens a block with one class and no extra wrapper.
 
@@ -42,7 +42,7 @@ Rules:
 
 In other systems: the column template goes wherever the project defines reusable styles. Where child selectors are not available, as in StyleX or Tailwind without a custom variant, each child sets its own `grid-column` to `content`, `breakout` or `full-width`.
 
-## 11. Intrinsic grid
+## Intrinsic grid
 
 Use it for any set of equal cards or tiles. It replaces a column count per breakpoint.
 
@@ -60,7 +60,7 @@ Rules:
 
 Support: Chrome 79, Firefox 76, Safari 11.1.
 
-## 13. Subgrid rows shared across cards
+## Subgrid rows shared across cards
 
 Use it when cards in a row have parts that should line up, such as title, body and footer, whatever the length of their content.
 
@@ -86,7 +86,7 @@ Rules:
 
 Support: Chrome 117, Firefox 71, Safari 16.
 
-## 14. Sidebar that wraps on its own
+## Sidebar that wraps on its own
 
 Use it for any pair where one side has an ideal width and the other takes the rest, such as a media object, an input with a button, or a page with an aside.
 
@@ -118,7 +118,7 @@ Rules:
 
 Support: Chrome 84, Firefox 63, Safari 14.1.
 
-## 12. Container queries with container units
+## Container queries with container units
 
 Use it for any component that appears in slots of different widths. The component responds to the space it is given, where a media query only knows the viewport.
 
@@ -140,13 +140,13 @@ Rules:
 - The container must be an ancestor. An element cannot query itself.
 - A container cannot take its width from its content. Never put `container-type` on a shrink-to-fit element, or it collapses to zero.
 - With no container ancestor the query never matches. Kevin Powell makes `header`, `main` and `footer` containers in his reset, so most components need none of their own.
-- A container cannot also be a subgrid. Entry 13 and this one need separate elements.
+- A container cannot also be a subgrid. "Subgrid rows shared across cards" and this entry need separate elements.
 - Container units are different from queries. With no container above the element, `cqi` measures the viewport, so one token written with `cqi` serves the page and every slot.
 - Never register a fluid token that uses `cqi` with `@property`. A registered length computes once on `:root`, where there is no container, and every slot then gets the viewport's value.
 
 Support: Chrome 105, Firefox 110, Safari 16.
 
-## 10. Stack layers with grid
+## Stack layers with grid
 
 Use it whenever things sit on top of each other, such as text over an image, a badge on a card, or two icons that swap. It replaces `position: absolute` with its offsets, sizes and transforms.
 
@@ -163,7 +163,7 @@ Rules:
 - A layer later in the DOM paints on top. Use `z-index` only to change that order.
 - Keep `position: absolute` for a layer that must not affect the container's size.
 
-## 15. Safe alignment
+## Safe alignment
 
 Use it wherever content is centered or end-aligned in a container that can become too small, such as a tab row, a toolbar or a vertically centered modal.
 
@@ -178,11 +178,11 @@ Use it wherever content is centered or end-aligned in a container that can becom
 Rules:
 
 - It works on every `align-*`, `justify-*` and `place-*` property.
-- Auto margins on the item center it the same way and are safe in every browser that has flexbox. Entry 46 (`spacing-and-shape.md`) has them.
+- Auto margins on the item center it the same way and are safe in every browser that has flexbox. "Push one item away with an auto margin" (`spacing-and-shape.md`) has them.
 
 Support: Chrome 115, Firefox 63, Safari 17.6.
 
-## 17. `overflow: clip` over `hidden`
+## `overflow: clip` over `hidden`
 
 Use it whenever you want to cut off overflow and do not need scrolling.
 

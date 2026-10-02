@@ -1,6 +1,6 @@
 <!-- Generated from PRACTICES.md by scripts/build-skill.js. Do not edit. -->
 
-## 34. Section spacing that depends on its neighbors
+## Section spacing that depends on its neighbors
 
 Use it on any page built from reorderable sections, above all in a CMS where an editor decides the order. When two particular sections meet, the spacing between them changes on its own.
 
@@ -27,7 +27,7 @@ Rules:
 
 Support: `:has()` in Chrome 105, Firefox 121, Safari 15.4. The `+` combinator works everywhere.
 
-## 45. Space between siblings set by the parent
+## Space between siblings set by the parent
 
 Use it wherever elements sit one above another, such as form fields, the parts of a card or the blocks of an article. The parent sets one space between its children, and no child carries a block margin of its own.
 
@@ -55,7 +55,7 @@ Rules:
 
 Support: `gap` in flex layout in Chrome 84, Firefox 63, Safari 14.1. `:is()` in Chrome 88, Firefox 78, Safari 14.
 
-## 46. Push one item away with an auto margin
+## Push one item away with an auto margin
 
 Use it when one item in a flex row or column sits apart from the rest, such as the actions at the bottom of a card, the account link at the end of a toolbar, or a title centered in a full-height section between a header and a footer.
 
@@ -95,7 +95,7 @@ Rules:
 
 Support: auto margins work wherever flexbox does. `margin-block` in Chrome 87, Firefox 66, Safari 14.1. `svh` in Chrome 108, Firefox 101, Safari 15.4.
 
-## 29. Concentric nested radius
+## Concentric nested radius
 
 Use it wherever a rounded element sits inside a padded rounded parent, such as an image in a card or a button in an input.
 

@@ -22,28 +22,32 @@ const cacheDir = join(root, "node_modules/.vite-build");
    reads the file without them. */
 const source = (await readFile(join(root, "PRACTICES.md"), "utf8")).replace(/^- Source:.*\n/gm, "");
 
-/* The site publishes the opening of PRACTICES.md and its numbered sections.
-   Any other `##` section is about the list, for the people who keep it, and
-   is left out. practices.js splits the file at the same headings. */
+/* The site publishes the opening of PRACTICES.md and its categories. A `##`
+   section with `###` sections under it is a category, and each `###` is an
+   entry. Any other `##` section is about the list, for the people who keep
+   it, and is left out. practices.js reads the file by the same headings. */
 const opening = [];
-const entrySections = [];
+const sections = [];
 let section = opening;
 
 for (const token of marked.lexer(source)) {
-  if (token.type === "heading" && token.depth === 2) {
-    section = /^\d+\./.test(token.text) ? [] : null;
-    if (section) entrySections.push(section);
-  }
-
-  section?.push(token.raw);
+  if (token.type === "heading" && token.depth === 2) sections.push((section = []));
+  section.push(token);
 }
 
+const isEntry = (token) => token.type === "heading" && token.depth === 3;
+const raw = (tokens) => tokens.map((token) => token.raw).join("").trim() + "\n";
+const categorySections = sections.filter((tokens) => tokens.some(isEntry));
+
 /* Each entry as Markdown, in the order of the entries. */
-const entryMarkdown = entrySections.map((raw) => raw.join("").trim() + "\n");
+const entryMarkdown = categorySections.flatMap((tokens) => {
+  const starts = tokens.flatMap((token, index) => (isEntry(token) ? [index] : []));
+  return starts.map((start, index) => raw(tokens.slice(start, starts[index + 1])));
+});
 
 /* This is the only copy of the file the site is built from, so what it leaves
    out reaches nothing public. */
-const practicesMarkdown = [opening.join("").trim() + "\n", ...entryMarkdown].join("\n");
+const practicesMarkdown = [raw(opening), ...categorySections.map(raw)].join("\n");
 
 const publicPractices = () => ({
   name: "public-practices",
@@ -90,7 +94,6 @@ const firstSentence = (value) => value.match(/^.*?[.!?](?=\s|$)/)?.[0] ?? value;
 const today = new Date().toISOString().slice(0, 10);
 const description = text(practices.statement);
 const entries = practices.entries.map((entry) => ({
-  number: entry.number,
   slug: entry.slug,
   title: text(entry.title),
   lede: firstSentence(text(entry.lede)),
@@ -187,14 +190,20 @@ for (const frame of document.querySelectorAll("iframe")) frame.setAttribute("loa
 await write("index.html", `<!doctype html>\n${document.documentElement.outerHTML}\n`);
 
 /* An entry is published twice: the specimen that runs it, and beside it the
-   entry itself as Markdown. */
+   entry itself as Markdown. Alone in a file its heading is the title, and a
+   link to another entry's heading goes to that entry's file. */
+const alone = (markdown) =>
+  markdown
+    .replace(/^### /, "# ")
+    .replace(/\]\(#([a-z0-9-]+)\)/g, (link, slug) => (bySlug[slug] ? `](${bySlug[slug].markdown})` : link));
+
 for (const [index, entry] of entries.entries()) {
   if (entry.specimen) await write(`specimen/${entry.slug}/index.html`, specimenPage(entry.slug));
 
   await write(
     `specimen/${entry.slug}.md`,
-    frontmatter({ title: `${entry.number}. ${entry.title}`, description: entry.lede, canonical: entry.markdown, updated: today }) +
-      entryMarkdown[index],
+    frontmatter({ title: entry.title, description: entry.lede, canonical: entry.markdown, updated: today }) +
+      alone(entryMarkdown[index]),
   );
 }
 
