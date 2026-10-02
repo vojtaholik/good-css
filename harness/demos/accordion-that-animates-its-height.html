@@ -8,12 +8,12 @@
       padding: 1.5rem;
     }
 
-    details {
-      border-block-end: 1px solid var(--bp-line);
+    .box {
+      padding-inline: 1.5rem;
+    }
 
-      &:first-of-type {
-        border-block-start: 1px solid var(--bp-line);
-      }
+    details + details {
+      border-block-start: 1px solid var(--bp-line-faint);
     }
 
     summary {
@@ -35,8 +35,8 @@
 
       &::after {
         content: "+";
-        font-family: var(--bp-font-mono);
-        font-weight: 400;
+        font-family: var(--bp-font-label);
+        font-weight: 500;
       }
 
       [open] > &::after {
@@ -52,6 +52,7 @@
   }
 </style>
 
+<div class="box">
 <details name="faq" open>
   <summary>What animates?</summary>
   <div>
@@ -73,3 +74,4 @@
     <p>In Safari and Firefox this opens and closes at once, with no animation. That is the intended result there.</p>
   </div>
 </details>
+</div>

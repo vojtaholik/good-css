@@ -4,6 +4,11 @@
 
 <style>
   @layer demo {
+    /* A whole page, so it covers the stage. */
+    :root {
+      background: var(--bp-panel);
+    }
+
     /* As tall as the entry's scroll-padding-block-start. */
     header {
       position: sticky;
@@ -13,7 +18,7 @@
       gap: 1.5rem;
       height: 5rem;
       padding-inline: 1.5rem;
-      border-block-end: 1px solid var(--bp-line);
+      border-block-end: 1px solid var(--bp-line-faint);
       background: var(--bp-paper);
     }
 
@@ -32,7 +37,7 @@
       font-size: 2.5rem;
     }
 
-    .hatch {
+    .placeholder {
       height: 24rem;
     }
   }
@@ -46,15 +51,15 @@
 
 <section id="one">
   <h2>Section one</h2>
-  <div class="hatch"></div>
+  <div class="placeholder"></div>
 </section>
 
 <section id="two">
   <h2>Section two</h2>
-  <div class="hatch"></div>
+  <div class="placeholder"></div>
 </section>
 
 <section id="three">
   <h2>Section three</h2>
-  <div class="hatch"></div>
+  <div class="placeholder"></div>
 </section>

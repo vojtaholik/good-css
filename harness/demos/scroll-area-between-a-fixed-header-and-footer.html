@@ -21,7 +21,8 @@
     .panel {
       flex: 1 1 16rem;
       max-inline-size: 22rem;
-      border: 1px solid var(--bp-line);
+      border: 1px solid var(--bp-line-faint);
+      border-radius: 10px;
       background: var(--bp-panel);
     }
 
@@ -31,11 +32,11 @@
     }
 
     .panel header {
-      border-block-end: 1px solid var(--bp-line);
+      border-block-end: 1px solid var(--bp-line-faint);
     }
 
     .panel footer {
-      border-block-start: 1px solid var(--bp-line);
+      border-block-start: 1px solid var(--bp-line-faint);
     }
 
     .panel-body {
@@ -100,7 +101,7 @@
   </section>
 </div>
 
-<p class="after">The page goes on below the panels. At the end of a list, scrolling stays in the list and this text does not move.</p>
+<p class="after label">The page goes on below the panels. At the end of a list, scrolling stays in the list and this text does not move.</p>
 
 <script>
   const toggle = document.querySelector("button[aria-pressed]");

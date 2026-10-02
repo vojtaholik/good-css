@@ -7,21 +7,24 @@
     body {
       display: grid;
       align-content: start;
-      gap: 2.5rem;
+      gap: 1.5rem;
       padding: 1.5rem;
+    }
+
+    .box {
+      padding-inline: 0.25rem;
     }
 
     .tabs ul {
       gap: 0.5rem;
       margin: 0;
       padding: 0;
-      border-block-end: 1px solid var(--bp-line-faint);
       list-style: none;
     }
 
     .tabs a {
       display: block;
-      padding: 0.75rem 1rem;
+      padding: 0.75rem;
       color: var(--bp-ink-soft);
       text-decoration: none;
     }
@@ -35,8 +38,12 @@
 </style>
 
 <!-- The entry's markup, twice, to show that two rows do not share an anchor. -->
+<div class="box">
 <!-- html -->
+</div>
+<div class="box">
 <!-- html -->
+</div>
 
 <script>
   for (const link of document.querySelectorAll(".tabs a")) {

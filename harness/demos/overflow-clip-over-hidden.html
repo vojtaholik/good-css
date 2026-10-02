@@ -4,6 +4,11 @@
 
 <style>
   @layer demo {
+    /* A whole page, so it covers the stage. */
+    :root {
+      background: var(--bp-panel);
+    }
+
     .hero {
       display: grid;
       align-content: start;
@@ -18,8 +23,9 @@
       z-index: 1;
       justify-self: start;
       padding: 0.25rem 0.5rem;
+      border-radius: 5px;
       background: var(--bp-ink);
-      color: var(--bp-paper);
+      color: var(--bp-panel);
     }
 
     .too-wide {
@@ -36,6 +42,6 @@
 <section class="hero">
   <p class="sticky label">position: sticky inside .hero</p>
   <h1>Hero</h1>
-  <div class="hatch too-wide"></div>
-  <p>The hatched block is wider than the frame. Scroll down.</p>
+  <div class="placeholder too-wide"></div>
+  <p>The gray block is wider than the frame. Scroll down.</p>
 </section>

@@ -18,7 +18,8 @@
       gap: 0.75rem;
       width: min(100%, 24rem);
       padding: 1.5rem;
-      border: 1px solid var(--bp-line);
+      border: 1px solid var(--bp-line-faint);
+      border-radius: 10px;
       background: var(--bp-panel);
     }
 
@@ -40,13 +41,16 @@
 
 <!-- html -->
 
-<p class="label">link followed <output data-count="a"></output> button clicked <output data-count="button"></output></p>
+<div class="readouts">
+  <p class="label">link followed <output data-count="a"></output></p>
+  <p class="label">button clicked <output data-count="button"></output></p>
+</div>
 
 <script>
   /* The link is stopped from leaving the page, and each control counts its clicks. */
   for (const output of document.querySelectorAll("[data-count]")) {
     let count = 0;
-    const show = () => (output.textContent = `[ ${count} ]`);
+    const show = () => (output.textContent = count);
 
     document.querySelector(`.card ${output.dataset.count}`).addEventListener("click", (event) => {
       event.preventDefault();

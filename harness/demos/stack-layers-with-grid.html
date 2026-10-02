@@ -29,8 +29,9 @@
     .badge {
       margin: 0.75rem;
       padding: 0.125rem 0.5rem;
+      border-radius: 5px;
       background: var(--bp-ink);
-      color: var(--bp-paper);
+      color: var(--bp-panel);
     }
 
     .copy {
@@ -43,7 +44,7 @@
 <section>
   <p class="label">The image layer sets the size</p>
   <div class="stack">
-    <div class="hatch image"></div>
+    <div class="placeholder image"></div>
     <h2 class="title">Title</h2>
     <span class="badge label">Badge</span>
   </div>
@@ -52,8 +53,8 @@
 <section>
   <p class="label">The text layer sets the size</p>
   <div class="stack">
-    <div class="hatch"></div>
-    <p class="copy">No layer here has a height of its own. The text is the largest, so the stack is as tall as the text, and the hatched layer behind stretches to fill it.</p>
+    <div class="placeholder"></div>
+    <p class="copy">No layer here has a height of its own. The text is the largest, so the stack is as tall as the text, and the gray layer behind stretches to fill it.</p>
     <span class="badge label">Badge</span>
   </div>
 </section>

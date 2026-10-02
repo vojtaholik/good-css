@@ -22,6 +22,16 @@
       font-size: 2rem;
     }
 
+    .pad {
+      padding: 1rem;
+    }
+
+    /* Paper Mono, which has no italic. */
+    .mono {
+      font-family: var(--bp-font-mono);
+      font-size: 0.8125rem;
+    }
+
     .columns {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -54,20 +64,20 @@
 
 <section>
   <p class="label">text-wrap: balance</p>
-  <h2>A heading set on two lines of about the same length</h2>
+  <div class="box pad"><h2>A heading set on two lines of about the same length</h2></div>
 </section>
 
 <section>
   <p class="label">text-wrap: pretty</p>
-  <p>The browser spends more effort on where each line of this paragraph breaks, so that the last line never ends up holding a single short word.</p>
+  <div class="box pad"><p>The browser spends more effort on where each line of this paragraph breaks, so that the last line never ends up holding a single short word.</p></div>
 </section>
 
 <section>
   <p class="label">font-synthesis: none</p>
-  <p class="label">This font has no italic. <i>Marked up as italic, this stays upright</i>, because the browser may not fake one.</p>
+  <div class="box pad"><p class="mono">This font has no italic. <i>Marked up as italic, this stays upright</i>, because the browser may not fake one.</p></div>
 </section>
 
 <section class="wide">
   <p class="label">max-width: 100% on an svg 1600px wide</p>
-  <svg class="hatch" width="1600" height="240" viewBox="0 0 1600 240" role="img" aria-label="Wide placeholder"></svg>
+  <svg class="placeholder" width="1600" height="240" viewBox="0 0 1600 240" role="img" aria-label="Wide placeholder"></svg>
 </section>

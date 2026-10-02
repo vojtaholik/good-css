@@ -1,5 +1,5 @@
 <template data-specimen data-height="700">
-  Move the sections with the arrows. Where a named pair meets, the hatched padding between the two shrinks and the readouts change: logos before features, features before cta, logos after hero, faq after features. Logos gets a line on top only straight after hero. Every other edge keeps 96px.
+  Move the sections with the arrows. Where a named pair meets, the gray padding between the two shrinks and the readouts change: logos before features, features before cta, logos after hero, faq after features. Logos gets a line on top only straight after hero. Every other edge keeps 96px.
 </template>
 
 <style>
@@ -30,20 +30,19 @@
        The readouts give the real padding. */
     main {
       zoom: 0.5;
-      border: 2px solid var(--bp-line);
+      border: 2px solid var(--bp-line-faint);
+      border-radius: 20px;
+      overflow: clip;
     }
 
-    /* The hatch is a section's padding. The solid box is its content. */
+    /* The gray is a section's padding. The white box is its content. */
     section {
-      --content: color-mix(in oklch, var(--bp-ink) 35%, var(--bp-paper));
-
       padding-inline: 3rem;
-      outline: 2px dashed var(--bp-line-faint);
+      outline: 2px dashed var(--bp-line);
       outline-offset: -1px;
       background:
-        linear-gradient(var(--content) 0 0) content-box,
-        var(--bp-hatch),
-        var(--bp-panel);
+        linear-gradient(var(--bp-panel) 0 0) content-box,
+        var(--bp-fill);
 
       & > div {
         display: flex;
@@ -51,8 +50,17 @@
         justify-content: space-between;
         gap: 0.5rem 2rem;
         padding: 1rem 1.5rem;
-        font-family: var(--bp-font-mono);
-        font-size: 1.625rem;
+        font-family: var(--bp-font-label);
+        font-size: 1.5rem;
+        font-weight: 500;
+      }
+
+      /* The readout is part of the row here, at the row's own size. */
+      & output {
+        padding: 0;
+        border: 0;
+        font: inherit;
+        color: var(--bp-ink-soft);
       }
     }
   }
@@ -80,7 +88,7 @@
       const { paddingBlockStart, paddingBlockEnd } = getComputedStyle(section);
       const [earlier, later] = chips.get(section).querySelectorAll("button");
 
-      section.querySelector("output").textContent = `padding-block [ ${paddingBlockStart} ${paddingBlockEnd} ]`;
+      section.querySelector("output").textContent = `padding-block ${paddingBlockStart} ${paddingBlockEnd}`;
       earlier.disabled = !section.previousElementSibling;
       later.disabled = !section.nextElementSibling;
     }
@@ -94,7 +102,7 @@
 
     chip.innerHTML = `
       <button aria-label="Move ${name} earlier">↑</button>
-      <code>.${name}</code>
+      <span class="label">.${name}</span>
       <button aria-label="Move ${name} later">↓</button>`;
 
     const [earlier, later] = chip.querySelectorAll("button");

@@ -17,29 +17,31 @@
       gap: 0.5rem;
     }
 
+    /* Both shapes have a line round them, so the two curves can be compared. */
     .card {
-      border: 1px solid var(--bp-ink);
+      border: 1px solid var(--bp-line);
+      background: var(--bp-panel);
     }
 
     .card > * {
       height: 9rem;
-      border-color: var(--bp-ink);
+      border: 1px solid var(--bp-line);
     }
   }
 </style>
 
 <section>
   <p class="label">--pad: 0.5rem, as in the entry</p>
-  <div class="card"><div class="hatch"></div></div>
+  <div class="card"><div class="placeholder"></div></div>
 </section>
 
 <!-- The padding is set inline. The outer radius follows it. -->
 <section>
   <p class="label">--pad: 1.5rem</p>
-  <div class="card" style="--pad: 1.5rem"><div class="hatch"></div></div>
+  <div class="card" style="--pad: 1.5rem"><div class="placeholder"></div></div>
 </section>
 
 <section>
   <p class="label">--pad: 3rem</p>
-  <div class="card" style="--pad: 3rem"><div class="hatch"></div></div>
+  <div class="card" style="--pad: 3rem"><div class="placeholder"></div></div>
 </section>

@@ -6,7 +6,7 @@
   @layer demo {
     /* The entry names this token and leaves its value to the project. */
     :root {
-      --surface-raised: color-mix(in oklch, var(--bp-ink) 30%, transparent);
+      --surface-raised: oklch(0.95 0.07 100);
     }
 
     body {
@@ -40,8 +40,12 @@
 
     .pair {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+      gap: 0.75rem;
+
+      & > * {
+        padding: 1rem;
+      }
     }
 
     h2 {
@@ -60,31 +64,14 @@
       align-items: center;
       gap: 0.75rem;
       padding: 1rem;
-      border: 1px solid var(--bp-line);
-    }
-
-    input {
-      padding: 0.5rem 0.75rem;
-      border: 1px solid var(--bp-line);
-      background: none;
-      font: inherit;
-      color: inherit;
     }
 
     dialog {
       max-width: 20rem;
-      padding: 1.5rem;
-      border: 1px solid var(--bp-ink);
-      background: var(--bp-paper);
-      color: var(--bp-ink);
 
       & p {
         margin-block-end: 1rem;
       }
-    }
-
-    ::backdrop {
-      background: color-mix(in oklch, oklch(0 0 none) 45%, transparent);
     }
   }
 </style>
@@ -94,7 +81,7 @@
   <div class="articles">
     <article class="box">No image</article>
     <article class="box">
-      <img class="hatch" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 1'/%3E">
+      <img class="placeholder" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 1'/%3E">
       Has an image, spans two
     </article>
     <article class="box">No image</article>
@@ -104,11 +91,11 @@
 <section>
   <p class="label">h2:has(+ p)</p>
   <div class="pair">
-    <div>
+    <div class="box">
       <h2>A paragraph follows</h2>
       <p>So the heading has no margin under it.</p>
     </div>
-    <div>
+    <div class="box">
       <h2>A list follows</h2>
       <ul>
         <li>So the heading keeps its margin.</li>
@@ -119,17 +106,16 @@
 
 <section>
   <p class="label">form:has(:focus-visible)</p>
-  <form>
+  <form class="box">
     <label for="name">Focus the field</label>
     <input id="name" type="text">
   </form>
 </section>
 
 <section>
-  <p class="label">html:has(dialog:modal)</p>
+  <p class="label">html:has(dialog:modal), while it is open this page does not scroll</p>
   <p><button commandfor="modal" command="show-modal">Open the dialog</button></p>
-  <p>While it is open, this page does not scroll.</p>
-  <div class="hatch" style="height: 30rem"></div>
+  <div class="placeholder" style="height: 30rem"></div>
 </section>
 
 <dialog id="modal">

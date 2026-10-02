@@ -15,8 +15,6 @@
       display: grid;
       gap: 1.25rem;
       padding: 1.25rem;
-      background: oklch(1 0 none);
-      color: oklch(0.25 0 none);
     }
 
     .swatches {
@@ -32,6 +30,7 @@
       &::before {
         content: "";
         height: 4.5rem;
+        border-radius: 5px;
         background: var(--swatch);
       }
     }
@@ -60,6 +59,8 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 1rem;
+      padding-block-start: 1.25rem;
+      border-block-start: 1px solid var(--bp-line-faint);
     }
 
     input[type="range"] {
@@ -70,20 +71,20 @@
   }
 </style>
 
-<div class="card">
+<div class="box card">
   <div class="swatches">
     <div class="swatch" style="--swatch: var(--primary)"><code>--primary</code></div>
     <div class="swatch" style="--swatch: var(--primary-hover)"><code>--primary-hover</code></div>
     <div class="swatch" style="--swatch: var(--primary-subtle)"><code>--primary-subtle</code></div>
   </div>
   <button class="cta">Hover me</button>
-</div>
 
-<label class="hue">
-  <span>Hue of <code>--primary</code></span>
-  <input type="range" min="0" max="360">
-  <output class="label"></output>
-</label>
+  <label class="hue">
+    <span>Hue of <code>--primary</code></span>
+    <input type="range" min="0" max="360">
+    <output></output>
+  </label>
+</div>
 
 <script>
   /* Only the hue changes. Lightness and chroma stay the entry's own. */
@@ -92,7 +93,7 @@
   const hue = document.querySelector("input");
   const output = document.querySelector("output");
 
-  const show = () => (output.textContent = `[ ${hue.value} ]`);
+  const show = () => (output.textContent = hue.value);
 
   hue.value = base.match(/([\d.]+)\)$/)?.[1] ?? 0;
   show();

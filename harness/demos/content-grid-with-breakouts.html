@@ -14,9 +14,10 @@
       padding: 1rem;
     }
 
+    /* The band runs edge to edge, so it has no corners. */
     .full-width {
-      border-inline: 0;
       padding-inline: 0;
+      border-radius: 0;
     }
   }
 </style>
@@ -25,7 +26,7 @@
 <main class="content-grid" style="--gutter: 1rem; --content: 26rem; --breakout: 40rem">
   <p class="box"><code>content</code>, the default for every child</p>
   <p class="box breakout"><code>.breakout</code></p>
-  <div class="hatch full-width">
+  <div class="placeholder full-width">
     <p class="box"><code>.full-width</code> reaches both edges, and its child sits on the content column</p>
   </div>
   <p class="box"><code>content</code></p>

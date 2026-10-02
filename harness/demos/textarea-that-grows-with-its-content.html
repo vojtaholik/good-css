@@ -21,10 +21,6 @@
       display: block;
       width: 100%;
       padding: 0.75rem;
-      border: 1px solid var(--bp-line);
-      background: var(--bp-panel);
-      font: inherit;
-      color: inherit;
 
       &::placeholder {
         color: var(--bp-ink-soft);
@@ -34,6 +30,7 @@
     /* The wrapper carries the border and background. Its textarea is bare. */
     .field {
       border: 1px solid var(--bp-line);
+      border-radius: 5px;
       background: var(--bp-panel);
 
       & textarea {
@@ -46,12 +43,12 @@
 </style>
 
 <section>
-  <p>Textarea alone. The height snaps.</p>
+  <p class="label">Textarea alone. The height snaps.</p>
   <textarea aria-label="Textarea alone" placeholder="Type a few lines"></textarea>
 </section>
 
 <section>
-  <p>Inside <code>.field</code>. The height animates.</p>
+  <p class="label">Inside .field. The height animates.</p>
   <!-- html -->
 </section>
 

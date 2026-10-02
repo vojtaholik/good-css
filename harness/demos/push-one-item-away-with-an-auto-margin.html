@@ -4,13 +4,18 @@
 
 <style>
   @layer demo {
+    /* A whole page, so it covers the stage. */
+    :root {
+      background: var(--bp-panel);
+    }
+
     .hero {
       padding: 1.5rem;
     }
 
     .toolbar {
       padding-block-end: 1rem;
-      border-block-end: 1px solid var(--bp-line);
+      border-block-end: 1px solid var(--bp-line-faint);
 
       & a {
         color: inherit;
@@ -26,6 +31,7 @@
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
       gap: 1.5rem;
       padding: 1.5rem;
+      background: var(--bp-paper);
     }
 
     .card {

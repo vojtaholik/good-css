@@ -5,6 +5,10 @@
 <style>
   @layer demo {
     body {
+      padding: 1.5rem;
+    }
+
+    .row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -30,18 +34,12 @@
       font-size: 2rem;
       color: oklch(0.5 0.17 350);
     }
-
-    input {
-      padding: 0.5rem 0.75rem;
-      border: 1px solid var(--bp-line);
-      background: none;
-      font: inherit;
-      color: inherit;
-    }
   }
 </style>
 
+<div class="box row">
 <a href="#">A link</a>
 <button class="mint">A button</button>
 <button class="large">A large button</button>
 <input type="text" value="A text input" aria-label="A text input">
+</div>

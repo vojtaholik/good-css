@@ -6,7 +6,7 @@
   @layer demo {
     /* The entry names this token and leaves its value to the project. */
     :root {
-      --primary-hover: color-mix(in oklch, var(--bp-ink) 65%, var(--bp-paper));
+      --primary-hover: color-mix(in oklch, var(--bp-ink) 65%, var(--bp-panel));
     }
 
     body {
@@ -21,7 +21,7 @@
       border: 0;
       background: var(--bp-ink);
       font-size: 1rem;
-      color: var(--bp-paper);
+      color: var(--bp-panel);
     }
   }
 </style>
@@ -33,7 +33,7 @@
   /* The query is read from the entry's own rule, so the readout cannot drift from it. */
   const [rule] = document.querySelector("style[data-source]").sheet.cssRules;
   const query = matchMedia(rule.conditionText);
-  const show = () => (document.querySelector("output").textContent = `[ ${query.matches ? "matches" : "does not match"} ]`);
+  const show = () => (document.querySelector("output").textContent = query.matches ? "matches" : "does not match");
 
   document.querySelector("[data-query]").textContent = rule.conditionText;
   query.addEventListener("change", show);

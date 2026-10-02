@@ -14,7 +14,13 @@
 
     section {
       display: grid;
+      gap: 0.5rem;
+    }
+
+    .box {
+      display: grid;
       gap: 1rem;
+      padding: 1rem 1.25rem 1.25rem;
     }
 
     table {
@@ -42,22 +48,26 @@
 
 <section>
   <p class="label">td and time</p>
-  <table>
-    <tr><td>1,111.11</td></tr>
-    <tr><td>9,876.54</td></tr>
-    <tr><td>4,040.07</td></tr>
-  </table>
-  <p class="timer"><time data-timer></time> s</p>
+  <div class="box">
+    <table>
+      <tr><td>1,111.11</td></tr>
+      <tr><td>9,876.54</td></tr>
+      <tr><td>4,040.07</td></tr>
+    </table>
+    <p class="timer"><time data-timer></time> s</p>
+  </div>
 </section>
 
 <section>
   <p class="label">The same numbers, left alone</p>
-  <div>
-    <div class="row">1,111.11</div>
-    <div class="row">9,876.54</div>
-    <div class="row">4,040.07</div>
+  <div class="box">
+    <div>
+      <div class="row">1,111.11</div>
+      <div class="row">9,876.54</div>
+      <div class="row">4,040.07</div>
+    </div>
+    <p class="timer"><span data-timer></span> s</p>
   </div>
-  <p class="timer"><span data-timer></span> s</p>
 </section>
 
 <script>

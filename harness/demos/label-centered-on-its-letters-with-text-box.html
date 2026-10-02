@@ -1,5 +1,5 @@
 <template data-specimen data-height="460">
-  In the first button the solid box ends at the top of the capitals and at the baseline, so the hatched padding is even all round and the descenders hang into it. The second has spare room above the capitals and under the baseline. The third is a flex container and is not trimmed. The fourth is a flex button with an icon, and its label is trimmed through the span. At normal size they are 35px, 48px, 48px and 40px tall.
+  In the first button the gray box ends at the top of the capitals and at the baseline, so the white padding is even all round and the descenders hang into it. The second has spare room above the capitals and under the baseline. The third is a flex container and is not trimmed. The fourth is a flex button with an icon, and its label is trimmed through the span. At normal size they are 35px, 48px, 48px and 40px tall.
 </template>
 
 <style>
@@ -25,16 +25,20 @@
       margin: 0;
     }
 
-    /* The hatch is the button's padding. The solid box is the text's own box. */
+    /* The white is the button's padding. The gray box is the text's own box.
+       The edge is a shadow, so it adds nothing to the height. */
     .button,
     .button-with-icon {
-      --text-box: color-mix(in oklch, var(--bp-ink) 35%, var(--bp-paper));
+      --text-box: var(--bp-fill-strong);
 
       min-width: 0;
       min-height: 0;
       border: 0;
-      background: var(--bp-hatch), var(--bp-panel);
+      border-radius: 0;
+      background: var(--bp-panel);
+      box-shadow: 0 0 0 1px var(--bp-line);
       font-size: 1rem;
+      font-weight: 400;
       line-height: 1.5;
       color: var(--bp-ink);
     }
@@ -42,7 +46,6 @@
     .button {
       background:
         linear-gradient(var(--text-box) 0 0) content-box,
-        var(--bp-hatch),
         var(--bp-panel);
     }
 
@@ -93,7 +96,7 @@
   const measure = () => {
     for (const figure of document.querySelectorAll("figure")) {
       const { height } = figure.querySelector("button").getBoundingClientRect();
-      figure.querySelector("output").textContent = `[ ${Math.round(height * 10) / 10}px ]`;
+      figure.querySelector("output").textContent = `${Math.round(height * 10) / 10}px`;
     }
   };
 

@@ -49,7 +49,7 @@
   const output = document.querySelector("output");
 
   const read = () => {
-    output.textContent = `[ ${Number(getComputedStyle(card).getPropertyValue("--progress")).toFixed(2)} ]`;
+    output.textContent = Number(getComputedStyle(card).getPropertyValue("--progress")).toFixed(2);
     requestAnimationFrame(read);
   };
 

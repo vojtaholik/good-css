@@ -4,6 +4,11 @@
 
 <style>
   @layer demo {
+    /* A whole page, so it covers the stage. */
+    :root {
+      background: var(--bp-panel);
+    }
+
     body {
       display: grid;
       align-content: start;
@@ -17,7 +22,7 @@
       justify-content: space-between;
       gap: 1rem;
       padding-block-end: 1rem;
-      border-block-end: 1px solid var(--bp-line);
+      border-block-end: 1px solid var(--bp-line-faint);
     }
 
     a {
@@ -36,7 +41,7 @@
 
     .b.page {
       background: var(--bp-ink);
-      color: var(--bp-paper);
+      color: var(--bp-panel);
     }
 
     [data-page="a"] .b,
@@ -52,10 +57,10 @@
   <a class="b" href="?page=a">Go to page A</a>
 </header>
 
-<div class="hatch page a"><h1>Page A</h1></div>
-<div class="page b"><h1>Page B</h1></div>
+<div class="placeholder page a"><h1>Page A</h1></div>
+<div class="placeholder page b"><h1>Page B</h1></div>
 
-<p class="label">This page arrived with a view transition <output>[ no ]</output></p>
+<p class="label">This page arrived with a view transition <output>no</output></p>
 
 <script>
   /* A view transition needs two documents. Both are this specimen, and the
@@ -63,6 +68,6 @@
   document.documentElement.dataset.page = new URLSearchParams(location.search).get("page") ?? "a";
 
   addEventListener("pagereveal", (event) => {
-    if (event.viewTransition) document.querySelector("output").textContent = "[ yes ]";
+    if (event.viewTransition) document.querySelector("output").textContent = "yes";
   });
 </script>

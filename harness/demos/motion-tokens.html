@@ -32,6 +32,7 @@
       grid-template-columns: auto 1fr;
       gap: 0.75rem 1rem;
       justify-self: stretch;
+      padding: 1rem 1.25rem;
     }
 
     .lane {
@@ -50,6 +51,7 @@
       display: block;
       width: 1rem;
       height: 1rem;
+      border-radius: 3px;
       background: var(--bp-ink);
     }
 
@@ -73,7 +75,7 @@
 
 <section>
   <button data-race>Run the curves</button>
-  <div class="lanes">
+  <div class="box lanes">
     <div class="lane" style="--ease: var(--ease-out)"><code>--ease-out</code><div class="track"><i></i></div></div>
     <div class="lane" style="--ease: ease-out"><code>ease-out</code><div class="track"><i></i></div></div>
     <div class="lane" style="--ease: var(--ease-in-out)"><code>--ease-in-out</code><div class="track"><i></i></div></div>

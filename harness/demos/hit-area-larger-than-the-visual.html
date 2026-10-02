@@ -9,7 +9,7 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 3rem;
-      padding: 2.5rem 1.5rem;
+      padding: 2.5rem 2.25rem;
     }
 
     div {
@@ -36,19 +36,19 @@
 
     /* Draws the hit area. The entry leaves it invisible. */
     .icon-button::after {
-      outline: 1px dashed var(--bp-ink);
+      outline: 1px dashed var(--bp-ink-soft);
     }
   }
 </style>
 
 <div>
   <button class="icon-button small" aria-label="Small button">×</button>
-  <p class="label">24px button, clicks <output>[ 0 ]</output></p>
+  <p class="label">24px button, clicks <output>0</output></p>
 </div>
 
 <div>
   <button class="icon-button large" aria-label="Large button">×</button>
-  <p class="label">64px button, clicks <output>[ 0 ]</output></p>
+  <p class="label">64px button, clicks <output>0</output></p>
 </div>
 
 <script>
@@ -56,6 +56,6 @@
     const output = button.parentElement.querySelector("output");
     let clicks = 0;
 
-    button.addEventListener("click", () => (output.textContent = `[ ${++clicks} ]`));
+    button.addEventListener("click", () => (output.textContent = ++clicks));
   }
 </script>

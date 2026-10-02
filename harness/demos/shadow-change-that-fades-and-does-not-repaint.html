@@ -5,24 +5,21 @@
 <style>
   @layer demo {
     body {
-      padding: 1.5rem;
+      padding: 2rem;
     }
 
-    /* The entry's shadows are dark and faint, made for a light page, so the
-       cards lie on a light sheet. */
-    .sheet {
+    /* The entry's shadows are dark and faint, made for a light page. The
+       stage is one, so the cards lie on it with no line round them. */
+    .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
       gap: 1.5rem;
-      padding: 2rem;
-      background: oklch(0.96 0.01 264);
-      color: oklch(0.25 0.03 264);
     }
 
     .card {
       padding: 1.25rem;
-      border-radius: 0.75rem;
-      background: oklch(1 0 none);
+      border-radius: 10px;
+      background: var(--bp-panel);
     }
 
     h2 {
@@ -32,7 +29,7 @@
   }
 </style>
 
-<div class="sheet">
+<div class="cards">
   <article class="card">
     <h2>First card</h2>
     <p>Hover me.</p>

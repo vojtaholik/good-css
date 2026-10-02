@@ -22,21 +22,13 @@
     }
 
     /* Each child is tinted, so the space between two of them shows. */
-    :is(.fields, .prose) > * {
-      background: color-mix(in oklch, var(--bp-ink) 12%, transparent);
+    :is(.fields, .prose) > :not(button) {
+      background: var(--bp-fill);
     }
 
     label {
       display: grid;
       gap: 0.25rem;
-    }
-
-    input {
-      padding: 0.5rem 0.75rem;
-      border: 1px solid var(--bp-line);
-      background: none;
-      font: inherit;
-      color: inherit;
     }
 
     /* The entry's rule for a button in a flex column. */

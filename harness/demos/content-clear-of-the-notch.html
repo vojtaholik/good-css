@@ -1,33 +1,38 @@
 <template data-specimen data-height="460" data-viewport="viewport-fit=cover">
-  On a desktop every inset is 0px: the readouts say 0px, 0px and 16px, and only the sheet shows a hatched band. Open it in its own tab on a phone with a notch or a home indicator. Wherever an inset is not 0px, a hatched band of that size appears and the text stays clear of it.
+  On a desktop every inset is 0px: the readouts say 0px, 0px and 16px, and only the sheet shows a gray band. Open it in its own tab on a phone with a notch or a home indicator. Wherever an inset is not 0px, a gray band of that size appears and the text stays clear of it.
 </template>
 
 <style>
   @layer demo {
-    /* The hatch is each bar's own background, so it shows only in the padding
-       the entry adds. The text sits on a paper box inside. */
+    /* An app shell, so it covers the stage. */
+    :root {
+      background: var(--bp-panel);
+    }
+
+    /* The gray is each bar's own background, so it shows only in the padding
+       the entry adds. The text sits on a white box inside. */
     .app-header,
     .bottom-bar,
     .sheet {
       position: fixed;
       inset-inline: 0;
-      background: var(--bp-hatch), var(--bp-panel);
+      background: var(--bp-fill-strong);
 
       & > * {
         padding: 1rem 1.5rem;
-        background: var(--bp-paper);
+        background: var(--bp-panel);
       }
     }
 
     .app-header {
       inset-block-start: 0;
-      border-block-end: 1px solid var(--bp-line);
+      border-block-end: 1px solid var(--bp-line-faint);
     }
 
     .bottom-bar,
     .sheet {
       inset-block-end: 0;
-      border-block-start: 1px solid var(--bp-line);
+      border-block-start: 1px solid var(--bp-line-faint);
     }
 
     .sheet > * {
@@ -46,17 +51,9 @@
       padding: 5rem 1.5rem;
     }
 
-    dl {
+    .readings {
       display: grid;
-      grid-template-columns: auto auto;
-      gap: 0.25rem 1.5rem;
-      margin: 0;
-      font-family: var(--bp-font-mono);
-      font-size: 0.8125rem;
-    }
-
-    dd {
-      margin: 0;
+      gap: 0.5rem;
     }
   }
 </style>
@@ -64,14 +61,11 @@
 <header class="app-header"><p><code>.app-header</code></p></header>
 
 <main>
-  <dl>
-    <dt>.app-header padding-block-start</dt>
-    <dd data-read=".app-header" data-side="paddingBlockStart"></dd>
-    <dt>.bottom-bar padding-block-end</dt>
-    <dd data-read=".bottom-bar" data-side="paddingBlockEnd"></dd>
-    <dt>.sheet padding-block-end</dt>
-    <dd data-read=".sheet" data-side="paddingBlockEnd"></dd>
-  </dl>
+  <div class="readings">
+    <p class="label">.app-header padding-block-start <output data-read=".app-header" data-side="paddingBlockStart"></output></p>
+    <p class="label">.bottom-bar padding-block-end <output data-read=".bottom-bar" data-side="paddingBlockEnd"></output></p>
+    <p class="label">.sheet padding-block-end <output data-read=".sheet" data-side="paddingBlockEnd"></output></p>
+  </div>
   <button data-sheet>Show the sheet</button>
 </main>
 
@@ -91,7 +85,7 @@
   const read = () => {
     for (const output of document.querySelectorAll("[data-read]")) {
       const { read, side } = output.dataset;
-      output.textContent = `[ ${getComputedStyle(document.querySelector(read))[side]} ]`;
+      output.textContent = getComputedStyle(document.querySelector(read))[side];
     }
   };
 

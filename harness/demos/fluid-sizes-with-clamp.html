@@ -10,32 +10,20 @@
       padding: 1.5rem;
     }
 
-    /* The hatched bands above and below the text are --space-section. */
+    /* The gray bands above and below the text are --space-section. The text
+       lies on white. */
     .spaced {
       padding-block: var(--space-section);
-      border: 1px solid var(--bp-line);
+      border: 1px solid var(--bp-line-faint);
+      border-radius: 10px;
       background:
-        linear-gradient(var(--bp-paper) 0 0) content-box,
-        var(--bp-hatch),
-        var(--bp-panel);
+        linear-gradient(var(--bp-panel) 0 0) content-box,
+        var(--bp-fill);
     }
 
     .spaced p {
-      padding: 0 1rem;
+      padding: 0.5rem 1.5rem;
       font-size: var(--text-body);
-    }
-
-    dl {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.25rem 1.5rem;
-      margin: 0;
-      font-family: var(--bp-font-mono);
-      font-size: 0.8125rem;
-    }
-
-    dd {
-      margin: 0;
     }
   }
 </style>
@@ -44,18 +32,15 @@
   <p>This text is set in <code>--text-body</code>. Make the frame wider and it grows.</p>
 </div>
 
-<dl>
-  <dt>viewport</dt>
-  <dd data-read="viewport"></dd>
-  <dt>--text-body</dt>
-  <dd data-read="text"></dd>
-  <dt>--space-section</dt>
-  <dd data-read="space"></dd>
-</dl>
+<div class="readouts">
+  <p class="label">viewport <output data-read="viewport"></output></p>
+  <p class="label">--text-body <output data-read="text"></output></p>
+  <p class="label">--space-section <output data-read="space"></output></p>
+</div>
 
 <script>
   const spaced = document.querySelector(".spaced");
-  const px = (value) => `[ ${Math.round(parseFloat(value) * 10) / 10}px ]`;
+  const px = (value) => `${Math.round(parseFloat(value) * 10) / 10}px`;
   const write = (name, value) => (document.querySelector(`[data-read="${name}"]`).textContent = px(value));
 
   const read = () => {
