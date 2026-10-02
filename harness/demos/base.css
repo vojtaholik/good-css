@@ -6,11 +6,12 @@
    in entry 20. A specimen has to work on the entry's code alone, and a base
    that already carried an entry would hide a broken one.
 
-   The look: the frame is a hatched stage, and the hatch is the stage's alone.
-   Whatever lies on it is opaque: a white box, a white control, a flat gray
-   block where an image would be. Running text goes in a box. Only a caption
-   or a control sits on the stage itself. A specimen that is a whole page
-   covers the stage: it sets the root's background to `--bp-panel`. */
+   The look is the page's own, drawn from the tokens the two share. The frame
+   is a hatched stage, and the hatch is the stage's alone. Whatever lies on it
+   is opaque: a white box, a white control, a flat gray block where an image
+   would be. Running text goes in a box. Only a caption or a control sits on
+   the stage itself. A specimen that is a whole page covers the stage: it sets
+   the root's background to `--bp-panel`. */
 @layer base, demo;
 
 @layer base {
@@ -23,12 +24,6 @@
   /* Smoothed like the page around the frame, so text has the same weight in
      both. */
   :root {
-    /* A flat gray for a block that stands in for an image, and for an area
-       a specimen marks, such as padding. */
-    --bp-fill: color-mix(in oklch, var(--bp-ink) 8%, var(--bp-panel));
-    /* One step darker, for a control held down. */
-    --bp-fill-strong: color-mix(in oklch, var(--bp-ink) 16%, var(--bp-panel));
-
     font-family: var(--bp-font-body);
     line-height: 1.5;
     color: var(--bp-ink);
@@ -42,15 +37,15 @@
     margin: 0;
   }
 
+  /* Set like the title of an entry on the page. */
   h1,
   h2,
   h3 {
     margin: 0;
     font-family: var(--bp-font-display);
     font-weight: 700;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
+    line-height: 1.1;
+    letter-spacing: -0.033em;
   }
 
   p {
@@ -74,13 +69,14 @@
     }
   }
 
-  /* A value a script reads off the specimen, as a white chip. */
+  /* A value a script reads off the specimen. Beside a control it is a white
+     chip. In the status bar it is plain text. */
   output {
     display: inline-block;
     padding: 0.125rem 0.375rem;
-    border: 1px solid var(--bp-line-faint);
-    border-radius: 5px;
+    border-radius: var(--bp-radius-control);
     background: var(--bp-panel);
+    box-shadow: var(--bp-shadow-raised);
     font-family: var(--bp-font-label);
     font-size: 0.75rem;
     font-weight: 500;
@@ -89,21 +85,66 @@
     color: var(--bp-ink);
   }
 
-  /* Several captions with their values, in a row that wraps. */
-  .readouts {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.5rem 1.5rem;
+  /* A specimen with a status bar, or with its subject in the middle, is a
+     window: the content takes the room and the bar keeps to the bottom. */
+  body:has(> :is(.center, .status)) {
+    display: grid;
+    grid-template-rows: 1fr;
+    min-block-size: 100dvh;
   }
 
+  /* A small subject sits in the middle of the stage, both ways. */
+  .center {
+    place-self: center;
+    max-inline-size: 100%;
+    padding: 1.5rem;
+  }
+
+  /* The readouts of a specimen, docked to the bottom of its window. It is
+     drawn like the toolbar of the frame above: the same white, line, type and
+     height. Each child is a name and its value, and the row wraps. */
+  .status {
+    position: sticky;
+    inset-block-end: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    min-block-size: var(--bp-bar);
+    /* The end stays clear of the grip in the corner of the frame. */
+    padding-block: 0.625rem;
+    padding-inline: 0.75rem 2rem;
+    border-block-start: var(--bp-edge) solid var(--bp-paper);
+    background: var(--bp-panel);
+    font-family: var(--bp-font-label);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--bp-ink-soft);
+
+    & > * {
+      display: flex;
+      gap: 0.5rem;
+      margin: 0;
+    }
+
+    & output {
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+
+  /* A white chip with a soft shadow, like the controls in the frame's
+     toolbar. The chosen one of a set is filled, like the page's button. */
   button {
     min-width: 2.25rem;
     min-height: 2.25rem;
     padding-inline: 0.75rem;
-    border: 1px solid var(--bp-line);
-    border-radius: 5px;
+    border: 0;
+    border-radius: var(--bp-radius-control);
     background: var(--bp-panel);
+    box-shadow: var(--bp-shadow-raised);
     font: inherit;
     font-size: 0.875rem;
     font-weight: 500;
@@ -112,34 +153,35 @@
 
     @media (hover: hover) and (pointer: fine) {
       &:hover:not(:disabled) {
-        background: var(--bp-fill);
+        background: var(--bp-paper);
       }
     }
 
     &:active:not(:disabled) {
-      background: var(--bp-fill-strong);
+      background: var(--bp-fill);
     }
 
     &[aria-pressed="true"] {
-      border-color: var(--bp-ink);
       background: var(--bp-ink);
+      box-shadow: none;
       color: var(--bp-panel);
     }
 
     &:disabled {
       background: var(--bp-paper);
+      box-shadow: none;
       color: var(--bp-line);
       cursor: default;
     }
   }
 
-  /* A field is white with a line round it, like a button. */
+  /* A field is white with a line round it. */
   input:not([type="range"], [type="checkbox"], [type="radio"]),
   textarea,
   select {
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--bp-line);
-    border-radius: 5px;
+    border-radius: var(--bp-radius-control);
     background: var(--bp-panel);
     font: inherit;
     color: inherit;
@@ -158,29 +200,30 @@
      image. */
   .box {
     border: 1px solid var(--bp-line-faint);
-    border-radius: 10px;
+    border-radius: var(--bp-radius);
     background: var(--bp-panel);
   }
 
   .placeholder {
-    border-radius: 10px;
+    border-radius: var(--bp-radius);
     background: var(--bp-fill);
   }
 
   /* Inside a box the corner is tighter, so it sits within the box's own. */
   .box .placeholder {
-    border-radius: 5px;
+    border-radius: var(--bp-radius-control);
   }
 
-  /* What opens over the page is a box with a shadow under it. */
+  /* What opens over the page is a box with the shadow of the page's own
+     popover. */
   dialog,
   [popover] {
     padding: 1.5rem;
     border: 1px solid var(--bp-line-faint);
-    border-radius: 10px;
+    border-radius: var(--bp-radius);
     background: var(--bp-panel);
     color: var(--bp-ink);
-    box-shadow: 0 0.75rem 2rem oklch(0 0 none / 0.14);
+    box-shadow: var(--bp-shadow-overlay);
   }
 
   dialog::backdrop {

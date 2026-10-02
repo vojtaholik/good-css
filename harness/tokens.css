@@ -37,6 +37,25 @@
     )
     var(--bp-paper);
 
+  /* Shapes and fills the page and the specimens share. */
+  /* The corner of a box: a card, a popover, a code block. */
+  --bp-radius: 10px;
+  /* The corner of a control: a button, a field, a chip. */
+  --bp-radius-control: 5px;
+  /* A frame's toolbar: its height, and the gray line along it. */
+  --bp-bar: 2.8125rem;
+  --bp-edge: 2px;
+  /* A flat gray on white, for a control or a block that stands in for an
+     image, and one step darker for the same thing held down. */
+  --bp-fill: color-mix(in oklch, var(--bp-ink) 9.6%, var(--bp-panel));
+  --bp-fill-pressed: color-mix(in oklch, var(--bp-ink) 11.5%, var(--bp-panel));
+  /* The filled button under the pointer. */
+  --bp-ink-hover: color-mix(in oklch, var(--bp-ink) 80%, var(--bp-panel));
+  /* Under a white chip that lies on white or gray, and under what opens over
+     the page. */
+  --bp-shadow-raised: 0 0 6px color-mix(in oklch, var(--bp-ink) 25%, transparent);
+  --bp-shadow-overlay: 0 12px 32px color-mix(in oklch, var(--bp-ink) 16%, transparent);
+
   /* Code Next is a commercial font and is not served. A reader who has it
      installed sees it, and everyone else sees Montserrat. */
   --bp-font-display: "Code Next", "Montserrat", sans-serif;
