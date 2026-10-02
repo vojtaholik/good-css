@@ -22,7 +22,7 @@
       justify-self: start;
     }
 
-    /* Blur plus offset is 2rem, less than the entry's 3rem of room. */
+    /* Blur plus offset is 2.75rem, less than the entry's 3rem of room. */
     .menu {
       position: absolute;
       inset-block-start: 100%;
@@ -31,9 +31,9 @@
       width: 14rem;
       padding: 0.5rem;
       border: 1px solid var(--bp-line-faint);
-      border-radius: 10px;
+      border-radius: var(--bp-radius);
       background: var(--bp-panel);
-      box-shadow: 0 0.5rem 1.5rem oklch(0 0 none / 0.18);
+      box-shadow: var(--bp-shadow-overlay);
 
       & a {
         padding: 0.5rem 0.75rem;

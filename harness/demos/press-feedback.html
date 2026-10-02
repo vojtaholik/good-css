@@ -4,12 +4,12 @@
 
 <style>
   @layer demo {
-    body {
+    .center {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
+      justify-content: center;
       gap: 1.5rem;
-      padding: 2rem 1.5rem;
     }
 
     .button {
@@ -27,5 +27,7 @@
   }
 </style>
 
-<button class="button">Press and hold</button>
-<button class="button small">A small one</button>
+<div class="center">
+  <button class="button">Press and hold</button>
+  <button class="button small">A small one</button>
+</div>

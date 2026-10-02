@@ -4,11 +4,11 @@
 
 <style>
   @layer demo {
-    body {
+    .center {
       display: flex;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 0.75rem;
-      padding: 1.5rem;
     }
 
     dialog,
@@ -22,8 +22,10 @@
   }
 </style>
 
-<button commandfor="dialog" command="show-modal">Open the dialog</button>
-<button popovertarget="popover">Toggle the popover</button>
+<div class="center">
+  <button commandfor="dialog" command="show-modal">Open the dialog</button>
+  <button popovertarget="popover">Toggle the popover</button>
+</div>
 
 <dialog id="dialog">
   <p>A modal dialog.</p>

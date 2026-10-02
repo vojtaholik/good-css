@@ -1,18 +1,19 @@
-<template data-specimen data-height="200">
+<template data-specimen data-height="260">
   Click inside the dashed square but outside the small button. The count goes up. The square is 44px, and the large button has none.
 </template>
 
 <style>
   @layer demo {
-    body {
+    .center {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 3rem;
-      padding: 2.5rem 2.25rem;
+      justify-content: center;
+      gap: 2rem 3rem;
+      padding: 2.25rem;
     }
 
-    div {
+    .center > div {
       display: flex;
       align-items: center;
       gap: 1.5rem;
@@ -41,19 +42,28 @@
   }
 </style>
 
-<div>
-  <button class="icon-button small" aria-label="Small button">×</button>
-  <p class="label">24px button, clicks <output>0</output></p>
+<div class="center">
+  <div>
+    <button class="icon-button small" aria-label="Small button">×</button>
+    <p class="label">24px button</p>
+  </div>
+
+  <div>
+    <button class="icon-button large" aria-label="Large button">×</button>
+    <p class="label">64px button</p>
+  </div>
 </div>
 
-<div>
-  <button class="icon-button large" aria-label="Large button">×</button>
-  <p class="label">64px button, clicks <output>0</output></p>
-</div>
+<footer class="status">
+  <p>clicks on the 24px button <output>0</output></p>
+  <p>clicks on the 64px button <output>0</output></p>
+</footer>
 
 <script>
-  for (const button of document.querySelectorAll(".icon-button")) {
-    const output = button.parentElement.querySelector("output");
+  const outputs = document.querySelectorAll("output");
+
+  for (const [index, button] of document.querySelectorAll(".icon-button").entries()) {
+    const output = outputs[index];
     let clicks = 0;
 
     button.addEventListener("click", () => (output.textContent = ++clicks));

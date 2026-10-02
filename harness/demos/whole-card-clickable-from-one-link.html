@@ -4,22 +4,14 @@
 
 <style>
   @layer demo {
-    body {
-      display: grid;
-      align-content: start;
-      justify-items: start;
-      gap: 1.5rem;
-      padding: 1.5rem;
-    }
-
     .card {
       display: grid;
       justify-items: start;
       gap: 0.75rem;
-      width: min(100%, 24rem);
+      inline-size: min(100vw - 3rem, 24rem);
       padding: 1.5rem;
       border: 1px solid var(--bp-line-faint);
-      border-radius: 10px;
+      border-radius: var(--bp-radius);
       background: var(--bp-panel);
     }
 
@@ -39,12 +31,14 @@
   }
 </style>
 
+<div class="center">
 <!-- html -->
-
-<div class="readouts">
-  <p class="label">link followed <output data-count="a"></output></p>
-  <p class="label">button clicked <output data-count="button"></output></p>
 </div>
+
+<footer class="status">
+  <p>link followed <output data-count="a"></output></p>
+  <p>button clicked <output data-count="button"></output></p>
+</footer>
 
 <script>
   /* The link is stopped from leaving the page, and each control counts its clicks. */

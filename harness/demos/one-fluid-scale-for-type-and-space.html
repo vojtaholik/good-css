@@ -4,10 +4,7 @@
 
 <style>
   @layer demo {
-    body {
-      display: grid;
-      align-content: start;
-      gap: 1.5rem;
+    main {
       padding: 1.5rem;
     }
 
@@ -17,21 +14,23 @@
   }
 </style>
 
+<main>
 <article class="box card">
   <h1>Step 4</h1>
   <h2>Step 2, a heading</h2>
   <p>Step 0 is the body text. The gap between these lines is <code>--space-s</code> and the padding around them is the pair <code>--space-s-l</code>.</p>
   <small>Step −1, the small print.</small>
 </article>
+</main>
 
-<div class="readouts">
-  <p class="label">frame <output data-read="frame"></output></p>
-  <p class="label">title <output data-read="h1"></output></p>
-  <p class="label">heading <output data-read="h2"></output></p>
-  <p class="label">body <output data-read="p"></output></p>
-  <p class="label">small <output data-read="small"></output></p>
-  <p class="label">padding <output data-read="padding"></output></p>
-</div>
+<footer class="status">
+  <p>frame <output data-read="frame"></output></p>
+  <p>title <output data-read="h1"></output></p>
+  <p>heading <output data-read="h2"></output></p>
+  <p>body <output data-read="p"></output></p>
+  <p>small <output data-read="small"></output></p>
+  <p>padding <output data-read="padding"></output></p>
+</footer>
 
 <script>
   const card = document.querySelector(".card");

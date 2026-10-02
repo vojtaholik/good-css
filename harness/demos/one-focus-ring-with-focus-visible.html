@@ -4,10 +4,6 @@
 
 <style>
   @layer demo {
-    body {
-      padding: 1.5rem;
-    }
-
     .row {
       display: flex;
       flex-wrap: wrap;
@@ -22,7 +18,8 @@
     }
 
     button {
-      border-color: currentColor;
+      border: 1px solid currentColor;
+      box-shadow: none;
     }
 
     .mint {
@@ -37,9 +34,11 @@
   }
 </style>
 
+<div class="center">
 <div class="box row">
 <a href="#">A link</a>
 <button class="mint">A button</button>
 <button class="large">A large button</button>
 <input type="text" value="A text input" aria-label="A text input">
+</div>
 </div>

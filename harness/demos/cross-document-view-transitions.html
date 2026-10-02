@@ -9,7 +9,7 @@
       background: var(--bp-panel);
     }
 
-    body {
+    main {
       display: grid;
       align-content: start;
       gap: 1.5rem;
@@ -51,6 +51,7 @@
   }
 </style>
 
+<main>
 <header>
   <p>The header is the same on both pages.</p>
   <a class="a" href="?page=b">Go to page B</a>
@@ -59,8 +60,11 @@
 
 <div class="placeholder page a"><h1>Page A</h1></div>
 <div class="placeholder page b"><h1>Page B</h1></div>
+</main>
 
-<p class="label">This page arrived with a view transition <output>no</output></p>
+<footer class="status">
+  <p>arrived with a view transition <output>no</output></p>
+</footer>
 
 <script>
   /* A view transition needs two documents. Both are this specimen, and the

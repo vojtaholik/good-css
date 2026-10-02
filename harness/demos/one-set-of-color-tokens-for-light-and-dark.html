@@ -41,12 +41,13 @@
       gap: 0.75rem;
       padding: 1rem;
       border: 1px solid;
-      border-radius: 10px;
+      border-radius: var(--bp-radius);
     }
 
     button {
-      border-color: currentColor;
+      border: 1px solid currentColor;
       background: var(--background);
+      box-shadow: none;
 
       &:is(:active, [aria-pressed="true"]) {
         background: var(--foreground);

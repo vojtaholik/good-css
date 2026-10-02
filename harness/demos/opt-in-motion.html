@@ -4,15 +4,6 @@
 
 <style>
   @layer demo {
-    body {
-      display: grid;
-      place-items: center;
-      place-content: center;
-      gap: 3rem;
-      min-height: 100dvh;
-      padding: 1.5rem;
-    }
-
     .box {
       width: 8rem;
       height: 8rem;
@@ -20,8 +11,13 @@
   }
 </style>
 
-<div class="box"></div>
-<p class="label">prefers-reduced-motion <output></output></p>
+<div class="center">
+  <div class="box"></div>
+</div>
+
+<footer class="status">
+  <p>prefers-reduced-motion <output></output></p>
+</footer>
 
 <script>
   const query = matchMedia("(prefers-reduced-motion: no-preference)");

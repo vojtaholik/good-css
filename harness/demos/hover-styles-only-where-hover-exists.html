@@ -9,13 +9,6 @@
       --primary-hover: color-mix(in oklch, var(--bp-ink) 65%, var(--bp-panel));
     }
 
-    body {
-      display: grid;
-      justify-items: start;
-      gap: 1.5rem;
-      padding: 1.5rem;
-    }
-
     .button {
       padding: 0.75rem 1.25rem;
       border: 0;
@@ -26,8 +19,13 @@
   }
 </style>
 
-<button class="button">Hover or tap</button>
-<p class="label"><span data-query></span> on this device <output></output></p>
+<div class="center">
+  <button class="button">Hover or tap</button>
+</div>
+
+<footer class="status">
+  <p><span data-query></span> <output></output></p>
+</footer>
 
 <script>
   /* The query is read from the entry's own rule, so the readout cannot drift from it. */

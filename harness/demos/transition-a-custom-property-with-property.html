@@ -4,18 +4,10 @@
 
 <style>
   @layer demo {
-    body {
-      display: grid;
-      align-content: start;
-      justify-items: start;
-      gap: 1.5rem;
-      padding: 1.5rem;
-    }
-
     .card {
       display: grid;
       gap: 1rem;
-      width: min(100%, 24rem);
+      inline-size: min(100vw - 3rem, 24rem);
       padding: 1.5rem;
     }
 
@@ -36,13 +28,17 @@
   }
 </style>
 
+<div class="center">
 <article class="box card">
   <a href="#">Hover or focus me <span class="icon" aria-hidden="true">→</span></a>
   <div class="bar"></div>
   <p class="more">This line is at the opacity of <code>--progress</code>.</p>
 </article>
+</div>
 
-<p class="label">--progress on the card <output></output></p>
+<footer class="status">
+  <p>--progress on the card <output></output></p>
+</footer>
 
 <script>
   const card = document.querySelector(".card");

@@ -10,15 +10,11 @@
       --success: oklch(0.7 0.19 150);
     }
 
-    body {
-      padding: 1.5rem;
-    }
-
     form {
       display: grid;
       justify-items: start;
       gap: 0.75rem;
-      max-width: 24rem;
+      inline-size: min(100vw - 3rem, 24rem);
       padding: 1.5rem;
     }
 
@@ -35,6 +31,7 @@
   }
 </style>
 
+<div class="center">
 <form class="box">
   <label>
     Password, at least 8 characters
@@ -42,3 +39,4 @@
   </label>
   <button>Submit</button>
 </form>
+</div>

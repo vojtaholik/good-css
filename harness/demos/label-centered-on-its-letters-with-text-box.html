@@ -1,20 +1,19 @@
-<template data-specimen data-height="460">
+<template data-specimen data-height="520">
   In the first button the gray box ends at the top of the capitals and at the baseline, so the white padding is even all round and the descenders hang into it. The second has spare room above the capitals and under the baseline. The third is a flex container and is not trimmed. The fourth is a flex button with an icon, and its label is trimmed through the span. At normal size they are 35px, 48px, 48px and 40px tall.
 </template>
 
 <style>
   @layer demo {
-    body {
+    .center {
       display: grid;
-      align-content: start;
       gap: 2rem;
-      padding: 1.5rem;
     }
 
     .row {
       display: flex;
       flex-wrap: wrap;
       align-items: start;
+      justify-content: center;
       gap: 1.5rem 2rem;
     }
 
@@ -29,12 +28,12 @@
        The edge is a shadow, so it adds nothing to the height. */
     .button,
     .button-with-icon {
-      --text-box: var(--bp-fill-strong);
+      --text-box: var(--bp-fill-pressed);
 
       min-width: 0;
       min-height: 0;
       border: 0;
-      border-radius: 0;
+      border-radius: var(--bp-radius-control);
       background: var(--bp-panel);
       box-shadow: 0 0 0 1px var(--bp-line);
       font-size: 1rem;
@@ -66,6 +65,7 @@
 </style>
 
 <!-- The second and third buttons change one declaration inline, to compare. -->
+<main class="center">
 <div class="row large">
   <button class="button">Apply</button>
   <button class="button" style="text-box: normal">Apply</button>
@@ -76,27 +76,37 @@
 <div class="row">
   <figure>
     <button class="button">Apply</button>
-    <figcaption class="label">as in the entry <output></output></figcaption>
+    <figcaption class="label">as in the entry</figcaption>
   </figure>
   <figure>
     <button class="button" style="text-box: normal">Apply</button>
-    <figcaption class="label">text-box: normal <output></output></figcaption>
+    <figcaption class="label">text-box: normal</figcaption>
   </figure>
   <figure>
     <button class="button" style="display: inline-flex">Apply</button>
-    <figcaption class="label">display: inline-flex <output></output></figcaption>
+    <figcaption class="label">display: inline-flex</figcaption>
   </figure>
   <figure>
     <button class="button-with-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M3 8.5l3.5 3.5L13 4.5" /></svg><span>Apply</span></button>
-    <figcaption class="label">.button-with-icon <output></output></figcaption>
+    <figcaption class="label">.button-with-icon</figcaption>
   </figure>
 </div>
+</main>
+
+<footer class="status">
+  <p>as in the entry <output></output></p>
+  <p>text-box: normal <output></output></p>
+  <p>display: inline-flex <output></output></p>
+  <p>.button-with-icon <output></output></p>
+</footer>
 
 <script>
   const measure = () => {
-    for (const figure of document.querySelectorAll("figure")) {
+    const outputs = document.querySelectorAll("output");
+
+    for (const [index, figure] of document.querySelectorAll("figure").entries()) {
       const { height } = figure.querySelector("button").getBoundingClientRect();
-      figure.querySelector("output").textContent = `${Math.round(height * 10) / 10}px`;
+      outputs[index].textContent = `${Math.round(height * 10) / 10}px`;
     }
   };
 

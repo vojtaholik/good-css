@@ -4,9 +4,7 @@
 
 <style>
   @layer demo {
-    body {
-      display: grid;
-      gap: 1.5rem;
+    main {
       padding: 1.5rem;
     }
 
@@ -15,7 +13,7 @@
     .spaced {
       padding-block: var(--space-section);
       border: 1px solid var(--bp-line-faint);
-      border-radius: 10px;
+      border-radius: var(--bp-radius);
       background:
         linear-gradient(var(--bp-panel) 0 0) content-box,
         var(--bp-fill);
@@ -28,15 +26,17 @@
   }
 </style>
 
-<div class="spaced">
-  <p>This text is set in <code>--text-body</code>. Make the frame wider and it grows.</p>
-</div>
+<main>
+  <div class="spaced">
+    <p>This text is set in <code>--text-body</code>. Make the frame wider and it grows.</p>
+  </div>
+</main>
 
-<div class="readouts">
-  <p class="label">viewport <output data-read="viewport"></output></p>
-  <p class="label">--text-body <output data-read="text"></output></p>
-  <p class="label">--space-section <output data-read="space"></output></p>
-</div>
+<footer class="status">
+  <p>viewport <output data-read="viewport"></output></p>
+  <p>--text-body <output data-read="text"></output></p>
+  <p>--space-section <output data-read="space"></output></p>
+</footer>
 
 <script>
   const spaced = document.querySelector(".spaced");
