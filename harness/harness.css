@@ -2527,6 +2527,17 @@ details[open]::details-content {
     & > div:nth-child(n + 3) {
       border-block-start: 1.5px solid var(--ink);
     }
+
+    /* Each link is a row as tall as a finger needs. */
+    & > div {
+      gap: 0;
+      padding-block-end: 0.75rem;
+    }
+
+    & :is(a, .with-icon) {
+      display: block;
+      padding-block: 0.6875rem;
+    }
   }
 }
 
