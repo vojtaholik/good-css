@@ -1262,10 +1262,13 @@ pre {
   margin-block-end: calc(var(--text-counter) * -0.3333);
 }
 
+/* Every digit is one width, as in "Tabular numbers", so the total and the
+   name beside the count hold still as it changes. */
 .counter {
   grid-area: count;
   font-size: var(--text-counter);
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
   line-height: 1;
   letter-spacing: -0.06em;
   white-space: nowrap;
