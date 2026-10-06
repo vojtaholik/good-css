@@ -411,15 +411,19 @@ pre {
 }
 
 /* The command and the button that copies it: a dark bar with a sulphur end.
-   A press on the command selects all of it. */
+   A press on the command selects all of it. Where the row has no room for
+   the command on two lines, the button drops under it. */
 .install-command {
   display: flex;
+  flex-wrap: wrap;
   min-block-size: 3.25rem;
   background: var(--bp-dark);
   color: var(--bp-tint);
 
+  /* The command takes nearly all the room a row has, and the button alone
+     on a row takes all of it. */
   & code {
-    flex: 1;
+    flex: 999 1 14rem;
     align-self: center;
     padding: 0.75rem 1rem;
     font-size: 0.84375rem;
@@ -436,11 +440,12 @@ pre {
   /* Wide enough for "Copied", so the bar holds still when the label changes. */
   & button {
     display: flex;
-    flex: none;
+    flex: 1 0 auto;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     min-inline-size: 4.75rem;
+    min-block-size: 2.75rem;
     padding-inline: 1rem;
     border: 0;
     background: var(--bp-lime);
@@ -1241,34 +1246,34 @@ pre {
 }
 
 /* The count, huge and cut by the bottom of the band, with the total and the
-   name of the category beside it, and the two buttons at the far end. */
+   name of the category beside it, and the two buttons at the far end. On a
+   narrow screen the buttons go under the name. */
 .carousel-controls {
-  display: flex;
+  display: grid;
+  grid-template-areas:
+    "count total buttons"
+    "count name buttons";
+  grid-template-columns: auto auto 1fr;
+  grid-template-rows: auto 1fr;
   align-items: start;
-  gap: 1.5rem;
+  column-gap: clamp(1rem, 4vw, 3.5rem);
   margin-block-start: 1.125rem;
   /* The band ends two thirds of the way down the count. */
   margin-block-end: calc(var(--text-counter) * -0.3333);
 }
 
 .counter {
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-template-rows: auto 1fr;
-  column-gap: clamp(1rem, 4vw, 3.5rem);
-  align-items: start;
-
-  & b {
-    grid-row: span 2;
-    font-size: var(--text-counter);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.06em;
-    translate: -0.05em 0;
-  }
+  grid-area: count;
+  font-size: var(--text-counter);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  white-space: nowrap;
+  translate: -0.05em 0;
 }
 
 .counter-total {
+  grid-area: total;
   padding-block-start: calc(var(--text-counter) * 0.2);
   font-size: 1.375rem;
   font-weight: 700;
@@ -1277,15 +1282,17 @@ pre {
 }
 
 .counter-name {
+  grid-area: name;
   padding-block-start: 0.75rem;
   color: color-mix(in oklch, var(--ink) 80%, transparent);
 }
 
 /* A button that has somewhere to go is filled. */
 .carousel-buttons {
+  grid-area: buttons;
+  justify-self: end;
   display: flex;
   gap: 0.75rem;
-  margin-inline-start: auto;
   padding-block-start: calc(var(--text-counter) * 0.186);
 
   & button {
@@ -2219,12 +2226,15 @@ details[open]::details-content {
     inline-size: 3.5897rem;
   }
 
+  /* It breaks after "an", as drawn. */
   & h2 {
+    max-inline-size: 6.5em;
     margin-block-start: 2rem;
     font-size: var(--text-panel-title);
     font-weight: 800;
     line-height: 0.98;
     letter-spacing: -0.045em;
+    text-wrap: wrap;
     translate: -0.05em 0;
   }
 
@@ -2301,6 +2311,15 @@ details[open]::details-content {
 
 .footer-soft {
   opacity: 0.8;
+}
+
+/* The arrow of an outside link follows its last word. */
+.footer-links .with-icon {
+  display: inline;
+
+  & .icon {
+    margin-inline-start: 0.375rem;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2385,6 +2404,34 @@ details[open]::details-content {
 
   .stat + .stat {
     margin-inline-start: 0;
+  }
+
+  .carousel-controls {
+    grid-template-areas:
+      "count total"
+      "count name"
+      "count buttons";
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    margin-block-end: calc(var(--text-counter) * -0.12);
+  }
+
+  .carousel-buttons {
+    justify-self: start;
+    padding-block-start: 1rem;
+
+    & button {
+      inline-size: 2.75rem;
+    }
+  }
+
+  /* The command wraps once, after "add", and its button loses the sign. */
+  .hero .install-command button {
+    min-inline-size: 4.75rem;
+
+    & .icon {
+      display: none;
+    }
   }
 
   .opener {
