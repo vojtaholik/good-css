@@ -1701,6 +1701,12 @@ pre {
   block-size: 1.5rem;
   border: 1px solid color-mix(in oklch, var(--panel-ink) 50%, transparent);
   border-radius: 50%;
+  text-decoration: none;
+}
+
+/* The link is named on a narrow screen only. */
+.viewport-open-label {
+  display: none;
 }
 
 /* The three widths in a pill, with the one in use in sulphur. */
@@ -2497,6 +2503,36 @@ details[open]::details-content {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-auto-flow: row;
     row-gap: 1rem;
+  }
+
+  /* The frame runs from one edge of the screen to the other, so a specimen
+     gets the 20rem it is drawn for on the narrowest phone too. The check
+     under it keeps to the column. */
+  .specimen {
+    margin-inline: calc(var(--gutter) * -1);
+  }
+
+  .check {
+    padding-inline: var(--gutter);
+  }
+
+  /* A phone has no room to change the frame's width, so the bar keeps the
+     size and the link that opens the specimen on a page of its own, named. */
+  .viewport-widths {
+    display: none;
+  }
+
+  .viewport-open {
+    display: flex;
+    gap: 0.5rem;
+    inline-size: auto;
+    block-size: 1.75rem;
+    padding-inline: 0.75rem 0.625rem;
+    border-radius: 999px;
+  }
+
+  .viewport-open-label {
+    display: inline;
   }
 
   .entry-index {
