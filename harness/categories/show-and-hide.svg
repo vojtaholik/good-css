@@ -1,26 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-188 -183 1389 1389" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-<g id="radial-diagram" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-    <path vector-effect="non-scaling-stroke" id="shaded-upper-sector" d="m89 87c176-4 346 56 477 149l-176 234c-89-56-195-87-301-85z" fill="currentColor" fill-opacity="0.12" stroke="none"/>
-    <g id="curved-boundaries" fill="none">
-      <path vector-effect="non-scaling-stroke" id="outer-arc" d="m89 87c176-4 346 56 477 149 121 90 213 205 274 334 49 106 77 230 83 365"/>
-      <path vector-effect="non-scaling-stroke" id="inner-arc" d="m89 385c106-2 212 29 301 85 83 61 151 138 194 224 31 74 47 156 50 241"/>
-    </g>
-    <g id="radial-lines" fill="none">
-      <path vector-effect="non-scaling-stroke" id="vertical-radius" d="m89 87v848"/>
-      <path vector-effect="non-scaling-stroke" id="upper-diagonal-radius" d="m90 935 300-465 176-234"/>
-      <path vector-effect="non-scaling-stroke" id="lower-diagonal-radius" d="m90 935 750-365"/>
-      <path vector-effect="non-scaling-stroke" id="horizontal-radius" d="m90 935h833"/>
-    </g>
-    <g id="intersection-nodes" fill="#fff">
-      <circle vector-effect="non-scaling-stroke" id="outer-top-node" cx="89" cy="88" r="17.1"/>
-      <circle vector-effect="non-scaling-stroke" id="inner-top-node" cx="89" cy="385" r="17.1"/>
-      <circle vector-effect="non-scaling-stroke" id="inner-upper-node" cx="390" cy="470" r="17.1"/>
-      <circle vector-effect="non-scaling-stroke" id="outer-upper-node" cx="566" cy="236" r="17.1"/>
-      <circle vector-effect="non-scaling-stroke" id="inner-lower-node" cx="584" cy="694" r="17.1"/>
-      <circle vector-effect="non-scaling-stroke" id="outer-lower-node" cx="840" cy="570" r="17.1"/>
-      <circle vector-effect="non-scaling-stroke" id="origin-node" cx="90" cy="935" r="17.1"/>
-      <circle vector-effect="non-scaling-stroke" id="inner-bottom-node" cx="634" cy="935" r="17.1"/>
-      <circle vector-effect="non-scaling-stroke" id="outer-bottom-node" cx="923" cy="935" r="17.1"/>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 312" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <g class="lines" stroke="currentColor">
+    <path vector-effect="non-scaling-stroke" d="M16.34 14C75.29 12.66 132.22 32.75 176.09 63.9C216.62 94.04 247.43 132.56 267.86 175.76C284.27 211.26 293.65 252.79 295.66 298"/>
+    <path vector-effect="non-scaling-stroke" d="M16.34 113.8C51.84 113.13 87.34 123.51 117.15 142.27C144.95 162.7 167.72 188.49 182.12 217.29C192.5 242.07 197.86 269.53 198.87 298"/>
+    <path vector-effect="non-scaling-stroke" d="M16.34 14L16.34 298"/>
+    <path vector-effect="non-scaling-stroke" d="M16.68 298L117.15 142.27L176.09 63.9"/>
+    <path vector-effect="non-scaling-stroke" d="M16.68 298L267.86 175.76"/>
+    <path vector-effect="non-scaling-stroke" d="M16.68 298L295.66 298"/>
+  </g>
+  <image class="solid" href="/art/show-and-hide-lime.webp" x="-13.66" y="-16.06" width="219.667" height="188.333"/>
+  <image class="solid solid-dark" href="/art/show-and-hide-dark.webp" x="-13.66" y="-16.06" width="219.667" height="188.333"/>
+  <g class="nodes" fill="var(--art-ground, none)" stroke="currentColor">
+    <circle vector-effect="non-scaling-stroke" cx="16.34" cy="14.33" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="16.34" cy="113.8" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="117.15" cy="142.27" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="176.09" cy="63.9" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="182.12" cy="217.29" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="267.86" cy="175.76" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="16.68" cy="298" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="198.87" cy="298" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="295.66" cy="298" r="3.8"/>
   </g>
 </svg>

@@ -1,22 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-198 -174 1390 1390" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-<g id="concentric-rings" fill="none" stroke="currentColor">
-    <path vector-effect="non-scaling-stroke" id="outer-ring" d="m480 125c225 0 407 184 407 412 0 229-181 415-407 415-227 0-410-186-410-415 0-227 183-412 410-412z"/>
-    <path vector-effect="non-scaling-stroke" id="middle-ring" d="m478 283c136 0 246 111 246 249s-110 251-246 251-245-113-245-251 109-249 245-249z"/>
-    <path vector-effect="non-scaling-stroke" id="central-disc" d="m477 379c86 0 155 69 155 155s-69 155-155 155-155-69-155-155 69-155 155-155z" fill="currentColor" fill-opacity="0.12"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 312" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <g class="lines" stroke="currentColor">
+    <path vector-effect="non-scaling-stroke" d="M150.59 24.17C225.09 24.17 285.35 85.09 285.35 160.59C285.35 236.41 225.42 298 150.59 298C75.42 298 14.83 236.41 14.83 160.59C14.83 85.42 75.42 24.17 150.59 24.17Z"/>
+    <path vector-effect="non-scaling-stroke" d="M149.92 76.48C194.96 76.48 231.38 113.24 231.38 158.93C231.38 204.62 194.96 242.04 149.92 242.04C104.89 242.04 68.8 204.62 68.8 158.93C68.8 113.24 104.89 76.48 149.92 76.48Z"/>
+    <path vector-effect="non-scaling-stroke" d="M15.16 160.59L150.59 24.83L285.35 160.59L150.59 296.68Z"/>
+    <path vector-effect="non-scaling-stroke" d="M150.59 160.59L297.17 14"/>
   </g>
-  <g id="connecting-lines" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-    <path vector-effect="non-scaling-stroke" id="inscribed-diamond" d="m71 537 409-410 407 410-407 411z"/>
-    <path vector-effect="non-scaling-stroke" id="outward-radius" d="M480 537 922.7 94.3"/>
-  </g>
-  <g id="connection-nodes" fill="#fff" stroke="currentColor">
-    <circle vector-effect="non-scaling-stroke" id="top-node" cx="480" cy="127" r="17.1"/>
-    <circle vector-effect="non-scaling-stroke" id="left-node" cx="72" cy="537" r="17.1"/>
-    <circle vector-effect="non-scaling-stroke" id="right-node" cx="887" cy="537" r="17.1"/>
-    <circle vector-effect="non-scaling-stroke" id="bottom-node" cx="480" cy="948" r="17.1"/>
-    <circle vector-effect="non-scaling-stroke" id="center-node" cx="480" cy="537" r="17.1"/>
-    <circle vector-effect="non-scaling-stroke" id="inner-radius-node" cx="589.6" cy="427.4" r="17.1"/>
-    <circle vector-effect="non-scaling-stroke" id="middle-radius-node" cx="655.2" cy="361.8" r="17.1"/>
-    <circle vector-effect="non-scaling-stroke" id="outer-radius-node" cx="769.1" cy="247.9" r="17.1"/>
-    <circle vector-effect="non-scaling-stroke" id="endpoint-node" cx="922.7" cy="94.3" r="17.1"/>
+  <image class="solid" href="/art/interaction-lime.webp" x="72.59" y="82.59" width="154" height="154"/>
+  <image class="solid solid-dark" href="/art/interaction-dark.webp" x="72.59" y="82.59" width="154" height="154"/>
+  <g class="nodes" fill="var(--art-ground, none)" stroke="currentColor">
+    <circle vector-effect="non-scaling-stroke" cx="150.59" cy="24.83" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="15.49" cy="160.59" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="285.35" cy="160.59" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="150.59" cy="296.68" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="186.88" cy="124.3" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="208.6" cy="102.57" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="246.31" cy="64.86" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="297.17" cy="14" r="3.8"/>
   </g>
 </svg>

@@ -1,21 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-56 -82 1142 1142" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-<g id="circular-body">
-    <circle vector-effect="non-scaling-stroke" cx="324.5" cy="448.4" r="217.4" fill="currentColor" fill-opacity="0.12" stroke="currentColor"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 312" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <g class="lines" stroke="currentColor">
+    <path vector-effect="non-scaling-stroke" d="M133.46 87.15L298 87.15"/>
+    <path vector-effect="non-scaling-stroke" d="M155.69 115.37L298 115.37"/>
+    <path vector-effect="non-scaling-stroke" d="M162.14 145.7L298 145.7"/>
+    <path vector-effect="non-scaling-stroke" d="M155.59 177.45L298 177.45"/>
+    <path vector-effect="non-scaling-stroke" d="M14 208.81L298 208.81"/>
+    <path vector-effect="non-scaling-stroke" d="M14 237.55L298 237.55"/>
   </g>
-  <g id="horizontal-leader-lines" fill="none" stroke="currentColor">
-    <path vector-effect="non-scaling-stroke" id="top-leader" d="m451.5 270.2h507.8"/>
-    <path vector-effect="non-scaling-stroke" id="upper-middle-leader" d="m520.1 357.3h439.2"/>
-    <path vector-effect="non-scaling-stroke" id="center-leader" d="m540 450.9h419.3"/>
-    <path vector-effect="non-scaling-stroke" id="lower-middle-leader" d="m519.8 548.9h439.5"/>
-    <path vector-effect="non-scaling-stroke" id="crossing-lower-leader" d="m82.8 645.7h876.5"/>
-    <path vector-effect="non-scaling-stroke" id="bottom-leader" d="m82.8 734.4h876.5"/>
-  </g>
-  <g id="open-circular-terminals" fill="#fff" stroke="currentColor">
-    <circle vector-effect="non-scaling-stroke" id="top-terminal" cx="451.5" cy="270.6" r="14"/>
-    <circle vector-effect="non-scaling-stroke" id="upper-middle-terminal" cx="520.1" cy="357.4" r="14"/>
-    <circle vector-effect="non-scaling-stroke" id="center-terminal" cx="540" cy="450.8" r="14"/>
-    <circle vector-effect="non-scaling-stroke" id="lower-middle-terminal" cx="519.8" cy="548.6" r="14"/>
-    <circle vector-effect="non-scaling-stroke" id="crossing-lower-terminal" cx="82.8" cy="645.5" r="14"/>
-    <circle vector-effect="non-scaling-stroke" id="bottom-terminal" cx="82.8" cy="734.2" r="14"/>
+  <image class="solid" href="/art/text-and-media-lime.webp" x="-13.35" y="39.22" width="211.333" height="211.333"/>
+  <image class="solid solid-dark" href="/art/text-and-media-dark.webp" x="-13.35" y="39.22" width="211.333" height="211.333"/>
+  <g class="nodes" fill="var(--art-ground, none)" stroke="currentColor">
+    <circle vector-effect="non-scaling-stroke" cx="133.46" cy="87.28" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="155.69" cy="115.4" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="162.14" cy="145.66" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="155.59" cy="177.35" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="14" cy="208.75" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="14" cy="237.49" r="3.8"/>
   </g>
 </svg>

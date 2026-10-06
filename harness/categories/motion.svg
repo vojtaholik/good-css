@@ -1,20 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-203 -278 1423 1423" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <circle vector-effect="non-scaling-stroke" id="last-circle-tint" cx="839.4" cy="99.8" r="120" fill="currentColor" fill-opacity="0.12"/>
-  <g id="circles" fill="none" stroke="currentColor">
-    <circle vector-effect="non-scaling-stroke" cx="176.6" cy="767.2" r="120"/>
-    <circle vector-effect="non-scaling-stroke" cx="286.6" cy="699.4" r="120"/>
-    <circle vector-effect="non-scaling-stroke" cx="508" cy="433.5" r="120"/>
-    <circle vector-effect="non-scaling-stroke" cx="729.4" cy="167.6" r="120"/>
-    <circle vector-effect="non-scaling-stroke" cx="839.4" cy="99.8" r="120"/>
-    <path vector-effect="non-scaling-stroke" id="easing-curve" d="M73 787C440 787 576 80 943 80" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 312" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <g class="lines" stroke="currentColor">
+    <path vector-effect="non-scaling-stroke" d="M89.84 260.44C89.84 281.18 73.02 298 52.28 298C31.54 298 14.72 281.18 14.72 260.44C14.72 239.7 31.54 222.88 52.28 222.88C73.02 222.88 89.84 239.7 89.84 260.44Z"/>
+    <path vector-effect="non-scaling-stroke" d="M124.26 239.22C124.26 259.96 107.45 276.78 86.71 276.78C65.96 276.78 49.15 259.96 49.15 239.22C49.15 218.48 65.96 201.66 86.71 201.66C107.45 201.66 124.26 218.48 124.26 239.22Z"/>
+    <path vector-effect="non-scaling-stroke" d="M193.56 156C193.56 176.74 176.74 193.56 156 193.56C135.26 193.56 118.44 176.74 118.44 156C118.44 135.26 135.26 118.44 156 118.44C176.74 118.44 193.56 135.26 193.56 156Z"/>
+    <path vector-effect="non-scaling-stroke" d="M262.85 72.78C262.85 93.52 246.04 110.34 225.29 110.34C204.55 110.34 187.74 93.52 187.74 72.78C187.74 52.04 204.55 35.22 225.29 35.22C246.04 35.22 262.85 52.04 262.85 72.78Z"/>
+    <path vector-effect="non-scaling-stroke" d="M19.85 266.64C134.72 266.64 177.28 45.36 292.15 45.36"/>
   </g>
-  <g id="nodes" fill="#fff" stroke="currentColor">
-    <circle vector-effect="non-scaling-stroke" cx="73" cy="787" r="17.5"/>
-    <circle vector-effect="non-scaling-stroke" cx="176.6" cy="767.2" r="17.5"/>
-    <circle vector-effect="non-scaling-stroke" cx="286.6" cy="699.4" r="17.5"/>
-    <circle vector-effect="non-scaling-stroke" cx="508" cy="433.5" r="17.5"/>
-    <circle vector-effect="non-scaling-stroke" cx="729.4" cy="167.6" r="17.5"/>
-    <circle vector-effect="non-scaling-stroke" cx="839.4" cy="99.8" r="17.5"/>
-    <circle vector-effect="non-scaling-stroke" cx="943" cy="80" r="17.5"/>
+  <image class="solid" href="/art/motion-lime.webp" x="203.06" y="-5.11" width="113.333" height="113.333"/>
+  <image class="solid solid-dark" href="/art/motion-dark.webp" x="203.06" y="-5.11" width="113.333" height="113.333"/>
+  <g class="nodes" fill="var(--art-ground, none)" stroke="currentColor">
+    <circle vector-effect="non-scaling-stroke" cx="19.85" cy="266.64" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="52.28" cy="260.44" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="86.71" cy="239.22" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="156" cy="156" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="225.29" cy="72.78" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="292.15" cy="45.36" r="3.8"/>
   </g>
 </svg>

@@ -1,19 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-21 -40 1065 1065" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-<g id="rounded-square-ring" stroke="currentColor" stroke-linejoin="round">
-    <path vector-effect="non-scaling-stroke" id="outer-ring-and-open-center" d="m320 153h384c81 0 146 65 146 146v385c0 82-63 147-146 147h-386c-80 0-145-63-145-145v-386c0-80 65-147 147-147zm94 147c-51 0-92 40-92 90v205c0 51 35 90 85 90h209c48 0 86-39 86-89v-205c0-51-39-91-89-91z" fill="currentColor" fill-opacity="0.12" fill-rule="evenodd"/>
-    <path vector-effect="non-scaling-stroke" id="middle-rounded-contour" d="m350 233h327c53 0 94 41 94 92v335c0 52-32 92-80 92h-357c-45 0-81-38-81-88v-339c0-52 44-92 97-92z" fill="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 312" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <g class="lines" stroke="currentColor">
+    <path vector-effect="non-scaling-stroke" d="M56.25 54.03L101.08 98.17L128.8 126.23L156.51 155.66L186.63 187.82L212.29 213.83L235.9 237.1L257.12 258.31"/>
   </g>
-  <g id="diagonal-with-circular-markers" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-    <path vector-effect="non-scaling-stroke" id="diagonal-connector" d="m220 194 131 129 81 82 81 86 88 94 75 76 69 68 62 62" fill="none"/>
-    <g id="white-circular-markers" fill="#fff">
-      <circle vector-effect="non-scaling-stroke" id="upper-left-outer-marker" cx="220" cy="194" r="13.1"/>
-      <circle vector-effect="non-scaling-stroke" id="upper-left-inner-marker" cx="351" cy="323" r="13.1"/>
-      <circle vector-effect="non-scaling-stroke" id="upper-center-marker" cx="432" cy="405" r="13.1"/>
-      <circle vector-effect="non-scaling-stroke" id="center-marker" cx="513" cy="491" r="13.1"/>
-      <circle vector-effect="non-scaling-stroke" id="lower-center-marker" cx="601.5" cy="585" r="13.1"/>
-      <circle vector-effect="non-scaling-stroke" id="lower-right-inner-marker" cx="676" cy="661" r="13.1"/>
-      <circle vector-effect="non-scaling-stroke" id="lower-right-middle-marker" cx="745" cy="729" r="13.1"/>
-      <circle vector-effect="non-scaling-stroke" id="lower-right-outer-marker" cx="807" cy="791" r="13.1"/>
-    </g>
+  <image class="solid" href="/art/spacing-and-shape-lime.webp" x="10.17" y="10" width="291.667" height="292"/>
+  <image class="solid solid-dark" href="/art/spacing-and-shape-dark.webp" x="10.17" y="10" width="291.667" height="292"/>
+  <g class="nodes" fill="var(--art-ground, none)" stroke="currentColor">
+    <circle vector-effect="non-scaling-stroke" cx="56.25" cy="54.03" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="101.08" cy="98.17" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="128.8" cy="126.23" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="156.51" cy="155.66" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="186.8" cy="187.82" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="212.29" cy="213.83" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="257.12" cy="258.31" r="3.8"/>
   </g>
 </svg>
