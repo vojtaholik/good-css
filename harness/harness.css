@@ -72,7 +72,7 @@ button,
   --text-title: clamp(1.75rem, 1.4815rem + 1.3423vw, 2.75rem);
   --text-lede: clamp(1.0625rem, 1.0122rem + 0.2517vw, 1.25rem);
   --text-stat: clamp(2.75rem, 2.3473rem + 2.0134vw, 4.25rem);
-  --text-counter: clamp(9.375rem, 4.8448rem + 22.651vw, 26.25rem);
+  --text-counter: clamp(8.5rem, 3.735rem + 23.826vw, 26.25rem);
   --text-ghost-band: clamp(15rem, 8.2886rem + 33.557vw, 40rem);
   --text-ghost-hero: clamp(13.75rem, 8.7164rem + 25.1678vw, 32.5rem);
   --text-ghost-entry: clamp(8.75rem, 6.0654rem + 13.4228vw, 18.75rem);
@@ -1068,7 +1068,7 @@ pre {
     z-index: -1;
     inset: auto 0 0;
     block-size: 17.125rem;
-    background: radial-gradient(circle, var(--ink) 1px, transparent 1.5px) 0 0 / 1rem 1rem;
+    background: radial-gradient(circle, var(--ink) 0.8px, transparent 1px) 0 0 / 1rem 1rem;
     opacity: 0.34;
   }
 
@@ -1359,6 +1359,16 @@ pre {
   }
 }
 
+/* A node keeps its size on screen as the drawing shrinks: the file's radius
+   is for the 312px of a card, and these are for 184px and 124px. */
+.opener-tile .nodes circle {
+  r: 5.43px;
+}
+
+.footer-art .nodes circle {
+  r: 6.54px;
+}
+
 /* Category ---------------------------------------------------------------- */
 
 /* A category is a band of its own, light or dark in turn, with its number
@@ -1419,20 +1429,10 @@ pre {
   opacity: 0.7;
 }
 
-/* The tile takes the other tone of the band, so a light band holds a dark
-   square and a dark band a light one. */
+/* The drawing lies on the band itself, in the band's ink, with its nodes
+   filled with the band's ground. */
 .opener-tile {
-  --ink: var(--bp-tint);
-  --art-ground: var(--bp-dark);
-
   padding: 0.5rem;
-  background: var(--art-ground);
-  color: var(--ink);
-
-  .band-dark & {
-    --ink: var(--bp-dark);
-    --art-ground: var(--bp-tint);
-  }
 }
 
 /* The entries of the category as a table of two columns, filled down the
@@ -2416,11 +2416,15 @@ details[open]::details-content {
       "count buttons";
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-rows: auto auto 1fr;
-    margin-block-end: calc(var(--text-counter) * -0.12);
+    /* The buttons under the name need the whole height, so the count is
+       not cut. */
+    margin-block-end: 0;
+    padding-block-end: 1.5rem;
   }
 
   .carousel-buttons {
     justify-self: start;
+    gap: 0.5rem;
     padding-block-start: 1rem;
 
     & button {

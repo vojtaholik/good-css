@@ -40,7 +40,7 @@
     /* Thumb, then track, for scrollbar-color. */
     --bp-scrollbar: var(--bp-line) transparent;
     --bp-ground:
-      radial-gradient(circle, color-mix(in oklch, var(--bp-ink) 30%, transparent) 1px, transparent 1.5px)
+      radial-gradient(circle, color-mix(in oklch, var(--bp-ink) 30%, transparent) 0.8px, transparent 1px)
       0 0 / 1rem 1rem,
       var(--bp-stage);
     /* Corners are square, and so are fields. A button is a pill. */
