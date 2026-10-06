@@ -8,7 +8,11 @@ import { demos } from "./demos/index.js";
    The entry's code blocks go in verbatim: its CSS unlayered, its HTML at
    every `<!-- html -->` in the fixture, its JS as a module at the end of
    body. Everything the fixture adds is in a cascade layer, so the entry's
-   CSS wins wherever the two touch the same property. */
+   CSS wins wherever the two touch the same property.
+
+   The panel is dark unless the URL asks for `?panel=light`. The page asks
+   for it in a dark band, and a link that opens the specimen in its own tab
+   keeps it. */
 export function specimenPage(slug) {
   const entry = readPractices().entries.find((entry) => entry.slug === slug);
   const demo = demos[slug];
@@ -23,6 +27,9 @@ export function specimenPage(slug) {
 <meta charset="utf-8">
 <meta name="viewport" content="${viewport}">
 <title>${entry.slug}</title>
+<script>
+  if (new URLSearchParams(location.search).get("panel") === "light") document.documentElement.dataset.panel = "light";
+</script>
 <style>
 ${tokens}
 ${base}

@@ -7,7 +7,10 @@ const attribute = (value) => value.replaceAll("&", "&amp;").replaceAll('"', "&qu
    prompt sign is drawn in CSS, so a copy takes the command alone. */
 export const installCommand = `<div class="install-command">
           <code>npx skills@latest add vojtaholik/good-css</code>
-          <button type="button" aria-live="polite" data-copy>Copy</button>
+          <button type="button" aria-live="polite" data-copy>
+            <span class="icon icon-copy"></span>
+            <span data-copy-label>Copy</span>
+          </button>
         </div>`;
 
 /* What the index adds to the header on a narrow screen: the category the
@@ -27,15 +30,13 @@ export const categoryNav = `<button class="current" type="button" popovertarget=
    that opens the install command in a popover. */
 export const header = (nav = "") => `<header class="site-header content-grid">
       <div class="site-header-bar">
-        <a class="mark" href="/" aria-label="good-css">
-          <img src="/mark.svg" alt="" width="83" height="78">
-        </a>
+        <a class="mark" href="/" aria-label="good-css"></a>
         ${nav}
-        <a class="github" href="${repository}">
-          <span class="icon"><img src="/icons/github.svg" alt=""></span>
+        <a class="pill github" href="${repository}">
+          <span class="icon icon-github"></span>
           <span class="github-label">GitHub</span>
         </a>
-        <button class="button" type="button" popovertarget="install">Install</button>
+        <button class="pill pill-filled" type="button" popovertarget="install">Install</button>
       </div>
 
       <div class="install" id="install" popover>
@@ -48,29 +49,63 @@ export const header = (nav = "") => `<header class="site-header content-grid">
       </div>
     </header>`;
 
-/* What ends every page: who made it, then the site's links. The script is
-   here because every page has a copy button, in the popover of the header. */
-export const footer = `<footer class="site-footer content-grid">
-      <div class="site-footer-row">
-        <p>Made by <a href="${authorProfile}">${author}</a></p>
-        <nav aria-label="Site">
+/* What ends every page: the install command again, the site's links in four
+   columns, and the wordmark cut by the bottom of the window. On the index
+   main.js puts the drawing of each category beside the command. */
+export const footer = `<footer class="site-footer band band-slate content-grid">
+      <div class="footer-top">
+        <section class="footer-install" aria-labelledby="footer-install-title">
+          <span class="mark" aria-hidden="true"></span>
+          <h2 id="footer-install-title">Install it as an agent skill</h2>
+          <p>
+            For Claude Code, Codex, Cursor and any other agent that reads skills. The source and the
+            other ways to install are on <a href="${repository}">GitHub</a>.
+          </p>
+          ${installCommand}
+        </section>
+        <div class="footer-art" data-slot="footer-art" aria-hidden="true"></div>
+      </div>
+
+      <nav class="footer-links" aria-label="Site">
+        <div>
+          <p class="label">Site</p>
           <a href="/">good-css</a>
           <a href="/about">About</a>
           <a href="/contact">Contact</a>
           <a href="/privacy">Privacy</a>
+        </div>
+        <div>
+          <p class="label">For agents</p>
           <a href="/llms.txt">llms.txt</a>
-          <a href="${repository}">GitHub</a>
-        </nav>
+        </div>
+        <div>
+          <p class="label">Source</p>
+          <a class="with-icon" href="${repository}">GitHub<span class="icon icon-out"></span></a>
+          <a class="footer-soft" href="${repository}/blob/main/LICENSE">MIT License</a>
+        </div>
+        <div>
+          <p class="label">Made by</p>
+          <a class="with-icon" href="${authorProfile}">${author}<span class="icon icon-out"></span></a>
+        </div>
+      </nav>
+
+      <div class="footer-end">
+        <p class="label">© ${new Date().getFullYear()} ${author}</p>
+        <p>From experts for agents.</p>
       </div>
+
+      <div class="footer-wordmark" aria-hidden="true"></div>
     </footer>
 
     <script type="module">
       /* A copy button copies the command beside it and says so for a moment. */
       for (const button of document.querySelectorAll("[data-copy]")) {
+        const label = button.querySelector("[data-copy-label]");
+
         button.addEventListener("click", async () => {
           await navigator.clipboard.writeText(button.previousElementSibling.textContent);
-          button.textContent = "Copied";
-          setTimeout(() => (button.textContent = "Copy"), 1500);
+          label.textContent = "Copied";
+          setTimeout(() => (label.textContent = "Copy"), 1500);
         });
       }
     </script>`;
@@ -107,7 +142,7 @@ export function sitePage({ page, stylesheets, path }) {
   <body>
     ${header()}
 
-    <main class="page content-grid">
+    <main class="page band band-tint content-grid">
       <h1>${page.title}</h1>
       <p class="page-statement">${marked.parseInline(page.statement)}</p>
       <div class="prose">${marked.parser(page.body)}</div>

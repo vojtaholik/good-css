@@ -7,15 +7,61 @@
    entry's code alone, and a base that already carried an entry would hide a
    broken one.
 
-   The look is the page's own, drawn from the tokens the two share. The frame
-   is a hatched stage, and the hatch is the stage's alone. Whatever lies on it
-   is opaque: a white box, a white control, a flat gray block where an image
-   would be. Running text goes in a box. Only a caption or a control sits on
-   the stage itself. A specimen that is a whole page covers the stage: it sets
-   the root's background to `--bp-panel`. */
+   The look is an instrument panel, drawn from the tokens the page shares.
+   The panel is dark, or light where the URL asks for `?panel=light`, which
+   the page does in a dark band. The stage is a grid of dots, and the dots
+   are the stage's alone. Whatever lies on it is opaque: a box with a line
+   round it, a control, a sulphur block where an image would be. Running text
+   goes in a box. Only a caption or a control sits on the stage itself. A
+   specimen that is a whole page covers the stage: it sets the root's
+   background to `--bp-panel`. */
 @layer base, demo;
 
 @layer base {
+  /* The roles of the panel's colors. A fixture names a role, never a color,
+     so it reads on both panels. */
+  :root {
+    /* Text and lines. */
+    --bp-ink: var(--bp-tint);
+    /* A box, a control, a page that covers the stage. */
+    --bp-panel: var(--bp-deep);
+    /* The stage, and the bar of readouts. */
+    --bp-stage: var(--bp-dark);
+    --bp-paper: var(--bp-deep);
+    /* A block that stands in for an image, and the same held down. */
+    --bp-fill: var(--bp-lime);
+    --bp-fill-pressed: color-mix(in oklch, var(--bp-lime) 80%, var(--bp-dark));
+    --bp-ink-soft: color-mix(in oklch, var(--bp-ink) 66%, transparent);
+    --bp-ink-hover: color-mix(in oklch, var(--bp-ink) 80%, var(--bp-panel));
+    --bp-line: color-mix(in oklch, var(--bp-ink) 40%, transparent);
+    --bp-line-faint: color-mix(in oklch, var(--bp-ink) 20%, transparent);
+    /* Thumb, then track, for scrollbar-color. */
+    --bp-scrollbar: var(--bp-line) transparent;
+    --bp-ground:
+      radial-gradient(circle, color-mix(in oklch, var(--bp-ink) 30%, transparent) 1px, transparent 1.5px)
+      0 0 / 1rem 1rem,
+      var(--bp-stage);
+    /* Corners are square, and so are fields. A button is a pill. */
+    --bp-radius: 0;
+    --bp-radius-control: 0;
+    /* The bar of readouts: its height, and the line along it. */
+    --bp-bar: 2.75rem;
+    --bp-edge: 1px;
+    --bp-shadow-raised: none;
+    --bp-shadow-overlay: 0 1.5rem 3rem color-mix(in oklch, var(--bp-deep) 40%, transparent);
+
+    color-scheme: dark;
+  }
+
+  :root[data-panel="light"] {
+    --bp-ink: var(--bp-dark);
+    --bp-panel: var(--bp-tint);
+    --bp-stage: var(--bp-tint);
+    --bp-paper: var(--bp-ghost-tint);
+
+    color-scheme: light;
+  }
+
   *,
   *::before,
   *::after {
@@ -26,6 +72,7 @@
      both. */
   :root {
     font-family: var(--bp-font-sans);
+    font-weight: 500;
     line-height: 1.5;
     color: var(--bp-ink);
     background: var(--bp-ground);
@@ -44,9 +91,9 @@
   h3 {
     margin: 0;
     font-family: var(--bp-font-sans);
-    font-weight: 700;
+    font-weight: 800;
     line-height: 1.1;
-    letter-spacing: -0.033em;
+    letter-spacing: -0.045em;
   }
 
   p {
@@ -55,10 +102,11 @@
 
   code {
     font-family: var(--bp-font-mono);
-    font-size: 0.8125rem;
+    font-size: 0.875em;
+    font-weight: 600;
   }
 
-  /* A caption, in the type of the frame's toolbar. */
+  /* A caption, in the type of a readout. */
   .label {
     font-family: var(--bp-font-mono);
     font-size: 0.75rem;
@@ -70,14 +118,13 @@
     }
   }
 
-  /* A value a script reads off the specimen. Beside a control it is a white
-     chip. In the status bar it is plain text. */
+  /* A value a script reads off the specimen. Beside a control it is a chip
+     with a line round it. In the bar of readouts it is plain text. */
   output {
     display: inline-block;
     padding: 0.125rem 0.375rem;
-    border-radius: var(--bp-radius-control);
+    border: 1px solid var(--bp-line);
     background: var(--bp-panel);
-    box-shadow: var(--bp-shadow-raised);
     font-family: var(--bp-font-mono);
     font-size: 0.75rem;
     font-weight: 500;
@@ -86,8 +133,8 @@
     color: var(--bp-ink);
   }
 
-  /* A specimen with a status bar, or with its subject in the middle, is a
-     window: the content takes the room and the bar keeps to the bottom. */
+  /* A specimen with a bar of readouts, or with its subject in the middle, is
+     a window: the content takes the room and the bar keeps to the bottom. */
   body:has(> :is(.center, .status)) {
     display: grid;
     grid-template-rows: 1fr;
@@ -101,91 +148,95 @@
     padding: 1.5rem;
   }
 
-  /* The readouts of a specimen, docked to the bottom of its window. It is
-     drawn like the toolbar of the frame above: the same white, line, type and
-     height. Each child is a name and its value, and the row wraps. */
+  /* The readouts of a specimen, docked to the bottom of its window, drawn
+     like the bar of the frame above: a row of cells, each a name and its
+     value, with a line between. The row wraps. */
   .status {
     position: sticky;
     inset-block-end: 0;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem 1.5rem;
-    min-block-size: var(--bp-bar);
     /* The end stays clear of the grip in the corner of the frame. */
-    padding-block: 0.625rem;
-    padding-inline: 0.75rem 2rem;
-    border-block-start: var(--bp-edge) solid var(--bp-paper);
-    background: var(--bp-panel);
+    padding-inline-end: 2rem;
+    border-block-start: var(--bp-edge) solid var(--bp-line);
+    background: var(--bp-paper);
     font-family: var(--bp-font-mono);
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.25;
     color: var(--bp-ink-soft);
 
     & > * {
       display: flex;
+      align-items: center;
       gap: 0.5rem;
+      min-block-size: var(--bp-bar);
       margin: 0;
+      padding-inline: 1.125rem;
+      border-inline-end: var(--bp-edge) solid var(--bp-line);
     }
 
     & output {
       padding: 0;
-      border-radius: 0;
-      box-shadow: none;
+      border: 0;
+      background: none;
     }
   }
 
-  /* A white chip with a soft shadow, like the controls in the frame's
-     toolbar. The chosen one of a set is filled, like the page's button. */
+  /* A pill with a line round it, like the widths in the frame's bar. The
+     chosen one of a set is sulphur. */
   button {
     min-width: 2.25rem;
     min-height: 2.25rem;
-    padding-inline: 0.75rem;
-    border: 0;
-    border-radius: var(--bp-radius-control);
+    padding-inline: 0.875rem;
+    border: 1px solid color-mix(in oklch, var(--bp-ink) 50%, transparent);
+    border-radius: 999px;
     background: var(--bp-panel);
-    box-shadow: var(--bp-shadow-raised);
     font: inherit;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     color: inherit;
     cursor: pointer;
 
     @media (hover: hover) and (pointer: fine) {
       &:hover:not(:disabled) {
-        background: var(--bp-paper);
+        border-color: var(--bp-ink);
       }
     }
 
     &:active:not(:disabled) {
-      background: var(--bp-fill);
+      background: var(--bp-line-faint);
     }
 
     &[aria-pressed="true"] {
-      background: var(--bp-ink);
-      box-shadow: none;
-      color: var(--bp-panel);
+      border-color: var(--bp-lime);
+      background: var(--bp-lime);
+      color: var(--bp-dark);
     }
 
     &:disabled {
-      background: var(--bp-paper);
-      box-shadow: none;
+      border-color: var(--bp-line-faint);
       color: var(--bp-line);
       cursor: default;
     }
   }
 
-  /* A field is white with a line round it. */
+  /* A field is the panel with a line round it. */
   input:not([type="range"], [type="checkbox"], [type="radio"]),
   textarea,
   select {
     padding: 0.5rem 0.75rem;
-    border: 1px solid var(--bp-line);
+    border: 1.5px solid var(--bp-line);
     border-radius: var(--bp-radius-control);
     background: var(--bp-panel);
     font: inherit;
     color: inherit;
+  }
+
+  input[type="range"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    accent-color: var(--bp-lime);
   }
 
   a:active {
@@ -197,10 +248,9 @@
     outline-offset: 2px;
   }
 
-  /* A white box on the stage, and the flat gray block that stands in for an
-     image. */
+  /* A box on the stage, and the sulphur block that stands in for an image. */
   .box {
-    border: 1px solid var(--bp-line-faint);
+    border: 1.5px solid var(--bp-ink);
     border-radius: var(--bp-radius);
     background: var(--bp-panel);
   }
@@ -210,17 +260,11 @@
     background: var(--bp-fill);
   }
 
-  /* Inside a box the corner is tighter, so it sits within the box's own. */
-  .box .placeholder {
-    border-radius: var(--bp-radius-control);
-  }
-
-  /* What opens over the page is a box with the shadow of the page's own
-     popover. */
+  /* What opens over the page is a box with a shadow under it. */
   dialog,
   [popover] {
     padding: 1.5rem;
-    border: 1px solid var(--bp-line-faint);
+    border: 1.5px solid var(--bp-ink);
     border-radius: var(--bp-radius);
     background: var(--bp-panel);
     color: var(--bp-ink);
@@ -228,6 +272,6 @@
   }
 
   dialog::backdrop {
-    background: oklch(0 0 none / 0.3);
+    background: color-mix(in oklch, var(--bp-deep) 50%, transparent);
   }
 }

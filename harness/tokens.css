@@ -20,46 +20,25 @@
 }
 
 :root {
-  /* Black, white and a gray, with no hue of their own, so a mix with a color
-     keeps that color's hue. `oklch(1 0 0)` would pull every mix toward red. */
-  --bp-ink: oklch(0 0 none);
-  /* White: the page, and any surface that lies on the gray. */
-  --bp-panel: oklch(1 0 none);
-  /* The gray of the categories band, of a code block and of the ground a
-     specimen is drawn on. */
-  --bp-paper: oklch(0.961 0 none);
-  --bp-ink-soft: color-mix(in oklch, var(--bp-ink) 60%, transparent);
-  --bp-line: color-mix(in oklch, var(--bp-ink) 20%, transparent);
-  --bp-line-faint: color-mix(in oklch, var(--bp-ink) 10%, transparent);
-  /* Thumb, then track, for scrollbar-color. */
-  --bp-scrollbar: var(--bp-line) transparent;
-  /* The ground of a specimen: the gray with lighter lines across it. */
-  --bp-ground:
-    repeating-linear-gradient(
-      -45deg,
-      color-mix(in oklch, var(--bp-panel) 60%, transparent) 0 2px,
-      transparent 2px 8px
-    )
-    var(--bp-paper);
-
-  /* Shapes and fills the page and the specimens share. */
-  /* The corner of a box: a card, a popover, a code block. */
-  --bp-radius: 10px;
-  /* The corner of a control: a button, a field, a chip. */
-  --bp-radius-control: 5px;
-  /* A frame's toolbar: its height, and the gray line along it. */
-  --bp-bar: 2.8125rem;
-  --bp-edge: 2px;
-  /* A flat gray on white, for a control or a block that stands in for an
-     image, and one step darker for the same thing held down. */
-  --bp-fill: color-mix(in oklch, var(--bp-ink) 9.6%, var(--bp-panel));
-  --bp-fill-pressed: color-mix(in oklch, var(--bp-ink) 11.5%, var(--bp-panel));
-  /* The filled button under the pointer. */
-  --bp-ink-hover: color-mix(in oklch, var(--bp-ink) 80%, var(--bp-panel));
-  /* Under a white chip that lies on white or gray, and under what opens over
-     the page. */
-  --bp-shadow-raised: 0 0 6px color-mix(in oklch, var(--bp-ink) 25%, transparent);
-  --bp-shadow-overlay: 0 12px 32px color-mix(in oklch, var(--bp-ink) 16%, transparent);
+  /* Lilac and sulphur. The page is drawn in bands of the first three, and
+     sulphur is the one accent. Every other color is mixed from these, as in
+     "OKLCH color". */
+  --bp-tint: oklch(0.851 0.017 297.5);
+  --bp-dark: oklch(0.236 0.025 295);
+  --bp-slate: oklch(0.448 0.041 297.5);
+  --bp-lime: oklch(0.847 0.164 115.5);
+  /* The bar of a frame, and code, on the dark. */
+  --bp-deep: oklch(0.191 0.022 296.7);
+  /* A card on the slate band. */
+  --bp-card: oklch(0.271 0.028 296.7);
+  /* The middle bar of a set of three, between the ink and sulphur. */
+  --bp-mid: oklch(0.627 0.036 296.8);
+  /* A function name or a string in code. */
+  --bp-bright: oklch(0.969 0.005 297.7);
+  /* A ghost numeral, one step off the band it lies on. */
+  --bp-ghost-tint: oklch(0.8 0.023 297.3);
+  --bp-ghost-dark: oklch(0.281 0.031 295.1);
+  --bp-ghost-slate: oklch(0.407 0.045 294.5);
 
   --bp-font-sans: "Inter", system-ui, sans-serif;
   --bp-font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;

@@ -10,6 +10,65 @@ const slugify = (text) =>
 const codeBlocks = (tokens, lang) =>
   tokens.filter((token) => token.type === "code" && token.lang === lang).map((token) => token.text);
 
+const capitalize = (html) => html.replace(/^[a-z]/, (letter) => letter.toUpperCase());
+
+/* The code of an entry, block by block, with any text between the blocks. */
+const readSource = (tokens) =>
+  tokens.map((token) =>
+    token.type === "code" ? { lang: token.lang, text: token.text } : { html: marked.parser([token]) },
+  );
+
+/* A support line that opens with versions, such as "Chrome 120, Firefox
+   118, Safari 15.4", gives one version per browser. What follows the
+   versions is kept as text. A line that names no versions is all text. */
+const versions = /^((?:Chrome|Firefox|Safari) \d+(?:\.\d+)*(?:, (?:Chrome|Firefox|Safari) \d+(?:\.\d+)*)*)/;
+
+function readSupport(text) {
+  const line = text.replace(/^Support: /, "");
+  const [listed = ""] = line.match(versions) ?? [];
+  const browsers = Object.fromEntries(listed.split(", ").filter(Boolean).map((pair) => pair.split(" ")));
+  const rest = line.slice(listed.length).replace(/^[,.]\s*/, "");
+
+  return {
+    browsers: ["Chrome", "Firefox", "Safari"].filter((name) => browsers[name]).map((name) => ({ name, version: browsers[name] })),
+    html: capitalize(marked.parseInline(rest)),
+  };
+}
+
+/* Everything from "Why it works:" on, sorted into its parts: the reasons,
+   the rules, the support line, the credits, and any other labelled line,
+   such as "In other systems:". A credit is a list item that opens with its
+   kind, and it may share a list with the rules. */
+const credit = /^(Borrowed from|Background|Docs):\s*/;
+
+function readNotes(tokens) {
+  const notes = { reasons: [], rules: [], support: null, other: [], credits: [] };
+  let list = null;
+
+  for (const token of tokens) {
+    if (token.type === "paragraph" && token.text === "Why it works:") list = notes.reasons;
+    else if (token.type === "paragraph" && token.text === "Rules:") list = notes.rules;
+    else if (token.type === "paragraph" && token.text.startsWith("Support:")) notes.support = readSupport(token.text);
+    else if (token.type === "list") {
+      for (const item of token.items) {
+        const [, kind] = item.text.match(credit) ?? [];
+
+        const html = marked.parseInline(item.text.replace(credit, ""));
+
+        if (kind) notes.credits.push({ kind, html });
+        else if (list) list.push(html);
+        else notes.other.push({ label: "", html });
+      }
+      list = null;
+    } else if (token.type === "paragraph") {
+      const [, label = "", text] = token.text.match(/^(?:([A-Z][^:.]{0,40}):\s*)?([\s\S]*)$/);
+      notes.other.push({ label, html: capitalize(marked.parseInline(text)) });
+    }
+  }
+
+  return notes;
+}
+
 /* An entry reads: when to use it, the code, then "Why it works:" and all
    that follows. `source` is the code with any text between its blocks, and
    `notes` is the rest. `number` is the entry's place in its category. */
@@ -23,8 +82,8 @@ function readEntry({ heading, body }, index) {
     title: marked.parseInline(heading.text),
     slug: slugify(heading.text),
     lede: hasLede ? marked.parseInline(body[0].text) : "",
-    source: marked.parser(body.slice(hasLede ? 1 : 0, notesStart)),
-    notes: marked.parser(body.slice(notesStart)),
+    source: readSource(body.slice(hasLede ? 1 : 0, notesStart)),
+    notes: readNotes(body.slice(notesStart)),
     code: {
       css: codeBlocks(body, "css"),
       html: codeBlocks(body, "html"),

@@ -15,37 +15,101 @@
     <!-- header -->
 
     <main>
-      <section class="hero content-grid">
-        <div class="hero-title">
-          <h1><img src="/wordmark.svg" alt="good-css" width="711" height="95"></h1>
-          <p>From experts for agents.</p>
+      <section class="hero">
+        <div class="hero-main">
+          <h1><img src="/wordmark.svg" alt="good-css" width="768" height="95"></h1>
+
+          <div class="hero-install">
+            <p class="hero-install-head label"><span>Install</span> <span>Agent skill</span></p>
+            <!-- install-command -->
+            <p class="label">For Claude Code, Codex, Cursor and any other agent that reads skills</p>
+          </div>
+
+          <p class="ghost" aria-hidden="true" data-slot="entry-count"></p>
         </div>
 
-        <!-- install-command -->
-
-        <a class="badge" href="https://is-agentic.com/scan/good-css.vercel.app">
-          <strong>100/100</strong>
-          <span>Your agent can read this site.</span>
-        </a>
+        <figure class="hero-panel" aria-hidden="true">
+          <div class="hero-object">
+            <img src="/art/box-model.webp" alt="" width="400" height="521">
+            <!-- Each label ends in a short line that points at its layer, at
+                 the place given as a share of the picture. -->
+            <span style="--x: 30.6%; --y: 11.9%">Content</span>
+            <span style="--x: 18.5%; --y: 29.9%">Padding</span>
+            <span style="--x: 10.2%; --y: 48.7%">Border</span>
+            <span style="--x: 1.1%; --y: 65.7%; --leader: 10px">Margin</span>
+          </div>
+        </figure>
       </section>
 
-      <section class="categories content-grid" aria-labelledby="categories-title">
+      <section class="stats band band-dark content-grid" aria-labelledby="tagline">
+        <p class="band-head label">
+          <span class="with-icon"><span class="icon icon-spark"></span>good-css · agent skill</span>
+          <span>PRACTICES.md</span>
+        </p>
+
+        <h2 class="tagline" id="tagline">From experts for agents.</h2>
+        <p class="statement">Opinionated modern CSS techniques, packaged as an agent skill.</p>
+
+        <ul class="stat-cells">
+          <li class="stat">
+            <p class="stat-head label">
+              <span class="with-icon"><span class="icon icon-target"></span>Entries</span>
+              <span>PRACTICES.md</span>
+            </p>
+            <p class="stat-cell">
+              <b data-slot="entry-count"></b>
+              <span>Entries, each one a live specimen</span>
+            </p>
+          </li>
+          <li class="stat">
+            <p class="stat-head label">
+              <span class="with-icon"><span class="icon icon-index"></span>Categories</span>
+              <span>skills/good-css/references</span>
+            </p>
+            <p class="stat-cell">
+              <b data-slot="category-count"></b>
+              <span>Categories, one reference file each</span>
+            </p>
+          </li>
+          <li class="stat">
+            <a href="https://is-agentic.com/scan/good-css.vercel.app">
+              <span class="stat-head label">
+                <span class="with-icon"><span class="icon icon-spark"></span>is-agentic</span>
+                <span class="with-icon">is-agentic.com<span class="icon icon-out"></span></span>
+              </span>
+              <span class="stat-cell">
+                <b>100/100</b>
+                <span>Your agent can read this site.</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section class="categories band band-slate content-grid" aria-labelledby="categories-title">
+        <p class="band-head label">
+          <span class="with-icon"><span class="icon icon-index"></span>Index</span>
+          <span data-slot="range"></span>
+        </p>
+
         <h2 id="categories-title">Categories</h2>
 
         <ul class="carousel" data-slot="cards"></ul>
 
+        <ol class="phases" data-slot="phases"></ol>
+
         <div class="carousel-controls">
-          <div class="carousel-progress" aria-hidden="true"></div>
-          <p class="carousel-count">
+          <p class="counter" aria-live="polite">
             <b data-slot="current">01</b>
-            <span>/ <span data-slot="total"></span></span>
+            <span class="counter-total">/ <span data-slot="total"></span></span>
+            <span class="counter-name label" data-slot="current-name"></span>
           </p>
           <div class="carousel-buttons">
             <button type="button" data-carousel-dir="-1" aria-label="Previous category">
-              <img src="/arrow.svg" alt="">
+              <span class="icon icon-arrow"></span>
             </button>
             <button type="button" data-carousel-dir="1" aria-label="Next category">
-              <img src="/arrow.svg" alt="">
+              <span class="icon icon-arrow"></span>
             </button>
           </div>
         </div>
@@ -59,37 +123,68 @@
     <template id="card">
       <li>
         <a class="card">
-          <span class="card-art" data-slot="art" aria-hidden="true"></span>
           <span class="card-title" data-slot="title"></span>
+          <span class="art" data-slot="art" aria-hidden="true"></span>
+          <span class="card-count"><b data-slot="count"></b> <span class="label">Entries</span></span>
+          <span class="card-open" aria-hidden="true"><span class="icon icon-arrow"></span></span>
         </a>
       </li>
     </template>
 
     <template id="category">
-      <section class="category content-grid">
-        <div class="category-layout">
-          <h2><span data-slot="title"></span></h2>
-          <div class="entries" data-slot="entries"></div>
-        </div>
+      <section class="category band content-grid">
+        <p class="ghost" aria-hidden="true" data-slot="ghost"></p>
+
+        <header class="opener">
+          <div class="opener-text">
+            <p class="opener-meta label">
+              <span class="opener-number" data-slot="number"></span>
+              <span data-slot="of"></span>
+              <span class="opener-dash"></span>
+              <span data-slot="count"></span>
+            </p>
+            <h2 data-slot="title"></h2>
+            <ol class="entry-index" data-slot="index"></ol>
+          </div>
+          <div class="opener-tile art" data-slot="art" aria-hidden="true"></div>
+        </header>
+
+        <div class="entries" data-slot="entries"></div>
       </section>
     </template>
 
     <template id="entry">
       <article class="entry">
-        <h3 data-slot="title"></h3>
-        <p class="lede" data-slot="lede"></p>
+        <p class="entry-number">
+          <span class="ghost" aria-hidden="true" data-slot="ghost"></span>
+          <span class="label">Entry</span>
+          <b data-slot="number"></b>
+        </p>
 
-        <div data-slot="specimen"></div>
+        <div class="entry-body">
+          <h3 data-slot="title"></h3>
+          <p class="lede" data-slot="lede"></p>
 
-        <details class="fold fold-source">
-          <summary>Code</summary>
-          <div class="prose" data-slot="source"></div>
-        </details>
+          <div data-slot="specimen"></div>
 
-        <details class="fold">
-          <summary>Why it works, the rules and the credits</summary>
-          <div class="prose" data-slot="notes"></div>
-        </details>
+          <div class="folds">
+            <details class="fold fold-code">
+              <summary>
+                <span class="fold-title">Code</span>
+                <span class="fold-meta label" data-slot="code-meta"></span>
+              </summary>
+              <div class="source" data-slot="source"></div>
+            </details>
+
+            <details class="fold">
+              <summary>
+                <span class="fold-title">Why it works, the rules and the credits</span>
+                <span class="fold-meta label" data-slot="notes-meta"></span>
+              </summary>
+              <div class="notes" data-slot="notes"></div>
+            </details>
+          </div>
+        </div>
       </article>
     </template>
 
@@ -104,12 +199,13 @@
               <button type="button" data-width="full">100%</button>
             </div>
             <a
+              class="viewport-open"
               data-slot="open"
               target="_blank"
               title="Open in its own tab"
               aria-label="Open this specimen in its own tab"
             >
-              <img src="/icons/link-square.svg" alt="">
+              <span class="icon icon-open"></span>
             </a>
           </div>
           <iframe data-slot="frame"></iframe>
@@ -118,12 +214,12 @@
             type="button"
             aria-label="Resize the frame, by dragging or with the arrow keys"
           >
-            <img src="/icons/resize.svg" alt="">
+            <span class="icon icon-grip"></span>
           </button>
         </div>
 
         <figcaption class="check">
-          <img src="/icons/info.svg" alt="Check:">
+          <span class="icon icon-info" role="img" aria-label="Check:"></span>
           <span data-slot="check"></span>
         </figcaption>
       </figure>

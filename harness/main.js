@@ -1,19 +1,43 @@
+/* Prism's core and the three languages an entry is written in. The full
+   bundle adds plugins that reach for the DOM, and the build has none. */
+import Prism from "prismjs/components/prism-core";
+import "prismjs/components/prism-markup";
+import "prismjs/components/prism-css";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
 import { readPractices } from "./practices.js";
 import { demos } from "./demos/index.js";
 
 const practices = readPractices();
+const { categories, entries } = practices;
 
 /* The drawing of each category, named by the slug of its title. It goes into
-   the page as markup, so its strokes take the color of the card. */
+   the page as markup, so its lines take the color of what holds it. */
 const drawings = import.meta.glob("./categories/*.svg", { query: "?raw", import: "default", eager: true });
+const drawing = (category) => drawings[`./categories/${category.slug}.svg`] ?? "";
 
 const stamp = (id) => document.getElementById(id).content.cloneNode(true);
 const slot = (root, name) => root.querySelector(`[data-slot="${name}"]`);
 const pad = (number) => String(number).padStart(2, "0");
+const plural = (count, word, words = `${word}s`) => `${count} ${count === 1 ? word : words}`;
 
-function specimen(entry, demo) {
+function element(tag, className, html) {
+  const node = document.createElement(tag);
+
+  if (className) node.className = className;
+  if (html !== undefined) node.innerHTML = html;
+
+  return node;
+}
+
+/* The bands alternate under the categories band: light, then dark. A frame
+   is drawn the other way round, so it stands out from its band: a dark panel
+   on a light band, a light panel on a dark one. */
+const tone = (index) => (index % 2 ? "dark" : "light");
+
+function specimen(entry, demo, band) {
   const node = stamp("specimen");
-  const url = `/specimen/${entry.slug}`;
+  const url = `/specimen/${entry.slug}${band === "dark" ? "?panel=light" : ""}`;
   const viewport = node.querySelector(".viewport");
   const frame = slot(node, "frame");
   const size = slot(node, "size");
@@ -26,13 +50,12 @@ function specimen(entry, demo) {
   slot(node, "check").innerHTML = demo.check;
   slot(node, "open").href = url;
 
-  /* A width button sets the width of the specimen, so the frame is wider by
-     its two edges. The last button clears the width, and the frame fills its
-     column again. */
+  /* A width button sets the width of the specimen. The last button clears
+     the width, and the frame fills its column again. */
   for (const button of widths) {
     button.addEventListener("click", () => {
       const width = Number(button.dataset.width);
-      viewport.style.width = width ? `calc(${width}px + var(--edge) * 2)` : "";
+      viewport.style.width = width ? `${width}px` : "";
     });
   }
 
@@ -98,16 +121,102 @@ function noSpecimen(entry) {
   return node;
 }
 
-function entry(entry) {
+/* A code block with its line numbers beside it. The numbers stay put while a
+   long line scrolls. Prism colors the code: CSS, HTML and JS are in its core. */
+const languages = { css: "css", html: "markup", js: "javascript" };
+
+function codeBlock({ lang, text }) {
+  const block = element("div", "code-block");
+  const lines = text.split("\n").length;
+  const language = Prism.languages[languages[lang]];
+
+  block.append(
+    element("span", "code-lines", Array.from({ length: lines }, (_, line) => line + 1).join("\n")),
+    element("pre", "", `<code>${language ? Prism.highlight(text, language, lang) : text}</code>`),
+  );
+  block.firstElementChild.setAttribute("aria-hidden", "true");
+
+  return block;
+}
+
+const sourcePart = (part) => (part.html ? element("div", "source-text", part.html) : codeBlock(part));
+
+/* "CSS · 2 blocks · 20 lines", from the code of the entry. */
+function codeMeta(source) {
+  const blocks = source.filter((part) => part.lang);
+  const langs = [...new Set(blocks.map((block) => block.lang.toUpperCase()))];
+  const lines = blocks.reduce((sum, block) => sum + block.text.split("\n").length, 0);
+
+  return [...langs, blocks.length > 1 && plural(blocks.length, "block"), plural(lines, "line")].filter(Boolean).join(" · ");
+}
+
+/* "5 reasons · 7 rules · support · credits", from the notes of the entry. */
+function notesMeta(notes) {
+  return [
+    notes.reasons.length && plural(notes.reasons.length, "reason"),
+    notes.rules.length && plural(notes.rules.length, "rule"),
+    notes.support && "support",
+    notes.credits.length && "credits",
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
+
+/* One part of the notes: its label on one side, its text on the other. */
+function note(label, body) {
+  const section = element("section", "note");
+
+  section.append(element("h4", "note-label label", label), body);
+  return section;
+}
+
+const numbered = (items) => element("ol", "note-items", items.map((html) => `<li><div>${html}</div></li>`).join(""));
+
+function support({ browsers, html }) {
+  const body = element("div", "note-body");
+
+  if (browsers.length) {
+    body.append(
+      element(
+        "dl",
+        "browsers",
+        browsers.map(({ name, version }) => `<div data-browser="${name}"><dt>${name}</dt><dd>${version}</dd></div>`).join(""),
+      ),
+    );
+  }
+
+  if (html) body.append(element("p", "", html));
+  return body;
+}
+
+function notes({ reasons, rules, support: line, other, credits }) {
+  return [
+    reasons.length && note("Why it works", numbered(reasons)),
+    rules.length && note("Rules", numbered(rules)),
+    line && note("Support", support(line)),
+    ...other.map(({ label, html }) => note(label || "Notes", element("div", "note-body", `<p>${html}</p>`))),
+    credits.length &&
+      note(
+        "Credits",
+        element("div", "note-body credits", credits.map(({ kind, html }) => `<p><strong>${kind}:</strong> ${html}</p>`).join("")),
+      ),
+  ].filter(Boolean);
+}
+
+function entry(entry, band) {
   const node = stamp("entry");
   const demo = demos[entry.slug];
 
   node.firstElementChild.id = entry.slug;
+  slot(node, "ghost").textContent = pad(entry.number);
+  slot(node, "number").textContent = pad(entry.number);
   slot(node, "title").innerHTML = entry.title;
   slot(node, "lede").innerHTML = entry.lede;
-  slot(node, "specimen").replaceWith(demo ? specimen(entry, demo) : noSpecimen(entry));
-  slot(node, "source").innerHTML = entry.source;
-  slot(node, "notes").innerHTML = entry.notes;
+  slot(node, "specimen").replaceWith(demo ? specimen(entry, demo, band) : noSpecimen(entry));
+  slot(node, "code-meta").textContent = codeMeta(entry.source);
+  slot(node, "source").replaceChildren(...entry.source.map(sourcePart));
+  slot(node, "notes-meta").textContent = notesMeta(entry.notes);
+  slot(node, "notes").replaceChildren(...notes(entry.notes));
 
   return node;
 }
@@ -117,13 +226,32 @@ function entry(entry) {
    the CSS does the rest. */
 const timeline = (category) => `--in-${category.slug}`;
 
-function category(category) {
-  const node = stamp("category");
+function indexItem(entry) {
+  const item = element("li");
+  item.append(element("a", "", `<span class="label">${pad(entry.number)}</span> <span>${entry.title}</span>`));
+  item.firstElementChild.href = `#${entry.slug}`;
+  return item;
+}
 
-  node.firstElementChild.id = category.slug;
-  node.firstElementChild.setAttribute("style", `view-timeline-name: ${timeline(category)}`);
+function category(category, index) {
+  const node = stamp("category");
+  const section = node.firstElementChild;
+  const band = tone(index);
+  const list = slot(node, "index");
+
+  section.id = category.slug;
+  section.classList.add(band === "dark" ? "band-dark" : "band-tint");
+  section.setAttribute("style", `view-timeline-name: ${timeline(category)}`);
+  slot(node, "ghost").textContent = pad(index + 1);
+  slot(node, "number").textContent = pad(index + 1);
+  slot(node, "of").textContent = `/ ${pad(categories.length)}`;
+  slot(node, "count").textContent = plural(category.entries.length, "entry", "entries");
   slot(node, "title").textContent = category.title;
-  slot(node, "entries").replaceChildren(...category.entries.map(entry));
+  slot(node, "art").innerHTML = drawing(category);
+  /* The index fills its first column, then its second. */
+  list.setAttribute("style", `--rows: ${Math.ceil(category.entries.length / 2)}`);
+  list.replaceChildren(...category.entries.map(indexItem));
+  slot(node, "entries").replaceChildren(...category.entries.map((item) => entry(item, band)));
 
   return node;
 }
@@ -132,16 +260,28 @@ function card(category) {
   const node = stamp("card");
 
   node.querySelector("a").href = `#${category.slug}`;
-  slot(node, "art").innerHTML = drawings[`./categories/${category.slug}.svg`] ?? "";
   slot(node, "title").textContent = category.title;
+  slot(node, "art").innerHTML = drawing(category);
+  slot(node, "count").textContent = category.entries.length;
 
   return node;
+}
+
+function phase(category, index) {
+  const item = element("li");
+  const button = element("button", "", `<span class="label">${pad(index + 1)}</span>`);
+
+  button.type = "button";
+  button.setAttribute("aria-label", category.title);
+  item.append(button);
+
+  return item;
 }
 
 /* The name of a category in the header's button. Only the one whose category
    is in view shows. */
 function currentName(category) {
-  const name = document.createElement("span");
+  const name = element("span");
 
   name.textContent = category.title;
   name.setAttribute("style", `animation-timeline: ${timeline(category)}`);
@@ -150,8 +290,8 @@ function currentName(category) {
 }
 
 function menuItem(category) {
-  const item = document.createElement("li");
-  const link = document.createElement("a");
+  const item = element("li");
+  const link = element("a");
 
   link.href = `#${category.slug}`;
   link.textContent = category.title;
@@ -161,14 +301,23 @@ function menuItem(category) {
   return item;
 }
 
-const { categories } = practices;
+function footerDrawing(category) {
+  return element("span", "art", drawing(category));
+}
+
 const menu = document.getElementById("category-menu");
 
-slot(document, "cards").replaceChildren(...categories.map(card));
+/* Every count on the page is read from PRACTICES.md. The built page already
+   holds what this draws, so each part is replaced and not added to. */
+for (const count of document.querySelectorAll('[data-slot="entry-count"]')) count.textContent = entries.length;
+slot(document, "category-count").textContent = categories.length;
+slot(document, "range").textContent = `01 — ${pad(categories.length)}`;
 slot(document, "total").textContent = pad(categories.length);
+slot(document, "cards").replaceChildren(...categories.map(card));
+slot(document, "phases").replaceChildren(...categories.map(phase));
 slot(document, "categories").replaceChildren(...categories.map(category));
-/* The first name is "Categories", from the header. The rest follow it. The
-   built page already has them, so they are replaced and not added to. */
+slot(document, "footer-art").replaceChildren(...categories.map(footerDrawing));
+/* The first name is "Categories", from the header. The rest follow it. */
 const names = slot(document, "category-names");
 names.replaceChildren(names.firstElementChild, ...categories.map(currentName));
 slot(document, "category-menu").replaceChildren(...categories.map(menuItem));
@@ -183,36 +332,39 @@ menu.addEventListener("click", (event) => {
   if (event.target.closest("a")) menu.hidePopover();
 });
 
-for (const link of document.querySelectorAll('.prose a[href^="http"]')) link.target = "_blank";
+for (const link of document.querySelectorAll('.notes a[href^="http"]')) link.target = "_blank";
 
 /* The row of cards scrolls on its own. The script adds what a scroller cannot
-   do alone: the two buttons, the count, and the bar that fills as it scrolls. */
+   do alone: the two buttons, the phases, the count, and the card it names. */
 const carousel = slot(document, "cards");
 const [previous, next] = document.querySelectorAll("[data-carousel-dir]");
+const phases = [...slot(document, "phases").querySelectorAll("button")];
 const current = slot(document, "current");
-const progress = document.querySelector(".carousel-progress");
+const currentTitle = slot(document, "current-name");
 
-const step = (dir) => {
-  const card = carousel.firstElementChild.getBoundingClientRect().width;
-  carousel.scrollBy({ left: dir * card });
-};
+const max = () => carousel.scrollWidth - carousel.clientWidth;
+const step = (dir) => carousel.scrollBy({ left: dir * carousel.firstElementChild.getBoundingClientRect().width });
 
-/* The bar fills from one card's share at the start to full at the end, where
-   the last card meets the end of the bar. The count is the same position as
-   a whole number, from 01 to 08. Where three cards show at once the row has
-   six stops for the eight numbers, so a press of an arrow moves the count by
-   one or by two. */
+/* The count runs from 01 to 08 as the row scrolls from start to end, and the
+   card it names is lit. Where three cards show at once the row has six stops
+   for the eight numbers, so a press of an arrow moves the count by one or by
+   two. A phase scrolls to the place where the count names its card. */
 const sync = () => {
-  const max = carousel.scrollWidth - carousel.clientWidth;
-  const scrolled = max > 0 ? Math.min(Math.abs(carousel.scrollLeft) / max, 1) : 0;
-  const position = scrolled * (categories.length - 1);
+  const scrolled = max() > 0 ? Math.min(Math.abs(carousel.scrollLeft) / max(), 1) : 0;
+  const index = Math.round(scrolled * (categories.length - 1));
 
-  previous.disabled = scrolled * max <= 1;
-  next.disabled = max > 0 && scrolled * max >= max - 1;
-  current.textContent = pad(Math.round(position) + 1);
-  progress.style.setProperty("--progress", (position + 1) / categories.length);
+  previous.disabled = scrolled * max() <= 1;
+  next.disabled = max() > 0 && scrolled * max() >= max() - 1;
+  current.textContent = pad(index + 1);
+  currentTitle.textContent = categories[index].title;
+
+  [...carousel.children].forEach((card, at) => card.toggleAttribute("data-current", at === index));
+  phases.forEach((button, at) => button.setAttribute("aria-pressed", at === index));
 };
 
+phases.forEach((button, index) =>
+  button.addEventListener("click", () => carousel.scrollTo({ left: (index / (categories.length - 1)) * max() })),
+);
 previous.addEventListener("click", () => step(-1));
 next.addEventListener("click", () => step(1));
 carousel.addEventListener("scroll", sync, { passive: true });
