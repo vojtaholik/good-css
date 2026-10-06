@@ -65,7 +65,7 @@ Renaming an entry's title changes its slug. Rename the fixture to match.
 - `tokens.css` holds the fonts and colors, shared by the page and the specimens.
 - `public/fonts` holds Inter and Geist Mono, the two fonts, each with its license.
 - `public/mark.svg`, `public/wordmark.svg` and `public/icons` are exports from the Figma file of the design. Their letters are outlines, so they need no font. The page draws them as masks, so they take the color of their band.
-- `categories` holds the drawing of each category, named by its slug. The page puts it in as markup, so its lines take the color of what holds it. Its solids are webp files in `public/art`, beside the box model of the hero.
-- `public/patterns` holds the box model drawn as lines, in three shapes, for the backgrounds of the hero, the stats band and the footer.
+- `categories` holds the drawing of each category, named by its slug. The page puts it in as markup, so its lines take the color of what holds it. Its solids are webp files in `public/art`.
+- `public/patterns` holds the box model drawn as lines, in two shapes, for the backgrounds of the stats band and the footer.
 - `../deploy/page.js` holds the header and the footer of every page.
 - `../vite.config.js` serves `/specimen/<slug>` and the pages, and puts the header and the footer into the index.

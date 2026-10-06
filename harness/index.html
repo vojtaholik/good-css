@@ -15,7 +15,9 @@
     <!-- header -->
 
     <main>
-      <section class="hero">
+      <section class="hero band band-tint content-grid">
+        <p class="ghost" aria-hidden="true" data-slot="entry-count"></p>
+
         <div class="hero-main">
           <h1><img src="/wordmark.svg" alt="good-css" width="768" height="95"></h1>
 
@@ -25,20 +27,9 @@
             <p class="label">For Claude Code, Codex, Cursor and any other agent that reads skills</p>
           </div>
 
-          <p class="ghost" aria-hidden="true" data-slot="entry-count"></p>
+          <!-- The art of the hero goes in here. Empty, it takes no room. -->
+          <figure class="hero-art" aria-hidden="true"></figure>
         </div>
-
-        <figure class="hero-panel" aria-hidden="true">
-          <div class="hero-object">
-            <img src="/art/box-model.webp" alt="" width="400" height="521">
-            <!-- Each label ends in a short line that points at its layer, at
-                 the place given as a share of the picture. -->
-            <span style="--x: 30.6%; --y: 11.9%">Content</span>
-            <span style="--x: 18.5%; --y: 29.9%">Padding</span>
-            <span style="--x: 10.2%; --y: 48.7%">Border</span>
-            <span style="--x: 1.1%; --y: 65.7%; --leader: 10px">Margin</span>
-          </div>
-        </figure>
       </section>
 
       <section class="stats band band-dark content-grid" aria-labelledby="tagline">

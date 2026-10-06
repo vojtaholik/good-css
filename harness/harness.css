@@ -472,7 +472,8 @@ pre {
 /* Header ------------------------------------------------------------------ */
 
 /* The mark, then the two links pushed to the far end by the auto margin of
-   the first, as in "Push one item away with an auto margin". */
+   the first, as in "Push one item away with an auto margin". The header is
+   the top of the light band the page opens with. */
 .site-header {
   z-index: 2;
   padding-block-start: 3.5rem;
@@ -491,21 +492,6 @@ pre {
 
 .mark:active {
   opacity: 0.6;
-}
-
-/* On the index the header lies over the hero, and its links over the slate
-   panel on the right. */
-@media (width >= 56rem) {
-  .site-header:has(~ main .hero) {
-    position: absolute;
-    inset-inline: 0;
-    background: none;
-
-    & .pill {
-      --ink: var(--bp-tint);
-      --ground: var(--bp-slate);
-    }
-  }
 }
 
 /* The install command, opened by the button in the header. It fades and rises
@@ -616,6 +602,43 @@ pre {
   }
 }
 
+/* The ink and the ground of the header are colors, so they turn from light
+   to dark smoothly and do not flip halfway. The accent is the sign of the
+   button, ink on the light bar and sulphur on the dark one. */
+@property --ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: black;
+}
+
+@property --ground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: white;
+}
+
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: black;
+}
+
+@keyframes header-tone {
+  from {
+    --ink: var(--bp-dark);
+    --ground: var(--bp-tint);
+    --accent: var(--bp-dark);
+    border-color: transparent;
+  }
+
+  to {
+    --ink: var(--bp-tint);
+    --ground: var(--bp-dark);
+    --accent: var(--bp-lime);
+    border-color: color-mix(in oklch, var(--bp-tint) 20%, transparent);
+  }
+}
+
 @media (width < 56rem) {
   /* A link into the page stops below the bar, as in "Anchor targets that
      clear a sticky header". */
@@ -623,15 +646,18 @@ pre {
     --anchor-offset: calc(var(--header-bar) + 1rem);
   }
 
-  /* The header is a dark bar that stays at the top of the window. */
+  /* The header is a bar that stays at the top of the window. At the top of
+     the page it is part of the light band under it. While the page scrolls by
+     the height of the bar it turns dark, by a scroll-driven animation, and
+     no script watches the scroll. A browser with no scroll timelines shows it dark. */
   .site-header {
-    --ink: var(--bp-tint);
-    --ground: var(--bp-dark);
-
     position: sticky;
     inset-block-start: 0;
     padding-block-start: 0;
-    border-block-end: 1px solid color-mix(in oklch, var(--bp-tint) 20%, transparent);
+    border-block-end: 1px solid;
+    animation: header-tone linear both;
+    animation-timeline: scroll();
+    animation-range: 0px var(--header-bar);
   }
 
   .site-header-bar {
@@ -693,7 +719,7 @@ pre {
       flex: none;
       inline-size: 0.75rem;
       block-size: 0.75rem;
-      background: var(--bp-lime);
+      background: var(--accent);
       mask: url("/icons/plus.svg") center / contain no-repeat;
     }
 
@@ -708,15 +734,17 @@ pre {
 
   /* Each name shows while its timeline runs, and "Categories" shows while
      none does. A hidden name has no width, so the button is as wide as the
-     one that shows and the sign stays beside it. A browser with no view
-     timelines shows "Categories" all the way down. */
+     one that shows and the sign stays beside it. A name too long for the bar
+     ends in an ellipsis. A browser with no view timelines shows "Categories"
+     all the way down. */
   .current-names {
     display: flex;
+    overflow: clip;
 
     & > * {
-      flex: none;
       overflow: clip;
       white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     & > :first-child {
@@ -784,36 +812,30 @@ pre {
 
 /* Hero -------------------------------------------------------------------- */
 
-/* The wordmark and the command on the light side, and the box model on a
-   slate panel at the right edge of the window. The panel starts at the same
-   place in the content column at every width, and is never narrower than
-   20rem, until the two stack. */
+/* The wordmark and the command, on the band the header opens, with the
+   number of entries huge behind them at the far end. The art goes at the end
+   of the row, and under the command on a narrow screen. With the header the
+   band is 50rem tall, and the two blocks sit in the middle of it. */
 .hero {
-  --ink: var(--bp-dark);
-  --ground: var(--bp-tint);
-  --ghost: var(--bp-ghost-tint);
-  --split: min(var(--start) + var(--column) * 0.7157, 100cqi - 20rem);
+  align-content: center;
+  min-block-size: 43rem;
+  padding-block: 3rem 6rem;
 
-  position: relative;
-  isolation: isolate;
-  display: grid;
-  grid-template-columns: var(--split) minmax(0, 1fr);
-  min-block-size: 50rem;
-  overflow: clip;
-  color: var(--ink);
-  background: var(--ground);
+  & > .ghost {
+    inset-block-start: calc(100% - 17.25rem);
+    inset-inline-end: calc(var(--start) - 0.25em);
+    font-size: var(--text-ghost-hero);
+  }
 }
 
 .hero-main {
-  position: relative;
   display: grid;
-  align-content: center;
-  gap: var(--wordmark-gap);
-  padding-block: 6.5rem 5.5rem;
-  padding-inline: var(--start) 2.375rem;
+  grid-template-columns: minmax(0, 48rem) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--wordmark-gap) 4rem;
 
-  & h1 {
-    max-inline-size: 48rem;
+  & > * {
+    grid-column: 1;
   }
 
   /* The G is round, so it hangs a little over the edge of the column to
@@ -822,11 +844,19 @@ pre {
     inline-size: 100%;
     translate: -0.75% 0;
   }
+}
 
-  & .ghost {
-    inset-block-start: calc(100% - 17.25rem);
-    inset-inline-start: calc(var(--start) - 1.5rem);
-    font-size: var(--text-ghost-hero);
+.hero-art {
+  grid-area: 1 / 2 / span 2;
+  justify-self: end;
+  inline-size: min(100%, 28rem);
+
+  &:empty {
+    display: none;
+  }
+
+  & img {
+    inline-size: 100%;
   }
 }
 
@@ -865,66 +895,6 @@ pre {
 
     & .icon {
       display: block;
-    }
-  }
-}
-
-/* The panel. Its lines are the box model drawn flat and faint behind the
-   object. Each label sits at the place given to it as a share of the
-   picture, and ends in a short line that points at its layer. */
-.hero-panel {
-  position: relative;
-  display: grid;
-  place-items: center;
-  padding-block: 10rem 7.4375rem;
-  padding-inline: 2.5rem;
-  background: var(--bp-slate);
-  color: var(--bp-tint);
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset-block-start: 7.5rem;
-    inset-inline-start: 50%;
-    inline-size: 27rem;
-    block-size: 40rem;
-    translate: -50% 0;
-    background: currentColor;
-    opacity: 0.16;
-    mask: url("/patterns/box-model-tall.svg") center / contain no-repeat;
-  }
-}
-
-.hero-object {
-  position: relative;
-  inline-size: min(25rem, 100% - 3rem);
-  margin-inline-start: 0.75rem;
-
-  & img {
-    inline-size: 100%;
-  }
-
-  & span {
-    position: absolute;
-    inset-block-start: var(--y);
-    inset-inline-end: calc(100% - var(--x));
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    translate: 0 -50%;
-    font-size: 0.625rem;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    white-space: nowrap;
-
-    &::after {
-      content: "";
-      inline-size: var(--leader, 1.375rem);
-      block-size: 1px;
-      background: currentColor;
-      opacity: 0.8;
     }
   }
 }
@@ -2368,36 +2338,22 @@ details[open]::details-content {
 
 @media (width < 56rem) {
   .hero {
-    grid-template-columns: minmax(0, 1fr);
     min-block-size: 0;
+    padding-block: 3.5rem 7rem;
+
+    & > .ghost {
+      inset-block-start: auto;
+      inset-block-end: -0.35em;
+    }
   }
 
   .hero-main {
-    padding-block: 4rem 6rem;
-    padding-inline: var(--gutter);
-
-    & .ghost {
-      inset-block-start: auto;
-      inset-block-end: -0.35em;
-      inset-inline-start: calc(var(--gutter) - 0.05em);
-    }
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .hero-panel {
-    padding-block: 3rem;
-
-    &::before {
-      inset-block-start: 50%;
-      inline-size: min(27rem, 90%);
-      block-size: auto;
-      aspect-ratio: 432 / 640;
-      translate: -50% -50%;
-    }
-  }
-
-  .hero-object {
-    inline-size: min(20rem, 100% - 5rem);
-    margin-inline-start: 4rem;
+  .hero-art {
+    grid-area: auto;
+    justify-self: center;
   }
 
   .stat-cells {
