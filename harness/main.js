@@ -7,6 +7,7 @@ import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import { readPractices } from "./practices.js";
 import { demos } from "./demos/index.js";
+import heroDrawing from "./hero.svg?raw";
 
 const practices = readPractices();
 const { categories, entries } = practices;
@@ -306,6 +307,10 @@ function footerDrawing(category) {
 }
 
 const menu = document.getElementById("category-menu");
+
+/* The drawing of the hero goes in as markup too, in place of what the built
+   page holds. */
+slot(document, "hero-art").innerHTML = heroDrawing;
 
 /* Every count on the page is read from PRACTICES.md. The built page already
    holds what this draws, so each part is replaced and not added to. */

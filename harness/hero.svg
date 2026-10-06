@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <g class="lines" stroke="currentColor">
+    <path vector-effect="non-scaling-stroke" d="M18 430L218.45 59.25"/>
+    <path vector-effect="non-scaling-stroke" d="M18 430L388.75 229.55"/>
+    <path vector-effect="non-scaling-stroke" d="M18 430L365.97 82.03"/>
+    <path vector-effect="non-scaling-stroke" d="M229.11 279.64C229.11 313.2 201.91 340.4 168.36 340.4C134.8 340.4 107.6 313.2 107.6 279.64C107.6 246.09 134.8 218.89 168.36 218.89C201.91 218.89 229.11 246.09 229.11 279.64Z"/>
+    <path vector-effect="non-scaling-stroke" d="M135.28 346.47C135.28 365.11 120.17 380.22 101.53 380.22C82.89 380.22 67.78 365.11 67.78 346.47C67.78 327.83 82.89 312.72 101.53 312.72C120.17 312.72 135.28 327.83 135.28 346.47Z"/>
+    <path vector-effect="non-scaling-stroke" d="M83.16 383.59C83.16 393.95 74.76 402.34 64.41 402.34C54.05 402.34 45.66 393.95 45.66 383.59C45.66 373.24 54.05 364.84 64.41 364.84C74.76 364.84 83.16 373.24 83.16 383.59Z"/>
+  </g>
+  <image class="solid" href="/art/hero-sphere.webp" x="124.31" y="-4.98" width="328.667" height="328.667"/>
+  <g class="nodes" fill="var(--art-ground, none)" stroke="currentColor">
+    <circle vector-effect="non-scaling-stroke" cx="18" cy="430" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="192.45" cy="107.35" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="340.65" cy="255.55" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="218.45" cy="59.25" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="388.75" cy="229.55" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="365.97" cy="82.03" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="211.32" cy="236.68" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="125.4" cy="322.6" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="77.67" cy="370.33" r="3.8"/>
+    <circle vector-effect="non-scaling-stroke" cx="51.15" cy="396.85" r="3.8"/>
+  </g>
+</svg>

@@ -823,9 +823,9 @@ pre {
 /* Hero -------------------------------------------------------------------- */
 
 /* The wordmark and the command, on the band the header opens, with the
-   number of entries huge behind them at the far end. The art goes at the end
-   of the row, and under the command on a narrow screen. With the header the
-   band is 50rem tall, and the two blocks sit in the middle of it. */
+   number of entries huge behind them. The drawing is at the end of the row,
+   centered on the two, and under the command on a narrow screen. With the
+   header the band is 50rem tall, and the row sits in the middle of it. */
 .hero {
   align-content: center;
   min-block-size: 43rem;
@@ -833,20 +833,26 @@ pre {
 
   & > .ghost {
     inset-block-start: calc(100% - 17.25rem);
-    inset-inline-end: calc(var(--start) - 0.25em);
+    inset-inline-start: calc(var(--start) - 1.5rem);
     font-size: var(--text-ghost-hero);
   }
 }
 
+/* The drawing reaches past the column to the gutter of the page, and no more
+   than 9rem past it on a wide screen. Its column leaves room for it. */
 .hero-main {
-  display: grid;
-  grid-template-columns: minmax(0, 48rem) minmax(0, 1fr);
-  align-items: center;
-  gap: var(--wordmark-gap) 4rem;
+  --art: clamp(20rem, 30cqi, 28rem);
+  --reach: min(var(--start) - var(--gutter), 9rem);
 
-  & > * {
-    grid-column: 1;
-  }
+  display: grid;
+  grid-template-columns: minmax(0, 48rem) minmax(calc(var(--art) - var(--reach)), 1fr);
+  align-items: center;
+  column-gap: 4rem;
+}
+
+.hero-text {
+  display: grid;
+  gap: var(--wordmark-gap);
 
   /* The G is round, so it hangs a little over the edge of the column to
      look in line with it. */
@@ -857,16 +863,15 @@ pre {
 }
 
 .hero-art {
-  grid-area: 1 / 2 / span 2;
+  container-type: inline-size;
   justify-self: end;
-  inline-size: min(100%, 28rem);
+  inline-size: var(--art);
+  margin-inline-end: calc(var(--reach) * -1);
 
-  &:empty {
-    display: none;
-  }
-
-  & img {
-    inline-size: 100%;
+  /* A node keeps the radius it has in the file, 3.8px at 448px, at any
+     size of the drawing. */
+  & .nodes circle {
+    r: calc(3.8px * (448px / 100cqi));
   }
 }
 
@@ -2407,18 +2412,23 @@ details[open]::details-content {
     padding-block: 3.5rem 7rem;
 
     & > .ghost {
-      inset-block-start: auto;
-      inset-block-end: -0.35em;
+      inset-block: auto -0.35em;
+      inset-inline: auto calc(var(--start) - 0.25em);
     }
   }
 
   .hero-main {
     grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--wordmark-gap);
   }
 
+  /* Under the command the drawing takes the width of the column, and clears
+     the number below it. */
   .hero-art {
-    grid-area: auto;
-    justify-self: center;
+    justify-self: start;
+    inline-size: min(100%, 28rem);
+    margin-block-end: 1.5rem;
+    margin-inline-end: 0;
   }
 
   .stat-cells {
