@@ -25,7 +25,26 @@
             <div class="hero-install">
               <p class="hero-install-head label"><span>Install</span> <span>Agent skill</span></p>
               <!-- install-command -->
-              <p class="label">For Claude Code, Codex, Cursor and any other agent that reads skills</p>
+              <p class="hero-caption label">For Claude Code, Codex, Cursor and any other agent that reads skills</p>
+
+              <p class="hero-or label">Or point your agent at this site</p>
+              <div class="agent-prompt">
+                <p id="agent-prompt">Before you write CSS, read <span class="url"><span>good-css.com/</span><wbr>skills/<wbr><span>good-css/</span><wbr>SKILL.md</span> and follow it.</p>
+                <button type="button" aria-live="polite" aria-describedby="agent-prompt" data-copy>
+                  <span class="icon icon-copy"></span>
+                  <span data-copy-label>Copy</span>
+                </button>
+              </div>
+              <a class="hero-score hero-caption label" href="https://is-agentic.com/scan/good-css.com">
+                <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <circle cx="14" cy="14" r="12.25" fill="var(--bp-lime)" stroke="none"/>
+                  <circle vector-effect="non-scaling-stroke" cx="14" cy="14" r="12.25"/>
+                  <path vector-effect="non-scaling-stroke" d="M14 14V1.75"/>
+                  <circle vector-effect="non-scaling-stroke" cx="14" cy="14" r="2.25" fill="var(--art-ground)"/>
+                  <circle vector-effect="non-scaling-stroke" cx="14" cy="1.75" r="2.75" fill="var(--art-ground)"/>
+                </svg>
+                <span><b>100/100</b> agent-ready on <span class="hero-score-site">is-agentic.com <span class="icon icon-out"></span></span></span>
+              </a>
             </div>
           </div>
 
@@ -64,16 +83,14 @@
             </p>
           </li>
           <li class="stat">
-            <a href="https://is-agentic.com/scan/good-css.com">
-              <span class="stat-head label">
-                <span class="with-icon"><span class="icon icon-spark"></span>is-agentic</span>
-                <span class="with-icon">is-agentic.com<span class="icon icon-out"></span></span>
-              </span>
-              <span class="stat-cell">
-                <b>100/100</b>
-                <span>Your agent can read this site.</span>
-              </span>
-            </a>
+            <p class="stat-head label">
+              <span class="with-icon"><span class="icon icon-spark"></span>Dependencies</span>
+              <span>Plain CSS</span>
+            </p>
+            <p class="stat-cell">
+              <b>0</b>
+              <span>Packages or class names to adopt</span>
+            </p>
           </li>
         </ul>
       </section>

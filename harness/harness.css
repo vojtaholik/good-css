@@ -388,19 +388,19 @@ pre {
 }
 
 /* "Press feedback", on everything that is pressed like a button. */
-:is(.pill, .install-command button, .carousel-buttons button, .card, .phases button):active {
+:is(.pill, :is(.install-command, .agent-prompt) button, .carousel-buttons button, .card, .phases button):active {
   scale: 0.97;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  :is(.pill, .install-command button, .carousel-buttons button, .card, .phases button) {
+  :is(.pill, :is(.install-command, .agent-prompt) button, .carousel-buttons button, .card, .phases button) {
     transition: scale 160ms var(--ease-out);
   }
 }
 
 /* The hit area of "Hit area larger than the visual", for what looks smaller
    than 44px. */
-:is(.pill, .viewport-bar :is(button, a), .current, .footer-links a, .entry-index a) {
+:is(.pill, .viewport-bar :is(button, a), .current, .footer-links a, .entry-index a, .hero-score) {
   position: relative;
 
   &::after {
@@ -822,17 +822,19 @@ pre {
 
 /* Hero -------------------------------------------------------------------- */
 
-/* The wordmark and the command, on the band the header opens, with the
+/* The wordmark and the two ways in, on the band the header opens, with the
    number of entries huge behind them. The drawing is at the end of the row,
-   centered on the two, and under the command on a narrow screen. With the
-   header the band is 50rem tall, and the row sits in the middle of it. */
+   centered on the text, and under it on a narrow screen. With the header the
+   band is 53rem tall, and the row sits in the middle of it, clear of the
+   number. */
 .hero {
   align-content: center;
-  min-block-size: 43rem;
+  min-block-size: 46rem;
   padding-block: 3rem 6rem;
 
+  /* The band cuts the number at the same share of its height at any size. */
   & > .ghost {
-    inset-block-start: calc(100% - 17.25rem);
+    inset-block-start: calc(100% - 0.485em);
     inset-inline-start: calc(var(--start) - 1.5rem);
     font-size: var(--text-ghost-hero);
   }
@@ -875,15 +877,138 @@ pre {
   }
 }
 
+/* Two ways in, each a head, a box and a line under it: the command that
+   installs the skill, and a prompt that has an agent read it from the site. */
 .hero-install {
   display: grid;
   gap: 0.5625rem;
   max-inline-size: 41.25rem;
+}
 
-  & > .label:last-child {
-    margin-block-start: 0.5625rem;
-    color: color-mix(in oklch, var(--ink) 72%, transparent);
+.hero-caption {
+  margin-block-start: 0.5625rem;
+  color: color-mix(in oklch, var(--ink) 72%, transparent);
+}
+
+/* The "or" between the two: its words, then a hairline to the end of the row. */
+.hero-or {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-block-start: 1.75rem;
+
+  &::after {
+    content: "";
+    flex: 1;
+    border-block-start: 1px solid var(--line);
   }
+}
+
+/* The prompt is the command's lighter sibling: a pale box with a line round
+   it, and the sign of an agent's input where the command has the shell's.
+   The button drops under the prompt where the prompt would be narrower than
+   20rem beside it, and the ink under the two shows through the gap between
+   them, as a line beside the button or over it. */
+.agent-prompt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5px;
+  border: 1.5px solid var(--ink);
+  background: var(--ink);
+
+  & p {
+    flex: 999 1 20rem;
+    padding: 0.875rem 1.25rem;
+    background: var(--bp-bright);
+    font-family: var(--bp-font-mono);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-wrap: balance;
+    user-select: all;
+
+    &::before {
+      content: "> ";
+      color: var(--soft);
+    }
+  }
+
+  /* The address goes to a line of its own whole, and breaks only after a
+     slash where a line is too short for it. */
+  & .url {
+    display: inline-block;
+
+    & span {
+      white-space: nowrap;
+    }
+  }
+
+  & button {
+    display: flex;
+    flex: 1 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-inline-size: 7rem;
+    min-block-size: 2.75rem;
+    padding-inline: 1rem;
+    border: 0;
+    background: var(--bp-bright);
+    font: inherit;
+    font-size: 0.65625rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink);
+    cursor: pointer;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .agent-prompt button:hover {
+    background: var(--bp-lime);
+  }
+}
+
+/* The proof that an agent can read the site: a dial drawn as the art is,
+   full of sulphur, its line closed and its hand back at the node it started
+   from, and the score, linked to the scan. */
+.hero-score {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.625rem;
+  justify-self: start;
+  text-decoration: none;
+
+  & svg {
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    overflow: visible;
+    color: var(--ink);
+  }
+
+  & b {
+    color: var(--ink);
+  }
+
+  & .icon {
+    vertical-align: -0.05em;
+  }
+}
+
+/* The address is never broken at its hyphen. */
+.hero-score-site {
+  white-space: nowrap;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-score:hover {
+    color: var(--ink);
+  }
+}
+
+.hero-score:active {
+  color: var(--ink);
 }
 
 .hero-install-head {
@@ -960,13 +1085,11 @@ pre {
   margin-block-start: 4.375rem;
 }
 
+/* The cell takes what height the row has over its label, so the cells line
+   up when one caption runs to two lines. */
 .stat {
   display: grid;
-
-  & > a {
-    display: grid;
-    text-decoration: none;
-  }
+  grid-template-rows: auto 1fr;
 
   & + & {
     margin-inline-start: -1.5px;
@@ -1032,16 +1155,6 @@ pre {
 
 .stat:nth-child(3) .stat-cell {
   --bar: var(--bp-lime);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .stat a:hover .stat-cell {
-    background: color-mix(in oklch, var(--ink) 6%, transparent);
-  }
-}
-
-.stat a:active .stat-cell {
-  background: color-mix(in oklch, var(--ink) 10%, transparent);
 }
 
 /* Categories -------------------------------------------------------------- */
@@ -2552,6 +2665,13 @@ details[open]::details-content {
 }
 
 @media (width < 40rem) {
+  /* The prompt is a size smaller, so its address fits a line of a 375px
+     phone whole. */
+  .agent-prompt p {
+    padding-inline: 1.125rem;
+    font-size: 0.8125rem;
+  }
+
   /* One card fills most of the row and the next one shows at its edge. A
      swipe stops at every card, as a pager does. */
   .carousel {
