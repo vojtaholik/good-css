@@ -497,11 +497,12 @@ pre {
 /* The install command, opened by the button in the header. It fades and rises
    in, as in "Enter and exit transitions from display: none", and sits under
    the button, as in "Popover anchored to its trigger". The button is at the
-   end of the row, so the popover runs back from the button's end edge. */
+   end of the row, so the popover runs back from the button's end edge. It
+   opens over the light band, so a line in the ink sets it apart. */
 .install {
   inline-size: min(100% - 2rem, 30rem);
   padding: 1.5rem;
-  border: 0;
+  border: 1.5px solid var(--bp-dark);
   background: var(--bp-tint);
   box-shadow: 0 1.5rem 3rem color-mix(in oklch, var(--bp-dark) 35%, transparent);
   font-size: 0.9375rem;
@@ -602,22 +603,23 @@ pre {
   }
 }
 
-/* The ink and the ground of the header are colors, so they turn from light
-   to dark smoothly and do not flip halfway. The accent is the sign of the
-   button, ink on the light bar and sulphur on the dark one. */
-@property --ink {
+/* The ink, the ground and the accent of the narrow header, registered as
+   colors so they turn from light to dark smoothly and do not flip halfway, as
+   in "Transition a custom property with `@property`". The accent is the sign
+   of its button: the ink on the light bar, and sulphur on the dark one. */
+@property --header-ink {
   syntax: "<color>";
   inherits: true;
   initial-value: black;
 }
 
-@property --ground {
+@property --header-ground {
   syntax: "<color>";
   inherits: true;
   initial-value: white;
 }
 
-@property --accent {
+@property --header-accent {
   syntax: "<color>";
   inherits: true;
   initial-value: black;
@@ -625,16 +627,16 @@ pre {
 
 @keyframes header-tone {
   from {
-    --ink: var(--bp-dark);
-    --ground: var(--bp-tint);
-    --accent: var(--bp-dark);
+    --header-ink: var(--bp-dark);
+    --header-ground: var(--bp-tint);
+    --header-accent: var(--bp-dark);
     border-color: transparent;
   }
 
   to {
-    --ink: var(--bp-tint);
-    --ground: var(--bp-dark);
-    --accent: var(--bp-lime);
+    --header-ink: var(--bp-tint);
+    --header-ground: var(--bp-dark);
+    --header-accent: var(--bp-lime);
     border-color: color-mix(in oklch, var(--bp-tint) 20%, transparent);
   }
 }
@@ -647,10 +649,14 @@ pre {
   }
 
   /* The header is a bar that stays at the top of the window. At the top of
-     the page it is part of the light band under it. While the page scrolls by
-     the height of the bar it turns dark, by a scroll-driven animation, and
-     no script watches the scroll. A browser with no scroll timelines shows it dark. */
+     the page it is part of the light band under it. While the page scrolls
+     by the height of the bar it turns dark, by a scroll-driven animation, and
+     no script watches the scroll. A browser with no scroll timelines shows
+     it dark. */
   .site-header {
+    --ink: var(--header-ink);
+    --ground: var(--header-ground);
+
     position: sticky;
     inset-block-start: 0;
     padding-block-start: 0;
@@ -664,9 +670,13 @@ pre {
     min-block-size: var(--header-bar);
   }
 
+  /* The mark is drawn 2rem wide, in a box a finger can hit, and its edge
+     stays on the column. */
   .site-header .mark {
-    inline-size: 2rem;
-    margin-inline-end: 0.5rem;
+    inline-size: 2.75rem;
+    aspect-ratio: 1;
+    margin-inline: -0.375rem 0.125rem;
+    mask-size: 2rem auto;
   }
 
   /* The link keeps its name for a screen reader and shows its sign alone. */
@@ -719,7 +729,7 @@ pre {
       flex: none;
       inline-size: 0.75rem;
       block-size: 0.75rem;
-      background: var(--accent);
+      background: var(--header-accent);
       mask: url("/icons/plus.svg") center / contain no-repeat;
     }
 
