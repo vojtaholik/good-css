@@ -1841,8 +1841,10 @@ pre {
   }
 }
 
+/* The title and the meta give up room in step with their lengths, so
+   neither is squeezed to nothing. */
 .fold-title {
-  flex: 1;
+  flex: 1 1 auto;
   font-size: 1.0625rem;
   font-weight: 700;
   line-height: 1.25;
@@ -2533,6 +2535,31 @@ details[open]::details-content {
 
   .viewport-open-label {
     display: inline;
+  }
+
+  /* The title over its meta, and the sign beside both. */
+  .fold summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title sign"
+      "meta sign";
+    gap: 0.375rem 1rem;
+    padding-block: 0.875rem;
+    padding-inline-start: 1.125rem;
+
+    &::after {
+      grid-area: sign;
+    }
+  }
+
+  .fold-title {
+    grid-area: title;
+  }
+
+  .fold-meta {
+    grid-area: meta;
+    text-align: start;
   }
 
   .entry-index {
