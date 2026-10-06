@@ -2482,6 +2482,23 @@ details[open]::details-content {
 }
 
 @media (width < 40rem) {
+  /* One card fills most of the row and the next one shows at its edge. A
+     swipe stops at every card, as a pager does. */
+  .carousel {
+    --card: clamp(15rem, 100cqi - var(--pad) * 2 - 3.5rem, 22rem);
+
+    & > * {
+      scroll-snap-stop: always;
+    }
+  }
+
+  /* The phases in two rows of four, so each is wide enough for a finger. */
+  .phases {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-flow: row;
+    row-gap: 1rem;
+  }
+
   .entry-index {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;
