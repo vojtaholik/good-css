@@ -1918,16 +1918,57 @@ details[open]::details-content {
     margin-block-start: 1.5rem;
   }
 
+  /* A side with more code past it fades, as in "Styles that apply only when
+     a scroller overflows". A block that fits does not. */
   & pre {
     margin: 0;
     padding-inline-end: 1.5rem;
     overflow-x: auto;
     scrollbar-color: color-mix(in oklch, var(--bp-tint) 30%, transparent) transparent;
     tab-size: 2;
+    animation: code-edges linear;
+    animation-timeline: scroll(self inline);
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 var(--code-fade-start),
+      #000 calc(100% - var(--code-fade-end)),
+      transparent
+    );
   }
 
   & code {
     font-size: inherit;
+  }
+}
+
+@property --code-fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --code-fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes code-edges {
+  from {
+    --code-fade-start: 0px;
+    --code-fade-end: 2.5rem;
+  }
+
+  10%,
+  90% {
+    --code-fade-start: 2.5rem;
+    --code-fade-end: 2.5rem;
+  }
+
+  to {
+    --code-fade-start: 2.5rem;
+    --code-fade-end: 0px;
   }
 }
 
