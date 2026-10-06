@@ -3,7 +3,7 @@
 Opinionated modern CSS techniques, packaged as an agent skill. With it installed, a coding agent reaches for one declaration that adapts on its own before a set of breakpoints, and for a CSS feature before a script. Every technique is a set of properties and values, so it works in plain CSS, Tailwind, StyleX or anything else.
 
 - [PRACTICES.md](PRACTICES.md) is the list for people. Each entry says when to use it, shows the CSS, explains why it works and credits who it is borrowed from.
-- [good-css.vercel.app](https://good-css.vercel.app) runs every entry as a live specimen.
+- [good-css.com](https://good-css.com) runs every entry as a live specimen.
 - [skills/good-css](skills/good-css) is the same list for agents, cut down to what they need while writing CSS.
 
 ## Install

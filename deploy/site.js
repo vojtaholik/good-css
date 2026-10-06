@@ -1,5 +1,5 @@
 /* What the build states about the published site. */
-export const origin = "https://good-css.vercel.app";
+export const origin = "https://good-css.com";
 export const author = "Vojta Holik";
 export const authorProfile = "https://x.com/vojta_holik";
 export const repository = "https://github.com/vojtaholik/good-css";

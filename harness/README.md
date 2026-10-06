@@ -10,7 +10,7 @@ bun dev --host   # also reachable from a phone on the same network
 
 The page reloads when `PRACTICES.md` or a fixture changes.
 
-`bun run build` writes a static copy to `dist/`, one page per specimen. A push to `main` builds it on Vercel and publishes it at https://good-css.vercel.app/.
+`bun run build` writes a static copy to `dist/`, one page per specimen. A push to `main` builds it on Vercel and publishes it at https://good-css.com/.
 
 The dev server also serves the pages of `deploy/pages`, at `/about`, `/contact`, `/privacy` and `/not-found`.
 
