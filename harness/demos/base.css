@@ -25,7 +25,7 @@
   /* Smoothed like the page around the frame, so text has the same weight in
      both. */
   :root {
-    font-family: var(--bp-font-body);
+    font-family: var(--bp-font-sans);
     line-height: 1.5;
     color: var(--bp-ink);
     background: var(--bp-ground);
@@ -43,7 +43,7 @@
   h2,
   h3 {
     margin: 0;
-    font-family: var(--bp-font-display);
+    font-family: var(--bp-font-sans);
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: -0.033em;
@@ -60,7 +60,7 @@
 
   /* A caption, in the type of the frame's toolbar. */
   .label {
-    font-family: var(--bp-font-label);
+    font-family: var(--bp-font-mono);
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--bp-ink-soft);
@@ -78,7 +78,7 @@
     border-radius: var(--bp-radius-control);
     background: var(--bp-panel);
     box-shadow: var(--bp-shadow-raised);
-    font-family: var(--bp-font-label);
+    font-family: var(--bp-font-mono);
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1.25;
@@ -117,7 +117,7 @@
     padding-inline: 0.75rem 2rem;
     border-block-start: var(--bp-edge) solid var(--bp-paper);
     background: var(--bp-panel);
-    font-family: var(--bp-font-label);
+    font-family: var(--bp-font-mono);
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1.25;

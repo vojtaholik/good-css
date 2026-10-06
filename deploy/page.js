@@ -101,8 +101,7 @@ export function sitePage({ page, stylesheets, path }) {
         : `<meta name="robots" content="noindex">`
     }
     <link rel="icon" href="/mark.svg" type="image/svg+xml">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin>
     ${stylesheets.map((href) => `<link rel="stylesheet" href="${href}">`).join("\n    ")}
   </head>
   <body>

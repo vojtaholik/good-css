@@ -62,9 +62,7 @@ Renaming an entry's title changes its slug. Rename the fixture to match.
 - `frame.js` builds a specimen page from an entry and its fixture.
 - `main.js`, `index.html`, `harness.css` are the page around the specimens.
 - `tokens.css` holds the fonts and colors, shared by the page and the specimens.
-- `public/fonts` holds Paper Mono, the monospace font, with its license.
+- `public/fonts` holds Inter and Geist Mono, the two fonts, each with its license.
 - `public/mark.svg`, `public/wordmark.svg`, `public/arrow.svg` and `public/icons` are exports from the Figma file of the design. Their letters are outlines, so they need no font.
 - `../deploy/page.js` holds the header and the footer of every page.
 - `../vite.config.js` serves `/specimen/<slug>` and the pages, and puts the header and the footer into the index.
-
-Headings are set in Code Next, a commercial font that is not in the repo and is not served. A reader who has it installed sees it. Everyone else sees Montserrat, the next font in `--bp-font-display`.

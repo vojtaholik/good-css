@@ -107,7 +107,7 @@ button,
   color-scheme: light;
   scrollbar-color: var(--bp-scrollbar);
   scroll-padding-block-start: var(--anchor-offset);
-  font-family: var(--bp-font-body);
+  font-family: var(--bp-font-sans);
   line-height: 1.5;
   color: var(--bp-ink);
   background: var(--bp-panel);
@@ -138,7 +138,7 @@ figure {
 h1,
 h2,
 h3 {
-  font-family: var(--bp-font-display);
+  font-family: var(--bp-font-sans);
   letter-spacing: -0.033em;
 }
 
@@ -549,7 +549,7 @@ pre {
     &::before {
       content: "+";
       order: 1;
-      font-family: var(--bp-font-label);
+      font-family: var(--bp-font-mono);
     }
 
     &:active {
@@ -700,7 +700,7 @@ pre {
 
   & strong {
     flex: none;
-    font-family: var(--bp-font-display);
+    font-family: var(--bp-font-sans);
     font-size: 1.323rem;
     font-weight: 700;
     letter-spacing: -0.033em;
@@ -816,7 +816,7 @@ pre {
 
 .card-title {
   margin-block-start: auto;
-  font-family: var(--bp-font-display);
+  font-family: var(--bp-font-sans);
   font-size: clamp(1.125rem, 0.75rem + 3.35cqi, 1.507rem);
   font-weight: 700;
   line-height: 1;
@@ -862,7 +862,7 @@ pre {
   display: flex;
   align-items: start;
   gap: 0.5625rem;
-  font-family: var(--bp-font-display);
+  font-family: var(--bp-font-sans);
   line-height: 1;
   letter-spacing: -0.033em;
 
@@ -1105,7 +1105,7 @@ pre {
   border-start-start-radius: var(--radius);
   border-start-end-radius: var(--radius);
   background: var(--bp-panel);
-  font-family: var(--bp-font-label);
+  font-family: var(--bp-font-mono);
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1;
@@ -1305,7 +1305,7 @@ pre {
 
     &::after {
       content: "+";
-      font-family: var(--bp-font-label);
+      font-family: var(--bp-font-mono);
     }
   }
 

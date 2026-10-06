@@ -1,16 +1,21 @@
 /* Fonts and tokens, shared by the page and every specimen. The tokens are
    prefixed so they never collide with a token an entry defines. */
 
-/* Geist for text and Geist Mono for the labels of a frame's toolbar. Montserrat
-   stands in for Code Next, in the four weights the headings use. */
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&family=Montserrat:wght@600;700;800;900&display=swap");
-
-/* Paper Mono, served from public/fonts. It has no italic, and the reset
-   specimen uses that to show font-synthesis: none. */
+/* Inter for headings and text, Geist Mono for code and readouts. Both are
+   variable fonts in their Latin subset, served from public/fonts. Geist Mono
+   is served with no italic, and the reset specimen uses that to show
+   font-synthesis: none. */
 @font-face {
-  font-family: "Paper Mono";
-  src: url("/fonts/PaperMono-Variable.woff2") format("woff2");
-  font-weight: 100 800;
+  font-family: "Inter";
+  src: url("/fonts/Inter-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
   font-display: swap;
 }
 
@@ -56,10 +61,6 @@
   --bp-shadow-raised: 0 0 6px color-mix(in oklch, var(--bp-ink) 25%, transparent);
   --bp-shadow-overlay: 0 12px 32px color-mix(in oklch, var(--bp-ink) 16%, transparent);
 
-  /* Code Next is a commercial font and is not served. A reader who has it
-     installed sees it, and everyone else sees Montserrat. */
-  --bp-font-display: "Code Next", "Montserrat", sans-serif;
-  --bp-font-body: "Geist", system-ui, sans-serif;
-  --bp-font-mono: "Paper Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  --bp-font-label: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --bp-font-sans: "Inter", system-ui, sans-serif;
+  --bp-font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
