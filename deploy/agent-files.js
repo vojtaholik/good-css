@@ -18,9 +18,8 @@ const entryLine = (entry) =>
 /* The skill comes first under "How to use it". An agent that is about to
    write CSS needs a short file and two or three references, not the list.
 
-   The entries are listed by category, one section each, as the index of the
-   site lists them. An entry keeps its number from the list, so the numbers in
-   a section do not run in order. */
+   The entries are listed by title under their category, one section each, as
+   the index of the site lists them. */
 export const llmsTxt = ({ title, description, categories, skill, list }) => `# ${title}
 
 > ${description}
@@ -46,7 +45,7 @@ To write CSS, read the skill. It is the same list, cut down to what an agent nee
 To study the list, or to learn why a technique works and who it is borrowed from, read the entries.
 
 - Fetch [the whole list as Markdown](${origin}/index.md). It is one file of ${list.kilobytes} KB with every entry and its code.
-- Or fetch one entry. Each link under a category below is that entry as Markdown, and its specimen is at the same URL without \`.md\`. The number is the entry's number in the list, which other entries refer to it by.
+- Or fetch one entry. Each link under a category below is that entry as Markdown, and its specimen is at the same URL without \`.md\`.
 - Any page answers a request with \`Accept: text/markdown\` in Markdown.
 - Follow the "Rules" of an entry when you apply it. They are the conditions under which it works.
 - A specimen page runs the entry's own code blocks, verbatim, with a fixture around them. View its source to see the technique in a working document.
