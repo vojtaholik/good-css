@@ -968,13 +968,19 @@ pre {
   }
 }
 
+/* A label is never broken. One that has no room goes under the other. */
 .stat-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.25rem 1rem;
   padding-block-end: 0.9375rem;
   padding-inline-end: 0.875rem;
+
+  & > * {
+    white-space: nowrap;
+  }
 
   & > :last-child {
     color: color-mix(in oklch, var(--ink) 55%, transparent);
@@ -2368,11 +2374,32 @@ details[open]::details-content {
 
   .stat-cells {
     grid-template-columns: minmax(0, 1fr);
-    gap: 2rem;
+    gap: 1.75rem;
   }
 
   .stat + .stat {
     margin-inline-start: 0;
+  }
+
+  .stat-head {
+    column-gap: 0.75rem;
+    padding-inline-end: 0;
+  }
+
+  /* A cell is a row: the figure, then what it counts, its last line on the
+     figure's baseline. Where the text would be narrower than 7rem beside a
+     wide figure, it goes under it. */
+  .stat-cell {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: last baseline;
+    gap: 0.5rem 1.25rem;
+    min-block-size: 0;
+    padding: 2.625rem 1.125rem 1.25rem;
+
+    & span {
+      flex: 1 1 7rem;
+    }
   }
 
   .carousel-controls {
