@@ -25,12 +25,14 @@
     --bp-ink: var(--bp-tint);
     /* A box, a control, a page that covers the stage. */
     --bp-panel: var(--bp-deep);
-    /* The stage, and the bar of readouts. */
+    /* The stage, and the bar of readouts at its foot. */
     --bp-stage: var(--bp-dark);
     --bp-paper: var(--bp-deep);
-    /* A block that stands in for an image, and the same held down. */
+    /* A block that stands in for an image, the same held down, and text
+       that lies on it. */
     --bp-fill: var(--bp-lime);
-    --bp-fill-pressed: color-mix(in oklch, var(--bp-lime) 80%, var(--bp-dark));
+    --bp-fill-pressed: color-mix(in oklch, var(--bp-lime) 80%, var(--bp-ink));
+    --bp-on-fill: var(--bp-dark);
     --bp-ink-soft: color-mix(in oklch, var(--bp-ink) 66%, transparent);
     --bp-ink-hover: color-mix(in oklch, var(--bp-ink) 80%, var(--bp-panel));
     --bp-line: color-mix(in oklch, var(--bp-ink) 40%, transparent);
@@ -58,6 +60,7 @@
     --bp-panel: var(--bp-tint);
     --bp-stage: var(--bp-tint);
     --bp-paper: var(--bp-ghost-tint);
+    --bp-fill-pressed: color-mix(in oklch, var(--bp-lime) 80%, var(--bp-ink));
 
     color-scheme: light;
   }
@@ -230,7 +233,7 @@
     border-radius: var(--bp-radius-control);
     background: var(--bp-panel);
     font: inherit;
-    color: inherit;
+    color: var(--bp-ink);
   }
 
   input[type="range"],
@@ -258,6 +261,7 @@
   .placeholder {
     border-radius: var(--bp-radius);
     background: var(--bp-fill);
+    color: var(--bp-on-fill);
   }
 
   /* What opens over the page is a box with a shadow under it. */

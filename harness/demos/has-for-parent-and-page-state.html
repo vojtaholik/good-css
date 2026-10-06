@@ -6,7 +6,7 @@
   @layer demo {
     /* The entry names this token and leaves its value to the project. */
     :root {
-      --surface-raised: oklch(0.95 0.07 100);
+      --surface-raised: color-mix(in oklch, var(--bp-fill) 25%, var(--bp-panel));
     }
 
     body {

@@ -1,5 +1,5 @@
 <template data-specimen data-height="460" data-viewport="viewport-fit=cover">
-  On a desktop every inset is 0px: the readouts say 0px, 0px and 16px, and only the sheet shows a gray band. Open it in its own tab on a phone with a notch or a home indicator. Wherever an inset is not 0px, a gray band of that size appears and the text stays clear of it.
+  On a desktop every inset is 0px: the readouts say 0px, 0px and 16px, and only the sheet shows a sulphur band. Open it in its own tab on a phone with a notch or a home indicator. Wherever an inset is not 0px, a sulphur band of that size appears and the text stays clear of it.
 </template>
 
 <style>
@@ -9,14 +9,14 @@
       background: var(--bp-panel);
     }
 
-    /* The gray is each bar's own background, so it shows only in the padding
-       the entry adds. The text sits on a white box inside. */
+    /* The sulphur is each bar's own background, so it shows only in the
+       padding the entry adds. The text sits on the panel inside. */
     .app-header,
     .bottom-bar,
     .sheet {
       position: fixed;
       inset-inline: 0;
-      background: var(--bp-fill-pressed);
+      background: var(--bp-fill);
 
       & > * {
         padding: 1rem 1.5rem;
