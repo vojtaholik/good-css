@@ -388,19 +388,19 @@ pre {
 }
 
 /* "Press feedback", on everything that is pressed like a button. */
-:is(.pill, :is(.install-command, .agent-prompt) button, .carousel-buttons button, .card, .phases button):active {
+:is(.pill, .install-command button, .carousel-buttons button, .card, .phases button):active {
   scale: 0.97;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  :is(.pill, :is(.install-command, .agent-prompt) button, .carousel-buttons button, .card, .phases button) {
+  :is(.pill, .install-command button, .carousel-buttons button, .card, .phases button) {
     transition: scale 160ms var(--ease-out);
   }
 }
 
 /* The hit area of "Hit area larger than the visual", for what looks smaller
    than 44px. */
-:is(.pill, .viewport-bar :is(button, a), .current, .footer-links a, .entry-index a, .hero-score) {
+:is(.pill, .viewport-bar :is(button, a), .current, .footer-links a, .entry-index a, .hero-score a) {
   position: relative;
 
   &::after {
@@ -877,8 +877,8 @@ pre {
   }
 }
 
-/* Two ways in, each a head, a box and a line under it: the command that
-   installs the skill, and a prompt that has an agent read it from the site. */
+/* Two ways in: the command that installs the skill, and the score that says
+   an agent can read the site without it. */
 .hero-install {
   display: grid;
   gap: 0.5625rem;
@@ -904,81 +904,18 @@ pre {
   }
 }
 
-/* The prompt is the command's lighter sibling: a pale box with a line round
-   it, and the sign of an agent's input where the command has the shell's.
-   The button drops under the prompt where the prompt would be narrower than
-   20rem beside it, and the ink under the two shows through the gap between
-   them, as a line beside the button or over it. */
-.agent-prompt {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5px;
-  border: 1.5px solid var(--ink);
-  background: var(--ink);
-
-  & p {
-    flex: 999 1 20rem;
-    padding: 0.875rem 1.25rem;
-    background: var(--bp-bright);
-    font-family: var(--bp-font-mono);
-    font-size: 0.875rem;
-    line-height: 1.5;
-    text-wrap: balance;
-    user-select: all;
-
-    &::before {
-      content: "> ";
-      color: var(--soft);
-    }
-  }
-
-  /* The address goes to a line of its own whole, and breaks only after a
-     slash where a line is too short for it. */
-  & .url {
-    display: inline-block;
-
-    & span {
-      white-space: nowrap;
-    }
-  }
-
-  & button {
-    display: flex;
-    flex: 1 0 auto;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    min-inline-size: 7rem;
-    min-block-size: 2.75rem;
-    padding-inline: 1rem;
-    border: 0;
-    background: var(--bp-bright);
-    font: inherit;
-    font-size: 0.65625rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--ink);
-    cursor: pointer;
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .agent-prompt button:hover {
-    background: var(--bp-lime);
-  }
-}
-
 /* The proof that an agent can read the site: a dial drawn as the art is,
    full of sulphur, its line closed and its hand back at the node it started
-   from, and the score, linked to the scan. */
+   from, then the sentence, with the score linked to the scan. */
 .hero-score {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  column-gap: 0.625rem;
-  justify-self: start;
-  text-decoration: none;
+  column-gap: 0.75rem;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.45;
+  text-wrap: balance;
 
   & svg {
     inline-size: 1.75rem;
@@ -987,8 +924,11 @@ pre {
     color: var(--ink);
   }
 
-  & b {
+  & a {
     color: var(--ink);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    white-space: nowrap;
   }
 
   & .icon {
@@ -996,19 +936,10 @@ pre {
   }
 }
 
-/* The address is never broken at its hyphen. */
-.hero-score-site {
-  white-space: nowrap;
-}
-
 @media (hover: hover) and (pointer: fine) {
-  .hero-score:hover {
-    color: var(--ink);
+  .hero-score a:hover {
+    text-decoration-thickness: 2px;
   }
-}
-
-.hero-score:active {
-  color: var(--ink);
 }
 
 .hero-install-head {
@@ -2665,13 +2596,6 @@ details[open]::details-content {
 }
 
 @media (width < 40rem) {
-  /* The prompt is a size smaller, so its address fits a line of a 375px
-     phone whole. */
-  .agent-prompt p {
-    padding-inline: 1.125rem;
-    font-size: 0.8125rem;
-  }
-
   /* One card fills most of the row and the next one shows at its edge. A
      swipe stops at every card, as a pager does. */
   .carousel {
