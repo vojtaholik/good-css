@@ -824,19 +824,29 @@ pre {
 
 /* The wordmark and the two ways in, on the band the header opens, with the
    number of entries huge behind them. The drawing is at the end of the row,
-   centered on the text, and under it on a narrow screen. With the header the
-   band is 53rem tall, and the row sits in the middle of it, clear of the
-   number. */
+   centered on the text, and under it on a narrow screen. On a wide screen the
+   band fills the viewport under the 7rem header (3.5rem of padding and a
+   3.5rem bar), and the row sits in its middle. */
 .hero {
   align-content: center;
-  min-block-size: 46rem;
   padding-block: 3rem 6rem;
 
-  /* The band cuts the number at the same share of its height at any size. */
+  @media (width >= 56rem) {
+    min-block-size: max(36rem, 100svh - 7rem);
+    padding-block: 3rem;
+  }
+
+  /* The band cuts the number at the same share of its height at any size.
+     It shows 0.485em of it, and the row is at most 28rem tall, so on a short
+     wide screen the number shrinks to stay in the gap under the row. */
   & > .ghost {
     inset-block-start: calc(100% - 0.485em);
     inset-inline-start: calc(var(--start) - 1.5rem);
     font-size: var(--text-ghost-hero);
+
+    @media (width >= 56rem) {
+      font-size: clamp(8rem, (100svh - 35rem) / 1.1, var(--text-ghost-hero));
+    }
   }
 }
 
@@ -934,17 +944,6 @@ pre {
   & .icon {
     margin-inline-start: 0.25em;
     vertical-align: -0.05em;
-  }
-
-  /* The address is what you type to your agent, so it is set as the
-     install command's lighter sibling: mono, on a pale box with a hairline. */
-  & code {
-    padding: 0.125em 0.4em;
-    border: 1px solid var(--ink);
-    background: var(--bp-bright);
-    font-family: var(--bp-font-mono);
-    font-size: 0.875em;
-    white-space: nowrap;
   }
 }
 
@@ -1888,17 +1887,16 @@ pre {
   }
 }
 
-/* Open, the summary is the ink, and the sign is cut out of a sulphur disc. */
+/* Open, the summary is the ink, and the sign sits on a sulphur disc. */
 .fold[open] summary {
   background: var(--ink);
   color: var(--ground);
 
+  /* The sign is drawn in the dark on the disc, as text on sulphur is
+     everywhere, so it reads on a light band and a dark one alike. */
   &::after {
-    background: var(--bp-lime);
-    mask:
-      url("/icons/minus.svg") center / 0.75rem no-repeat,
-      radial-gradient(closest-side, #000 calc(100% - 0.5px), transparent 100%);
-    mask-composite: exclude;
+    background: linear-gradient(var(--bp-dark) 0 0) center / 0.75rem 1.6px no-repeat, var(--bp-lime);
+    mask: radial-gradient(closest-side, #000 calc(100% - 0.5px), transparent 100%);
   }
 }
 
