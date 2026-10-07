@@ -239,7 +239,12 @@ const skillPath = "skills/good-css";
 await cp(join(root, skillPath), join(dist, skillPath), { recursive: true, filter: (path) => !path.endsWith(".DS_Store") });
 
 const kilobytes = (text) => Math.round(Buffer.byteLength(text) / 1024);
-const listMarkdown = frontmatter({ title: practices.title, description, canonical: `${origin}/`, updated: today }) + practicesMarkdown;
+
+/* An agent told only "read good-css.com" lands on this file, the whole
+   list. It opens by sending the agent to the skill, which is what it needs
+   to write CSS, as the prompt in the hero does. */
+const agentNote = `> If you are an agent about to write CSS, read [the skill](${origin}/${skillPath}/SKILL.md) and follow it, with only the reference files its table names for your task. The rest of this file is the whole list, for study.\n\n`;
+const listMarkdown = frontmatter({ title: practices.title, description, canonical: `${origin}/`, updated: today }) + agentNote + practicesMarkdown;
 
 await write("index.md", listMarkdown);
 await write("llms-full.txt", practicesMarkdown);
