@@ -932,7 +932,19 @@ pre {
   }
 
   & .icon {
+    margin-inline-start: 0.25em;
     vertical-align: -0.05em;
+  }
+
+  /* The address is what you type to your agent, so it is set as the
+     install command's lighter sibling: mono, on a pale box with a hairline. */
+  & code {
+    padding: 0.125em 0.4em;
+    border: 1px solid var(--ink);
+    background: var(--bp-bright);
+    font-family: var(--bp-font-mono);
+    font-size: 0.875em;
+    white-space: nowrap;
   }
 }
 
