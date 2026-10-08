@@ -61,7 +61,7 @@ Renaming an entry's title changes its slug. Rename the fixture to match.
 
 - `practices.js` reads the categories and entries of `PRACTICES.md`. Its other sections are about the list and are not shown.
 - `frame.js` builds a specimen page from an entry and its fixture.
-- `main.js`, `index.html`, `harness.css` are the page around the specimens.
+- `main.js`, `index.html`, `harness.css` are the page around the specimens. `draw.js` draws the index from the list. The build runs it, so the published page arrives drawn and a browser there runs only `main.js`.
 - `tokens.css` holds the fonts and colors, shared by the page and the specimens.
 - `public/fonts` holds Inter and Geist Mono, the two fonts, each with its license.
 - `public/mark.svg`, `public/wordmark.svg` and `public/icons` are exports from the Figma file of the design. Their letters are outlines, so they need no font. The page draws them as masks, so they take the color of their band.
