@@ -214,7 +214,9 @@ function phase(category, index) {
   const button = element("button", "", `<span class="label">${pad(index + 1)}</span>`);
 
   button.type = "button";
-  button.setAttribute("aria-label", category.title);
+  /* The name holds the number it shows, so a reader who says what they see
+     can press it. */
+  button.setAttribute("aria-label", `${pad(index + 1)} ${category.title}`);
   item.append(button);
 
   return item;
