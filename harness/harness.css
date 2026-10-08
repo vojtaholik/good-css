@@ -1508,11 +1508,18 @@ pre {
   border: 1.5px solid var(--ink);
   overflow: clip;
 
-  & li {
+  & li,
+  &:has(> li:last-child:nth-child(odd))::after {
     margin-block-start: -1px;
     margin-inline-start: -1.5px;
     border-block-start: 1px solid var(--ink);
     border-inline-start: 1.5px solid var(--ink);
+  }
+
+  /* With an odd count the last cell of the second column is empty. The
+     pseudo-element fills it and draws its lines as a cell does. */
+  &:has(> li:last-child:nth-child(odd))::after {
+    content: "";
   }
 
   & a {
@@ -2739,6 +2746,11 @@ details[open]::details-content {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;
     grid-auto-flow: row;
+  }
+
+  /* One column has no empty cell. */
+  .entry-index:has(> li:last-child:nth-child(odd))::after {
+    display: none;
   }
 
   .opener {
