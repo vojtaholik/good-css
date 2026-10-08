@@ -2,9 +2,9 @@
 
 Strong opinions about modern CSS technique, borrowed from experts, for agents to know and reach for.
 
-Each one is described in plain CSS because that is the common language. None of them depends on a class name, a file layout or a framework: the properties and values are the technique. Write them in whatever the project already uses, whether that is a stylesheet, Tailwind utilities or StyleX objects. Names in the examples are illustrative.
+Each one is described in plain CSS because that is the common language. None of them depends on a class name, a file layout or a framework. The properties and values are the technique. Write them in whatever the project already uses, whether that is a stylesheet, Tailwind utilities or StyleX objects. Names in the examples are illustrative.
 
-The bias throughout: one declaration that adapts on its own beats a set of breakpoints, and a CSS feature beats a script. JavaScript appears only where it makes the result nicer, and the CSS works without it.
+The list always prefers one declaration that adapts on its own over a set of breakpoints, and a CSS feature over a script. JavaScript appears only where it makes the result nicer, and the CSS works without it.
 
 Every entry has the same shape: when to use it, the CSS, why it works, the rules, and who it is borrowed from.
 
