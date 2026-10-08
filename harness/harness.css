@@ -182,7 +182,7 @@ pre {
    from those in tokens.css, as in "OKLCH color". */
 .band,
 .site-header {
-  --soft: color-mix(in oklch, var(--ink) 66%, transparent);
+  --soft: color-mix(in oklch, var(--ink) 68%, transparent);
   --text: color-mix(in oklch, var(--ink) 86%, transparent);
   --line: color-mix(in oklch, var(--ink) 45%, transparent);
   --art-ground: var(--ground);
@@ -958,7 +958,7 @@ pre {
   justify-content: space-between;
 
   & span + span {
-    color: color-mix(in oklch, var(--ink) 60%, transparent);
+    color: var(--soft);
   }
 }
 
@@ -1786,7 +1786,7 @@ pre {
     background: none;
     font: inherit;
     font-size: 0.6875rem;
-    color: color-mix(in oklch, var(--panel-ink) 66%, transparent);
+    color: color-mix(in oklch, var(--panel-ink) 72%, transparent);
     outline-offset: -2px;
     cursor: pointer;
 
@@ -1912,7 +1912,7 @@ pre {
 
 .fold-meta {
   text-align: end;
-  opacity: 0.66;
+  opacity: 0.68;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2407,7 +2407,7 @@ details[open]::details-content {
 }
 
 .footer-soft {
-  opacity: 0.8;
+  font-weight: 500;
 }
 
 /* The arrow of an outside link follows its last word. */

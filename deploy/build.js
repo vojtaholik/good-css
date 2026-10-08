@@ -58,7 +58,7 @@ const publicPractices = () => ({
 });
 
 /* Loads the harness modules the way the dev server does, so the build runs
-   the same practices.js, frame.js and main.js. */
+   the same practices.js, frame.js, draw.js and main.js. */
 const server = await createServer({
   plugins: [publicPractices()],
   cacheDir,
@@ -175,17 +175,15 @@ async function write(path, content) {
   await writeFile(join(dist, path), content);
 }
 
-/* The index is drawn by main.js. Running it here against the built page puts
-   the entries in the HTML, where a reader with no JavaScript finds them. In
-   a browser main.js then draws the same page again over this one. */
+/* The index is drawn by draw.js, which main.js loads when the page is empty.
+   Running main.js here against the built page puts the entries in the HTML,
+   where a reader with no JavaScript finds them. In a browser main.js finds
+   the page drawn, leaves it as it is and loads nothing more. */
 const { document } = window;
 
 document.write(await readFile(join(dist, "index.html"), "utf8"));
 Object.assign(globalThis, { document, ResizeObserver: window.ResizeObserver });
 await server.ssrLoadModule("/main.js");
-
-/* A frame the browser drops a moment later should not load its specimen. */
-for (const frame of document.querySelectorAll("iframe")) frame.setAttribute("loading", "lazy");
 
 await write("index.html", `<!doctype html>\n${document.documentElement.outerHTML}\n`);
 
