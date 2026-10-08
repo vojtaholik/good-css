@@ -181,7 +181,8 @@ pre {
    so one class turns a part over from light to dark. Every color is mixed
    from those in tokens.css, as in "OKLCH color". */
 .band,
-.site-header {
+.site-header,
+.notes {
   --soft: color-mix(in oklch, var(--ink) 68%, transparent);
   --text: color-mix(in oklch, var(--ink) 86%, transparent);
   --line: color-mix(in oklch, var(--ink) 45%, transparent);
@@ -1147,6 +1148,8 @@ pre {
   scroll-padding-inline: var(--pad);
   overscroll-behavior-x: contain;
   scrollbar-width: none;
+  /* A mouse drags the row, so a drag selects no text. */
+  user-select: none;
 
   /* Each card is a container too, and sizes what it holds in `cqi`. */
   & > * {
@@ -1154,6 +1157,17 @@ pre {
     flex: none;
     inline-size: var(--card);
     scroll-snap-align: start;
+  }
+
+  /* While a mouse drags it the row follows the pointer and does not snap.
+     main.js lands it on a card. */
+  &[data-dragging] {
+    scroll-snap-type: none;
+    cursor: grabbing;
+
+    & a {
+      cursor: inherit;
+    }
   }
 }
 
@@ -1873,30 +1887,68 @@ pre {
   &::-webkit-details-marker {
     display: none;
   }
-
-  /* The sign in a ring. The two are one mask, so both take the ink. */
-  &::after {
-    content: "";
-    flex: none;
-    inline-size: 1.75rem;
-    block-size: 1.75rem;
-    background: currentColor;
-    mask:
-      url("/icons/plus.svg") center / 0.75rem no-repeat,
-      radial-gradient(closest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1.5px) 100%, transparent 100%);
-  }
 }
 
-/* Open, the summary is the ink, and the sign sits on a sulphur disc. */
+/* Open, the summary is the ink. */
 .fold[open] summary {
   background: var(--ink);
   color: var(--ground);
+}
 
-  /* The sign is drawn in the dark on the disc, as text on sulphur is
-     everywhere, so it reads on a light band and a dark one alike. */
-  &::after {
-    background: linear-gradient(var(--bp-dark) 0 0) center / 0.75rem 1.6px no-repeat, var(--bp-lime);
-    mask: radial-gradient(closest-side, #000 calc(100% - 0.5px), transparent 100%);
+/* The sign, a plus in a ring, drawn in index.html on the center of its box.
+   Open, a sulphur disc grows over the ring and the upright of the plus
+   turns down onto its bar, so the plus becomes the minus. The sign is drawn
+   in the dark on the disc, as text on sulphur is everywhere, so it reads on
+   a light band and a dark one alike. */
+.fold-sign {
+  flex: none;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+
+  & * {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  & .fold-disc {
+    fill: var(--bp-lime);
+    stroke: none;
+    scale: 0;
+  }
+
+  .fold[open] & {
+    stroke: var(--bp-dark);
+
+    & .fold-ring {
+      stroke: var(--bp-lime);
+    }
+
+    & .fold-disc {
+      scale: 1;
+    }
+
+    & .fold-bar {
+      rotate: 90deg;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fold summary {
+    transition:
+      background-color 0.3s var(--ease-out),
+      color 0.3s var(--ease-out);
+  }
+
+  .fold-sign * {
+    transition:
+      stroke 0.3s var(--ease-out),
+      scale 0.3s var(--ease-out),
+      rotate 0.3s var(--ease-out);
   }
 }
 
@@ -2064,8 +2116,13 @@ details[open]::details-content {
 }
 
 /* The notes: a label on one side and its items on the other, one part
-   under the other with a line between. */
+   under the other with a line between. Like the code they are on the
+   deepest dark in every band, and they turn over as a band does, so the
+   sulphur in them reads on a light band too. */
 .notes {
+  --ink: var(--bp-tint);
+  --ground: var(--bp-deep);
+
   padding: 0.625rem 2.5rem 1.125rem;
 }
 
@@ -2663,10 +2720,10 @@ details[open]::details-content {
     gap: 0.375rem 1rem;
     padding-block: 0.875rem;
     padding-inline-start: 1.125rem;
+  }
 
-    &::after {
-      grid-area: sign;
-    }
+  .fold-sign {
+    grid-area: sign;
   }
 
   .fold-title {
