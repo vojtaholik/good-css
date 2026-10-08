@@ -52,6 +52,8 @@ bun dev                              # the preview site, on localhost:4310
 
 `skills/good-css/SKILL.md` is written by hand. [AGENTS.md](AGENTS.md) has the rules for changing the repo.
 
+Pull requests are for fixes. New entries and changes of opinion start as issues. [CONTRIBUTING.md](CONTRIBUTING.md) says what counts as a fix.
+
 ## License
 
 [MIT](LICENSE). Each entry in `PRACTICES.md` credits the people its technique comes from.
