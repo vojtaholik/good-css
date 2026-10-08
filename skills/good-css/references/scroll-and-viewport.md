@@ -36,16 +36,18 @@ Arrow buttons are the one part that needs a script.
 ```js
 const carousel = document.querySelector(".carousel");
 const [prev, next] = document.querySelectorAll("[data-carousel-dir]");
+const sign = getComputedStyle(carousel).direction === "rtl" ? -1 : 1;
 
 const step = (dir) => {
   const card = carousel.firstElementChild.getBoundingClientRect().width;
-  carousel.scrollBy({ left: dir * card });
+  carousel.scrollBy({ left: sign * dir * card });
 };
 
 const sync = () => {
   const max = carousel.scrollWidth - carousel.clientWidth;
-  prev.disabled = carousel.scrollLeft <= 1;
-  next.disabled = carousel.scrollLeft >= max - 1;
+  const scrolled = Math.abs(carousel.scrollLeft);
+  prev.disabled = scrolled <= 1;
+  next.disabled = scrolled >= max - 1;
 };
 
 prev.addEventListener("click", () => step(-1));

@@ -1651,16 +1651,18 @@ Arrow buttons are the one part that needs a script.
 ```js
 const carousel = document.querySelector(".carousel");
 const [prev, next] = document.querySelectorAll("[data-carousel-dir]");
+const sign = getComputedStyle(carousel).direction === "rtl" ? -1 : 1;
 
 const step = (dir) => {
   const card = carousel.firstElementChild.getBoundingClientRect().width;
-  carousel.scrollBy({ left: dir * card });
+  carousel.scrollBy({ left: sign * dir * card });
 };
 
 const sync = () => {
   const max = carousel.scrollWidth - carousel.clientWidth;
-  prev.disabled = carousel.scrollLeft <= 1;
-  next.disabled = carousel.scrollLeft >= max - 1;
+  const scrolled = Math.abs(carousel.scrollLeft);
+  prev.disabled = scrolled <= 1;
+  next.disabled = scrolled >= max - 1;
 };
 
 prev.addEventListener("click", () => step(-1));
@@ -1673,6 +1675,7 @@ Why it works:
 
 - Scroll snap makes the browser do the scrolling and the landing. Every input method gets the same result.
 - `scrollBy` moves one card width and snapping picks the final position. The script never calculates an offset.
+- In a right-to-left row `scrollLeft` starts at 0 and goes negative. `sign` and `Math.abs()` make the script work in both directions.
 - `scroll-behavior: smooth` in CSS animates the script's scroll. The media query turns the animation off for people who ask for reduced motion.
 - `overscroll-behavior-x: contain` stops a swipe at the end of the row from triggering the browser's back gesture.
 
