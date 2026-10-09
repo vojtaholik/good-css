@@ -4,7 +4,10 @@
 
 <style>
   @layer demo {
+    /* The body is a container, so the card can ask how wide the specimen
+       is. */
     body {
+      container-type: inline-size;
       display: grid;
       gap: 1.5rem;
       padding: 1.5rem;
@@ -19,7 +22,7 @@
 
     .swatches {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1rem;
     }
 
@@ -63,10 +66,62 @@
       border-block-start: 1px solid var(--bp-line-faint);
     }
 
+    /* A finger gets 2.75rem of height to land on, and the margins give the
+       row its height back. */
     input[type="range"] {
       flex: 1;
-      min-width: 10rem;
+      min-width: 6rem;
+      min-height: 2.75rem;
+      margin-block: -0.75rem;
       accent-color: var(--bp-ink);
+    }
+
+    /* Room for three digits, so the slider keeps its width, and its thumb
+       its place under a finger, as the value changes. */
+    .hue output {
+      box-sizing: content-box;
+      min-width: 3ch;
+      text-align: end;
+    }
+
+    /* In a narrow specimen each swatch is a row, a chip beside its name,
+       and the slider takes a row of its own under its label and its value.
+       The whole card then shows at once, so a move of the hue is seen in
+       all of it, and the slider is as long as the card allows. */
+    @container (inline-size < 34rem) {
+      .card {
+        gap: 0.875rem;
+        padding: 1rem;
+      }
+
+      .swatches {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.5rem;
+      }
+
+      .swatch {
+        grid-template-columns: 2.5rem minmax(0, 1fr);
+        align-items: center;
+        gap: 0.75rem;
+
+        &::before {
+          height: 1.5rem;
+        }
+      }
+
+      .hue {
+        row-gap: 0.75rem;
+        padding-block-start: 0.875rem;
+
+        & span {
+          flex: 1;
+        }
+
+        & input {
+          order: 1;
+          flex-basis: 100%;
+        }
+      }
     }
   }
 </style>
