@@ -2,7 +2,7 @@
 
 ## Content grid with breakouts
 
-Use it wherever you would reach for a centered max-width container. One grid on the section replaces the `section > .container` wrapper pair, and any child can be content width, wider, or edge to edge. Put it on `main` for a page of flowing content, or on each section. It suits CMS content well, because an editor widens a block with one class and no extra wrapper.
+Use it as the container of every page, whether or not anything on it goes wider than the content. A centered `max-width` wrapper is the sign, such as `.container`, `.wrapper` or Tailwind's `mx-auto max-w-*`. One grid on the section replaces the `section > .container` wrapper pair and costs no more than it, and any child can be content width, wider, or edge to edge. Put it on `main` for a page of flowing content, or on each section. A band, a figure or a block that an editor later wants wider then takes one class, with no negative margin and no new wrapper.
 
 The container defines three nested widths with named grid lines:
 
@@ -39,6 +39,7 @@ Rules:
 - Every child must be placed. An unplaced child of the grid lands in the gutter track.
 - Every direct child is a grid item. Wrap a run of inline elements in one element.
 - Change a width by overriding `--content`, not by writing a new column template.
+- In a pass over existing CSS, replace each centered `max-width` wrapper with the grid, and keep the wrapper's width as `--content` on its section.
 
 In other systems: the column template goes wherever the project defines reusable styles. Where child selectors are not available, as in StyleX or Tailwind without a custom variant, each child sets its own `grid-column` to `content`, `breakout` or `full-width`.
 
