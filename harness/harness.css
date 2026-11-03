@@ -1662,29 +1662,11 @@ pre {
   }
 }
 
-/* The mark beside a title that links to its own page. It shows while the
-   title is under the pointer or the mark has focus, and stays faint on a
-   screen with no pointer that hovers. */
-.permalink {
-  margin-inline-start: 0.2em;
-  font-weight: 500;
-  color: var(--soft);
+/* A title that links to its own page looks like the title. Only the
+   pointer says it is a link. */
+:is(.entry, .opener-text) :is(h1, h2, h3) a {
+  color: inherit;
   text-decoration: none;
-  opacity: 0;
-  transition: opacity 150ms ease-out, color 150ms ease-out;
-
-  :is(h1, h2, h3):hover > &,
-  &:focus-visible {
-    opacity: 1;
-  }
-
-  &:hover {
-    color: var(--ink);
-  }
-
-  @media (hover: none) {
-    opacity: 0.5;
-  }
 }
 
 .lede {

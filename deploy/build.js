@@ -8,7 +8,7 @@ import { readPage, sitePage } from "./page.js";
 import { author, origin, pages, published } from "./site.js";
 
 /* Builds the harness into dist/ as a static site: the index with its content
-   already in the HTML, one page per specimen at /specimen/<slug>, the pages
+   already in the HTML, one page per entry at /<slug>, the pages
    in deploy/pages, the skill, and the files an agent looks for.
 
    A push to main deploys it. vercel.json has Vercel run `bun run build` and
@@ -97,8 +97,8 @@ const entries = practices.entries.map((entry) => ({
   slug: entry.slug,
   title: text(entry.title),
   lede: firstSentence(text(entry.lede)),
-  markdown: `${origin}/specimen/${entry.slug}.md`,
-  page: `${origin}/specimen/${entry.slug}`,
+  markdown: `${origin}/${entry.slug}.md`,
+  page: `${origin}/${entry.slug}`,
 }));
 
 /* The same entries by category, in the order the page shows them. */
@@ -108,6 +108,14 @@ const categories = practices.categories.map((category) => ({
   title: category.title,
   entries: category.entries.map((entry) => bySlug[entry.slug]),
 }));
+
+/* Entries, categories and pages share the root, beside what the build
+   writes there. The build stops on a slug two of them would claim. */
+const reserved = ["frame", "assets", "fonts", "art", "icons", "patterns", "skills", "index", "llms", "llms-full", "not-found", "sitemap", "robots", "og", "mark", "wordmark"];
+const claimed = [...entries.map((entry) => entry.slug), ...categories.map((category) => category.slug), ...pages, ...reserved];
+const clash = claimed.find((slug, index) => claimed.indexOf(slug) !== index);
+
+if (clash) throw new Error(`Two things claim /${clash}`);
 
 const person = { "@type": "Person", name: author, url: `${origin}/about` };
 
@@ -242,8 +250,7 @@ const heading = (node, tag) => {
   const replacement = document.createElement(tag);
   replacement.setAttribute("data-slot", "title");
   /* The page's own title needs no link to itself. */
-  node.querySelector(".permalink")?.remove();
-  replacement.innerHTML = node.innerHTML;
+  replacement.innerHTML = node.querySelector("a")?.innerHTML ?? node.innerHTML;
   node.replaceWith(replacement);
 };
 
@@ -312,7 +319,7 @@ function entryPage(entry) {
   /* The category's list goes to the other entries' pages. */
   for (const link of section.querySelectorAll(".entry-index a")) {
     const slug = link.getAttribute("href").slice(1);
-    link.setAttribute("href", `/specimen/${slug}`);
+    link.setAttribute("href", `/${slug}`);
     if (slug === entry.slug) link.setAttribute("aria-current", "page");
   }
 
@@ -320,7 +327,7 @@ function entryPage(entry) {
     title: `${entry.title} · good-css`,
     description: entry.lede,
     url: entry.page,
-    markdown: `/specimen/${entry.slug}.md`,
+    markdown: `/${entry.slug}.md`,
     ld: {
       "@type": "TechArticle",
       headline: entry.title,
@@ -378,10 +385,10 @@ for (const [index, category] of categories.entries()) {
 
 for (const [index, entry] of entries.entries()) {
   if (demos[entry.slug]) await write(`frame/${entry.slug}/index.html`, specimenPage(entry.slug));
-  await write(`specimen/${entry.slug}/index.html`, entryPage(entry));
+  await write(`${entry.slug}/index.html`, entryPage(entry));
 
   await write(
-    `specimen/${entry.slug}.md`,
+    `${entry.slug}.md`,
     frontmatter({ title: entry.title, description: entry.lede, canonical: entry.markdown, updated: today }) +
       alone(entryMarkdown[index]),
   );
@@ -441,13 +448,10 @@ await write(
 await write("sitemap.xml", sitemap(sitemapUrls(entries, categories), today));
 await write("robots.txt", robots);
 
-/* vercel.json names the pages in its rules. The build fails if a page in
-   site.js is missing from them. */
+/* vercel.json answers a request for any page with Markdown by one rule. */
 const routes = await readFile(join(root, "vercel.json"), "utf8");
 
-if (!routes.includes(`^/(${pages.join("|")})/?$`)) throw new Error("vercel.json does not route every page in deploy/site.js");
-if (!routes.includes(`^/(${categories.map((category) => category.slug).join("|")})/?$`))
-  throw new Error("vercel.json does not route every category of PRACTICES.md");
+if (!routes.includes("^/([^/.]+)/?$")) throw new Error("vercel.json does not answer every page with Markdown on request");
 
 /* The build fails if a Source line ever gets past the filter at the top. */
 for (const file of await readdir(dist, { recursive: true })) {
