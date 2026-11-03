@@ -161,6 +161,7 @@ const head = () => ({
       { tag: "meta", attrs: { name: "twitter:card", content: "summary_large_image" } },
       { tag: "meta", attrs: { name: "is-agentic-site-type", content: "content" } },
       { tag: "script", attrs: { type: "application/ld+json" }, children: JSON.stringify(jsonLd) },
+      { tag: "script", attrs: { defer: true, src: "/_vercel/insights/script.js" } },
     ].map((tag) => ({ ...tag, injectTo: "head" })),
 });
 
