@@ -78,16 +78,19 @@ async function grow() {
   /* Where the header is a sticky bar, the index's own bar does its job. */
   const sticky = getComputedStyle(header).position === "sticky";
   live.section.before(...above, ...(sticky ? [] : [header]));
-  if (sticky) header.remove();
   live.section.after(...sections.after);
   copyAttributes(categories, liveCategories);
   liveCategories.before(...parts.before);
   liveCategories.after(...parts.after);
 
-  /* The index's header goes at the top. The install popover stays with the
-     page's header, and both Install buttons open it. */
+  /* The index's header goes at the top. The page's install popover, whose
+     copy button the page already wired, is the only one: it stays in the
+     page's header, or moves into the index's where that header went. */
   const indexHeader = doc.querySelector(".site-header");
-  if (!sticky) indexHeader.querySelector("#install").remove();
+  const install = indexHeader.querySelector("#install");
+  if (sticky) install.replaceWith(header.querySelector("#install"));
+  else install.remove();
+  if (sticky) header.remove();
   document.querySelector("main").before(indexHeader);
   document.body.setAttribute("style", doc.body.getAttribute("style") ?? "");
 
