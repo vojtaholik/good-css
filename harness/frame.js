@@ -29,7 +29,8 @@ export function specimenPage(slug) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="${viewport}">
-<title>${entry.slug}</title>
+<title>${entry.slug} · good-css frame</title>
+<meta name="robots" content="noindex">
 <meta name="description" content="${description}">
 <link rel="icon" href="/mark.svg" type="image/svg+xml">
 <script>

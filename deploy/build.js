@@ -98,7 +98,7 @@ const entries = practices.entries.map((entry) => ({
   title: text(entry.title),
   lede: firstSentence(text(entry.lede)),
   markdown: `${origin}/specimen/${entry.slug}.md`,
-  specimen: demos[entry.slug] ? `${origin}/specimen/${entry.slug}` : null,
+  page: `${origin}/specimen/${entry.slug}`,
 }));
 
 /* The same entries by category, in the order the page shows them. */
@@ -186,6 +186,9 @@ document.write(await readFile(join(dist, "index.html"), "utf8"));
 Object.assign(globalThis, { document, ResizeObserver: window.ResizeObserver });
 await server.ssrLoadModule("/main.js");
 
+/* The templates are for drawing, and the built page arrives drawn. */
+for (const template of document.querySelectorAll("template")) template.remove();
+
 await write("index.html", `<!doctype html>\n${document.documentElement.outerHTML}\n`);
 
 /* An entry is published twice: the specimen that runs it, and beside it the
@@ -196,8 +199,108 @@ const alone = (markdown) =>
     .replace(/^### /, "# ")
     .replace(/\]\(#([a-z0-9-]+)\)/g, (link, slug) => (bySlug[slug] ? `](${bySlug[slug].markdown})` : link));
 
+/* Each entry gets a page of its own, the one a search finds: the drawn index
+   cut down to the entry's category, with that entry alone under it. Its
+   specimen runs in a frame from /frame/<slug>, which search engines skip. */
+const homeHead = [
+  'meta[name="description"]',
+  'link[rel="canonical"]',
+  'link[rel="alternate"]',
+  'link[rel="preload"][as="image"]',
+  'meta[property^="og:"]',
+  'meta[name^="twitter:"]',
+  'script[type="application/ld+json"]',
+].join(", ");
+
+function entryPage(entry) {
+  const page = document.documentElement.cloneNode(true);
+  const find = (selector) => page.querySelector(selector);
+  const article = find(`article[id="${entry.slug}"]`);
+  const section = article.closest("section.category");
+  const categories = find('[data-slot="categories"]');
+
+  for (const other of section.querySelectorAll("article.entry")) if (other !== article) other.remove();
+
+  /* The entry comes first, and its category follows as the way to the rest. */
+  section.classList.add("entry-page");
+  section.insertBefore(section.querySelector(".entries"), section.querySelector(".opener"));
+  categories.replaceChildren(section);
+  find("main").replaceChildren(categories);
+
+  /* The entry's title is the page's heading. */
+  const heading = article.querySelector("h3");
+  const h1 = document.createElement("h1");
+  h1.setAttribute("data-slot", "title");
+  h1.innerHTML = heading.querySelector("a").innerHTML;
+  heading.replaceWith(h1);
+
+  /* The category's list goes to the other entries' pages. */
+  for (const link of section.querySelectorAll(".entry-index a")) {
+    const slug = link.getAttribute("href").slice(1);
+    link.setAttribute("href", `/specimen/${slug}`);
+    if (slug === entry.slug) link.setAttribute("aria-current", "page");
+  }
+
+  /* The header's list of categories belongs to the index. */
+  find(".site-header .current")?.remove();
+  find("#category-menu")?.remove();
+
+  /* A link to a part of the index goes back to the index. */
+  for (const link of page.querySelectorAll('a[href^="#"]')) {
+    const id = link.getAttribute("href").slice(1);
+    if (id && !page.querySelector(`[id="${id}"]`)) link.setAttribute("href", `/#${id}`);
+  }
+
+  const head = find("head");
+  const url = entry.page;
+  const title = `${entry.title} · good-css`;
+
+  for (const tag of head.querySelectorAll(homeHead)) tag.remove();
+  head.querySelector("title").textContent = title;
+
+  const tags = [
+    ["meta", { name: "description", content: entry.lede }],
+    ["link", { rel: "canonical", href: url }],
+    ["link", { rel: "alternate", type: "text/markdown", href: `/specimen/${entry.slug}.md`, title: "This entry as Markdown" }],
+    ["meta", { property: "og:title", content: title }],
+    ["meta", { property: "og:description", content: entry.lede }],
+    ["meta", { property: "og:type", content: "article" }],
+    ["meta", { property: "og:url", content: url }],
+    ["meta", { property: "og:image", content: `${origin}/og.png` }],
+    ["meta", { name: "twitter:card", content: "summary_large_image" }],
+  ];
+
+  for (const [name, attrs] of tags) {
+    const tag = document.createElement(name);
+    for (const [key, value] of Object.entries(attrs)) tag.setAttribute(key, value);
+    head.append(tag);
+  }
+
+  const ld = document.createElement("script");
+  ld.setAttribute("type", "application/ld+json");
+  ld.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: entry.title,
+    description: entry.lede,
+    url,
+    image: `${origin}/og.png`,
+    inLanguage: "en",
+    datePublished: published,
+    dateModified: today,
+    author: person,
+    publisher: person,
+    isPartOf: { "@type": "WebSite", name: practices.title, url: `${origin}/` },
+    encoding: { "@type": "MediaObject", encodingFormat: "text/markdown", contentUrl: entry.markdown },
+  });
+  head.append(ld);
+
+  return `<!doctype html>\n${page.outerHTML}\n`;
+}
+
 for (const [index, entry] of entries.entries()) {
-  if (entry.specimen) await write(`specimen/${entry.slug}/index.html`, specimenPage(entry.slug));
+  if (demos[entry.slug]) await write(`frame/${entry.slug}/index.html`, specimenPage(entry.slug));
+  await write(`specimen/${entry.slug}/index.html`, entryPage(entry));
 
   await write(
     `specimen/${entry.slug}.md`,
@@ -272,4 +375,4 @@ for (const file of await readdir(dist, { recursive: true })) {
   if (/Source: ?(\\?`|<code>)/.test(await readFile(join(dist, file), "utf8"))) throw new Error(`${file} holds a Source line`);
 }
 
-console.log(`Built ${entries.length} entries and ${entries.filter((entry) => entry.specimen).length} specimens for ${origin}`);
+console.log(`Built ${entries.length} entry pages and ${Object.keys(demos).length} specimens for ${origin}`);

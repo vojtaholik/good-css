@@ -43,7 +43,7 @@ const tone = (index) => (index % 2 ? "dark" : "light");
 
 function specimen(entry, demo, band) {
   const node = stamp("specimen");
-  const url = `/specimen/${entry.slug}${band === "dark" ? "?panel=light" : ""}`;
+  const url = `/frame/${entry.slug}${band === "dark" ? "?panel=light" : ""}`;
   const frame = slot(node, "frame");
 
   frame.src = url;
@@ -152,7 +152,8 @@ function entry(entry, band) {
   node.firstElementChild.id = entry.slug;
   slot(node, "ghost").textContent = pad(entry.number);
   slot(node, "number").textContent = pad(entry.number);
-  slot(node, "title").innerHTML = entry.title;
+  /* The title links to the entry's own page, the one a search finds. */
+  slot(node, "title").innerHTML = `<a href="/specimen/${entry.slug}">${entry.title}</a>`;
   slot(node, "lede").innerHTML = entry.lede;
   slot(node, "specimen").replaceWith(demo ? specimen(entry, demo, band) : noSpecimen(entry));
   slot(node, "code-meta").textContent = codeMeta(entry.source);
