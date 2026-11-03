@@ -642,6 +642,23 @@ pre {
   }
 }
 
+/* On a category's or an entry's own page the header lies over the top of
+   the band, which reaches up under it, so the band's ghost shows through.
+   It stays there when the page grows. A narrow screen has a sticky bar. */
+@media (width >= 56rem) {
+  .site-header-over {
+    background: transparent;
+
+    & + [data-grows],
+    & + main [data-grows] {
+      --header-block: calc(3.5rem + var(--header-bar));
+
+      margin-block-start: calc(-1 * var(--header-block));
+      padding-block-start: calc(var(--space-band) + var(--header-block));
+    }
+  }
+}
+
 @media (width < 56rem) {
   /* A link into the page stops below the bar, as in "Anchor targets that
      clear a sticky header". */

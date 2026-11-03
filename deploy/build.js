@@ -227,7 +227,9 @@ function cutDown(sectionId, grows) {
 
   /* The header takes the tone of the band under it, so a dark band reaches
      the top of the window. */
-  if (section.classList.contains("band-dark")) page.querySelector(".site-header").classList.add("band-dark");
+  const header = page.querySelector(".site-header");
+  header.classList.add("site-header-over");
+  if (section.classList.contains("band-dark")) header.classList.add("band-dark");
 
   /* The header's list of categories belongs to the index. */
   page.querySelector(".site-header .current")?.remove();

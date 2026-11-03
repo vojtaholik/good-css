@@ -1,9 +1,10 @@
 /* A category's or an entry's own page holds that part of the index alone,
    which is all a search engine reads there. The first time a reader scrolls,
-   touches, clicks or presses a key, the rest of the index grows around it,
-   and it stays where it was on the screen. From then on the page is the
-   index, scrolled to that part. A crawler does none of those things, so it
-   never sees more than the part.
+   touches, clicks or presses a key, the rest of the index grows around it
+   and it stays where it was on the screen. The page's header stays in place
+   above the part, and everything the index has before the part grows above
+   that header, with the index's own header at the very top. A crawler does
+   none of those things, so it never sees more than the part.
 
    The index is fetched while the page is idle, so it is usually there by
    the time the reader moves. */
@@ -46,57 +47,20 @@ function copyAttributes(from, to) {
   for (const { name, value } of from.attributes) to.setAttribute(name, value);
 }
 
-/* An entry's page holds its category's opener after the entry. It gives way
-   to the index's, above the entries as on the index, and the entry gets its
-   neighbours in the category back. */
-function growEntry(section) {
+/* What the index has before an entry in its category: the category's
+   ghost, its opener and the entries before it, as a band of its own. The
+   entries after it join the entry's page, and the page's own copy of the
+   opener, which it showed after the entry, goes. */
+function splitCategory(section) {
   const article = section.querySelector(`article[id="${live.article.id}"]`);
-  const around = siblings(article);
+  const { after } = siblings(article);
 
-  live.section.querySelector(":scope > .ghost")?.remove();
+  article.remove();
+  live.article.after(...after);
   live.section.querySelector(":scope > .opener").remove();
-  live.article.parentElement.before(...[...section.children].filter((child) => !child.contains(article)));
-  live.article.before(...around.before);
-  live.article.after(...around.after);
-}
+  live.section.removeAttribute("id");
 
-/* What the reader saw above the part, the header and the band's space under
-   it, stays on the screen where it was, laid over the grown page, and
-   scrolls away with it. It goes once it is out of the window, or fades as
-   soon as the reader scrolls up, where the index's own content is. */
-function stand(header, top, ground) {
-  const cover = document.createElement("div");
-  const rect = header.getBoundingClientRect();
-  const copy = header.cloneNode(true);
-
-  copy.querySelector("#install")?.remove();
-  cover.className = "stand";
-  cover.dataset.screenTop = rect.top;
-  cover.style.cssText = `position: absolute; inset-inline: 0; z-index: 3; top: ${scrollY + rect.top}px; height: ${top - rect.top}px; background: ${ground}`;
-  cover.append(copy);
-
-  return cover;
-}
-
-function standAside(cover) {
-  let last = scrollY;
-  const watch = new IntersectionObserver(([{ isIntersecting }]) => isIntersecting || leave());
-
-  const leave = () => {
-    watch.disconnect();
-    removeEventListener("scroll", onScroll);
-    cover.remove();
-  };
-
-  const onScroll = () => {
-    if (scrollY >= last) return void (last = scrollY);
-
-    removeEventListener("scroll", onScroll);
-    cover.animate({ opacity: [1, 0] }, { duration: 180, easing: "ease-out" }).finished.then(leave);
-  };
-
-  watch.observe(cover);
-  addEventListener("scroll", onScroll, { passive: true });
+  return section;
 }
 
 async function grow() {
@@ -105,47 +69,36 @@ async function grow() {
   const categories = section.parentElement;
   const top = live.anchor.getBoundingClientRect().top;
   const wired = new Set(document.querySelectorAll(".specimen .viewport"));
-
   const header = document.querySelector(".site-header");
-  const ground = getComputedStyle(live.section).backgroundColor;
-  const cover = stand(header, top, ground);
-
-  if (live.article) growEntry(section);
-  copyAttributes(section, live.section);
-
-  /* The page's own nodes stay put, so its specimens do not load again. The
-     index is built around them: the other categories, and what comes before
-     and after them. */
   const liveCategories = live.section.parentElement;
   const sections = siblings(section);
-  live.section.before(...sections.before);
+  const parts = siblings(categories);
+
+  const above = [...sections.before, ...(live.article ? [splitCategory(section)] : [])];
+  /* Where the header is a sticky bar, the index's own bar does its job. */
+  const sticky = getComputedStyle(header).position === "sticky";
+  live.section.before(...above, ...(sticky ? [] : [header]));
+  if (sticky) header.remove();
   live.section.after(...sections.after);
   copyAttributes(categories, liveCategories);
-
-  const parts = siblings(categories);
   liveCategories.before(...parts.before);
   liveCategories.after(...parts.after);
 
-  /* The header gains the index's list of categories. Its other parts stay,
-     with what the page already wired to them. */
-  /* Above the hero the header is light again, as on the index. */
-  header.classList.remove("band-dark");
-  const mark = header.querySelector(".mark");
-  mark.after(doc.querySelector(".site-header .current"), doc.getElementById("category-menu"));
+  /* The index's header goes at the top. The install popover stays with the
+     page's header, and both Install buttons open it. */
+  const indexHeader = doc.querySelector(".site-header");
+  if (!sticky) indexHeader.querySelector("#install").remove();
+  document.querySelector("main").before(indexHeader);
   document.body.setAttribute("style", doc.body.getAttribute("style") ?? "");
 
-  /* The entry goes back to where it was before anything grew above it. */
-  window.scrollBy({ top: live.anchor.getBoundingClientRect().top - top, behavior: "instant" });
-
-  /* The cover was measured before anything grew; the screen has not moved since. */
-  cover.style.top = `${scrollY + parseFloat(cover.dataset.screenTop)}px`;
-  document.body.append(cover);
+  /* The part goes back to where it was before anything grew above it. */
+  const shift = live.anchor.getBoundingClientRect().top - top;
+  if (shift) window.scrollBy({ top: shift, behavior: "instant" });
 
   for (const viewport of document.querySelectorAll(".specimen .viewport")) {
     if (!wired.has(viewport)) specimen(viewport);
   }
 
-  standAside(cover);
   categoryMenu(document.getElementById("category-menu"));
   carousel(document.querySelector('[data-slot="cards"]'));
 }
