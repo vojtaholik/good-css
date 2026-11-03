@@ -11,6 +11,10 @@ import { carousel } from "./carousel.js";
 import { categoryMenu } from "./menu.js";
 import { specimen } from "./viewport.js";
 
+/* A reload starts on the entry. The browser would restore the scroll of the
+   grown page, far below the end of the page that has not grown yet. */
+history.scrollRestoration = "manual";
+
 const live = {
   section: document.querySelector(".entry-page"),
   article: document.querySelector(".entry-page article.entry"),
@@ -56,9 +60,11 @@ async function grow() {
      opener, the other categories, and what comes before and after them. */
   const entries = live.article.parentElement;
   const around = siblings(article);
+  /* The page's own ghost and opener give way to the index's, which sit
+     above the entries as they do on the index. */
   live.section.querySelector(":scope > .ghost")?.remove();
+  live.section.querySelector(":scope > .opener").remove();
   entries.before(...[...section.children].filter((child) => !child.contains(article)));
-  live.section.querySelector(".opener").remove();
   live.article.before(...around.before);
   live.article.after(...around.after);
   copyAttributes(section, live.section);
