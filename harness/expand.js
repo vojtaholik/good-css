@@ -60,12 +60,38 @@ function growEntry(section) {
   live.article.after(...around.after);
 }
 
+/* Once the standing header is out of the window it goes, and whatever is
+   below it stays where it is on the screen. */
+function standAside(stand) {
+  const watch = new IntersectionObserver(([{ isIntersecting }]) => {
+    if (isIntersecting) return;
+
+    const next = stand.nextElementSibling;
+    const top = next.getBoundingClientRect().top;
+
+    watch.disconnect();
+    stand.remove();
+
+    const shift = next.getBoundingClientRect().top - top;
+    if (shift) window.scrollBy({ top: shift, behavior: "instant" });
+  });
+
+  watch.observe(stand);
+}
+
 async function grow() {
   const doc = await load();
   const section = doc.getElementById(live.section.id);
   const categories = section.parentElement;
   const top = live.anchor.getBoundingClientRect().top;
   const wired = new Set(document.querySelectorAll(".specimen .viewport"));
+
+  /* The header the reader saw stays where it was, above the part, and
+     scrolls away with the page. The real one waits above the hero. */
+  const header = document.querySelector(".site-header");
+  const stand = header.cloneNode(true);
+  stand.querySelector("#install")?.remove();
+  live.section.before(stand);
 
   if (live.article) growEntry(section);
   copyAttributes(section, live.section);
@@ -86,8 +112,8 @@ async function grow() {
   /* The header gains the index's list of categories. Its other parts stay,
      with what the page already wired to them. */
   /* Above the hero the header is light again, as on the index. */
-  document.querySelector(".site-header").classList.remove("band-dark");
-  const mark = document.querySelector(".site-header .mark");
+  header.classList.remove("band-dark");
+  const mark = header.querySelector(".mark");
   mark.after(doc.querySelector(".site-header .current"), doc.getElementById("category-menu"));
   document.body.setAttribute("style", doc.body.getAttribute("style") ?? "");
 
@@ -98,6 +124,7 @@ async function grow() {
     if (!wired.has(viewport)) specimen(viewport);
   }
 
+  standAside(stand);
   categoryMenu(document.getElementById("category-menu"));
   carousel(document.querySelector('[data-slot="cards"]'));
 }
