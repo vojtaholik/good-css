@@ -60,23 +60,43 @@ function growEntry(section) {
   live.article.after(...around.after);
 }
 
-/* Once the standing header is out of the window it goes, and whatever is
-   below it stays where it is on the screen. */
-function standAside(stand) {
-  const watch = new IntersectionObserver(([{ isIntersecting }]) => {
-    if (isIntersecting) return;
+/* What the reader saw above the part, the header and the band's space under
+   it, stays on the screen where it was, laid over the grown page, and
+   scrolls away with it. It goes once it is out of the window, or fades as
+   soon as the reader scrolls up, where the index's own content is. */
+function stand(header, top, ground) {
+  const cover = document.createElement("div");
+  const rect = header.getBoundingClientRect();
+  const copy = header.cloneNode(true);
 
-    const next = stand.nextElementSibling;
-    const top = next.getBoundingClientRect().top;
+  copy.querySelector("#install")?.remove();
+  cover.className = "stand";
+  cover.dataset.screenTop = rect.top;
+  cover.style.cssText = `position: absolute; inset-inline: 0; z-index: 3; top: ${scrollY + rect.top}px; height: ${top - rect.top}px; background: ${ground}`;
+  cover.append(copy);
 
+  return cover;
+}
+
+function standAside(cover) {
+  let last = scrollY;
+  const watch = new IntersectionObserver(([{ isIntersecting }]) => isIntersecting || leave());
+
+  const leave = () => {
     watch.disconnect();
-    stand.remove();
+    removeEventListener("scroll", onScroll);
+    cover.remove();
+  };
 
-    const shift = next.getBoundingClientRect().top - top;
-    if (shift) window.scrollBy({ top: shift, behavior: "instant" });
-  });
+  const onScroll = () => {
+    if (scrollY >= last) return void (last = scrollY);
 
-  watch.observe(stand);
+    removeEventListener("scroll", onScroll);
+    cover.animate({ opacity: [1, 0] }, { duration: 180, easing: "ease-out" }).finished.then(leave);
+  };
+
+  watch.observe(cover);
+  addEventListener("scroll", onScroll, { passive: true });
 }
 
 async function grow() {
@@ -86,12 +106,9 @@ async function grow() {
   const top = live.anchor.getBoundingClientRect().top;
   const wired = new Set(document.querySelectorAll(".specimen .viewport"));
 
-  /* The header the reader saw stays where it was, above the part, and
-     scrolls away with the page. The real one waits above the hero. */
   const header = document.querySelector(".site-header");
-  const stand = header.cloneNode(true);
-  stand.querySelector("#install")?.remove();
-  live.section.before(stand);
+  const ground = getComputedStyle(live.section).backgroundColor;
+  const cover = stand(header, top, ground);
 
   if (live.article) growEntry(section);
   copyAttributes(section, live.section);
@@ -120,11 +137,15 @@ async function grow() {
   /* The entry goes back to where it was before anything grew above it. */
   window.scrollBy({ top: live.anchor.getBoundingClientRect().top - top, behavior: "instant" });
 
+  /* The cover was measured before anything grew; the screen has not moved since. */
+  cover.style.top = `${scrollY + parseFloat(cover.dataset.screenTop)}px`;
+  document.body.append(cover);
+
   for (const viewport of document.querySelectorAll(".specimen .viewport")) {
     if (!wired.has(viewport)) specimen(viewport);
   }
 
-  standAside(stand);
+  standAside(cover);
   categoryMenu(document.getElementById("category-menu"));
   carousel(document.querySelector('[data-slot="cards"]'));
 }
