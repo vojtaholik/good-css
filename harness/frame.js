@@ -32,6 +32,7 @@ export function specimenPage(slug) {
 <title>${entry.slug}</title>
 <meta name="description" content="${description}">
 <link rel="icon" href="/mark.svg" type="image/svg+xml">
+<script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 <script>
   if (new URLSearchParams(location.search).get("panel") === "light") document.documentElement.dataset.panel = "light";
 </script>
