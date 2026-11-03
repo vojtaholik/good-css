@@ -4,13 +4,13 @@ import { defineConfig } from "vite";
 import { categoryNav, footer, header, installCommand, readPage, sitePage } from "./deploy/page.js";
 import { pages } from "./deploy/site.js";
 
-/* Serves each specimen as a page of its own at /specimen/<slug>, built on
+/* Serves each specimen as a frame of its own at /frame/<slug>, built on
    request from PRACTICES.md and the fixture. A real URL means a specimen can
    be opened in another browser or on a phone, with `vite --host`. */
 const specimens = () => ({
   name: "specimens",
   configureServer(server) {
-    server.middlewares.use("/specimen", async (request, response) => {
+    server.middlewares.use("/frame", async (request, response) => {
       const slug = new URL(request.url, "http://localhost").pathname.slice(1);
       const { specimenPage } = await server.ssrLoadModule("/frame.js");
       const page = specimenPage(slug);

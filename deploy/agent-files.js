@@ -13,7 +13,7 @@ last-updated: ${updated}
 `;
 
 const entryLine = (entry) =>
-  `- [${entry.title}](${entry.markdown}): ${entry.lede}` + (entry.specimen ? ` [Specimen](${entry.specimen})` : "");
+  `- [${entry.title}](${entry.markdown}): ${entry.lede}` + ` [Page](${entry.page})`;
 
 /* The skill comes first under "How to use it". An agent that is about to
    write CSS needs a short file and two or three references, not the list.
@@ -45,10 +45,10 @@ To write CSS, read the skill. It is the same list, cut down to what an agent nee
 To study the list, or to learn why a technique works and who it is borrowed from, read the entries.
 
 - Fetch [the whole list as Markdown](${origin}/index.md). It is one file of ${list.kilobytes} KB with every entry and its code.
-- Or fetch one entry. Each link under a category below is that entry as Markdown, and its specimen is at the same URL without \`.md\`.
+- Or fetch one entry. Each link under a category below is that entry as Markdown, and its page for people, with the specimen running, is at the same URL without \`.md\`.
 - Any page answers a request with \`Accept: text/markdown\` in Markdown.
 - Follow the "Rules" of an entry when you apply it. They are the conditions under which it works.
-- A specimen page runs the entry's own code blocks, verbatim, with a fixture around them. View its source to see the technique in a working document.
+- The specimen alone is at \`/frame/<slug>\`. It runs the entry's own code blocks, verbatim, with a fixture around them. View its source to see the technique in a working document.
 
 ${categories.map((category) => `## ${category.title}\n\n${category.entries.map(entryLine).join("\n")}`).join("\n\n")}
 
@@ -67,10 +67,11 @@ ${categories.map((category) => `## ${category.title}\n\n${category.entries.map(e
 - [Privacy](${origin}/privacy.md): what the site does with a visit
 `;
 
-export const sitemapUrls = (entries) => [
+export const sitemapUrls = (entries, categories) => [
   `${origin}/`,
   ...pages.map((page) => `${origin}/${page}`),
-  ...entries.map((entry) => entry.specimen).filter(Boolean),
+  ...categories.map((category) => `${origin}/${category.slug}`),
+  ...entries.map((entry) => entry.page),
 ];
 
 export const sitemap = (urls, modified) => `<?xml version="1.0" encoding="UTF-8"?>

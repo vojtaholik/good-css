@@ -14,17 +14,11 @@
       "continue": true
     },
     { "src": "^/$", "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }], "dest": "/index.md" },
-    { "src": "^/(about|contact|privacy)/?$", "headers": { "Vary": "Accept" }, "continue": true },
+    { "src": "^/([^/.]+)/?$", "headers": { "Vary": "Accept" }, "continue": true },
     {
-      "src": "^/(about|contact|privacy)/?$",
+      "src": "^/([^/.]+)/?$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
       "dest": "/$1.md"
-    },
-    { "src": "^/specimen/([^/.]+)/?$", "headers": { "Vary": "Accept" }, "continue": true },
-    {
-      "src": "^/specimen/([^/.]+)/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "dest": "/specimen/$1.md"
     },
     { "handle": "filesystem" },
     { "handle": "error" },

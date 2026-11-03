@@ -642,6 +642,23 @@ pre {
   }
 }
 
+/* On a category's or an entry's own page the header lies over the top of
+   the band, which reaches up under it, so the band's ghost shows through.
+   It stays there when the page grows. A narrow screen has a sticky bar. */
+@media (width >= 56rem) {
+  .site-header-over {
+    background: transparent;
+
+    & + [data-grows],
+    & + main [data-grows] {
+      --header-block: calc(3.5rem + var(--header-bar));
+
+      margin-block-start: calc(-1 * var(--header-block));
+      padding-block-start: calc(var(--space-band) + var(--header-block));
+    }
+  }
+}
+
 @media (width < 56rem) {
   /* A link into the page stops below the bar, as in "Anchor targets that
      clear a sticky header". */
@@ -1460,7 +1477,8 @@ pre {
   gap: 1.125rem;
   max-inline-size: 56.25rem;
 
-  & h2 {
+  /* An h1 on a category's own page. */
+  & :is(h1, h2) {
     font-size: var(--text-opener);
     font-weight: 800;
     line-height: 0.96;
@@ -1561,6 +1579,25 @@ pre {
   margin-block-start: var(--space-entry);
 }
 
+/* On an entry's own page the entry leads and its category follows. */
+.entry-page .entries {
+  margin-block: 0 var(--space-entry);
+}
+
+/* The entry's own number stands behind it, so the category's steps aside. */
+.entry-page > .ghost {
+  display: none;
+}
+
+.entry-index a[aria-current="page"] {
+  background: var(--bp-lime);
+  color: var(--bp-dark);
+
+  & .label {
+    color: inherit;
+  }
+}
+
 /* Entry ------------------------------------------------------------------- */
 
 /* The number in a gutter of its own, huge and pale behind, then the entry. */
@@ -1613,7 +1650,7 @@ pre {
   }
 }
 
-.entry h3 {
+.entry :is(h1, h2, h3) {
   font-size: var(--text-title);
   font-weight: 800;
   line-height: 1.136;
@@ -1623,6 +1660,13 @@ pre {
   & code {
     font: inherit;
   }
+}
+
+/* A title that links to its own page looks like the title. Only the
+   pointer says it is a link. */
+:is(.entry, .opener-text) :is(h1, h2, h3) a {
+  color: inherit;
+  text-decoration: none;
 }
 
 .lede {

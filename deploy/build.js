@@ -8,7 +8,7 @@ import { readPage, sitePage } from "./page.js";
 import { author, origin, pages, published } from "./site.js";
 
 /* Builds the harness into dist/ as a static site: the index with its content
-   already in the HTML, one page per specimen at /specimen/<slug>, the pages
+   already in the HTML, one page per entry at /<slug>, the pages
    in deploy/pages, the skill, and the files an agent looks for.
 
    A push to main deploys it. vercel.json has Vercel run `bun run build` and
@@ -97,16 +97,25 @@ const entries = practices.entries.map((entry) => ({
   slug: entry.slug,
   title: text(entry.title),
   lede: firstSentence(text(entry.lede)),
-  markdown: `${origin}/specimen/${entry.slug}.md`,
-  specimen: demos[entry.slug] ? `${origin}/specimen/${entry.slug}` : null,
+  markdown: `${origin}/${entry.slug}.md`,
+  page: `${origin}/${entry.slug}`,
 }));
 
 /* The same entries by category, in the order the page shows them. */
 const bySlug = Object.fromEntries(entries.map((entry) => [entry.slug, entry]));
 const categories = practices.categories.map((category) => ({
+  slug: category.slug,
   title: category.title,
   entries: category.entries.map((entry) => bySlug[entry.slug]),
 }));
+
+/* Entries, categories and pages share the root, beside what the build
+   writes there. The build stops on a slug two of them would claim. */
+const reserved = ["frame", "assets", "fonts", "art", "icons", "patterns", "skills", "index", "llms", "llms-full", "not-found", "sitemap", "robots", "og", "mark", "wordmark"];
+const claimed = [...entries.map((entry) => entry.slug), ...categories.map((category) => category.slug), ...pages, ...reserved];
+const clash = claimed.find((slug, index) => claimed.indexOf(slug) !== index);
+
+if (clash) throw new Error(`Two things claim /${clash}`);
 
 const person = { "@type": "Person", name: author, url: `${origin}/about` };
 
@@ -186,6 +195,9 @@ document.write(await readFile(join(dist, "index.html"), "utf8"));
 Object.assign(globalThis, { document, ResizeObserver: window.ResizeObserver });
 await server.ssrLoadModule("/main.js");
 
+/* The templates are for drawing, and the built page arrives drawn. */
+for (const template of document.querySelectorAll("template")) template.remove();
+
 await write("index.html", `<!doctype html>\n${document.documentElement.outerHTML}\n`);
 
 /* An entry is published twice: the specimen that runs it, and beside it the
@@ -196,11 +208,187 @@ const alone = (markdown) =>
     .replace(/^### /, "# ")
     .replace(/\]\(#([a-z0-9-]+)\)/g, (link, slug) => (bySlug[slug] ? `](${bySlug[slug].markdown})` : link));
 
+/* Each category and each entry gets a page of its own, the one a search
+   finds: the drawn index cut down to that category, or to that entry with its
+   category after it. expand.js grows it into the index the first time it is
+   used. A specimen runs in a frame from /frame/<slug>, which search engines
+   skip. */
+const homeHead = [
+  'meta[name="description"]',
+  'link[rel="canonical"]',
+  'link[rel="alternate"]',
+  'link[rel="preload"][as="image"]',
+  'meta[property^="og:"]',
+  'meta[name^="twitter:"]',
+  'script[type="application/ld+json"]',
+].join(", ");
+
+/* The drawn index with only `section` left in its main, marked for expand.js. */
+function cutDown(sectionId, grows) {
+  const page = document.documentElement.cloneNode(true);
+  const section = page.querySelector(`section[id="${sectionId}"]`);
+  const categories = page.querySelector('[data-slot="categories"]');
+
+  section.setAttribute("data-grows", grows);
+  categories.replaceChildren(section);
+  page.querySelector("main").replaceChildren(categories);
+
+  /* The header takes the tone of the band under it, so a dark band reaches
+     the top of the window. */
+  const header = page.querySelector(".site-header");
+  header.classList.add("site-header-over");
+  if (section.classList.contains("band-dark")) header.classList.add("band-dark");
+
+  /* The header's list of categories belongs to the index. */
+  page.querySelector(".site-header .current")?.remove();
+  page.querySelector("#category-menu")?.remove();
+
+  return { page, section };
+}
+
+const heading = (node, tag) => {
+  const replacement = document.createElement(tag);
+  replacement.setAttribute("data-slot", "title");
+  /* The page's own title needs no link to itself. */
+  replacement.innerHTML = node.querySelector("a")?.innerHTML ?? node.innerHTML;
+  node.replaceWith(replacement);
+};
+
+function finish(page, { title, description, url, markdown, ld }) {
+  /* A link to a part of the index goes back to the index. */
+  for (const link of page.querySelectorAll('a[href^="#"]')) {
+    const id = link.getAttribute("href").slice(1);
+    if (id && !page.querySelector(`[id="${id}"]`)) link.setAttribute("href", `/#${id}`);
+  }
+
+  const head = page.querySelector("head");
+
+  for (const tag of head.querySelectorAll(homeHead)) tag.remove();
+  head.querySelector("title").textContent = title;
+
+  const tags = [
+    ["meta", { name: "description", content: description }],
+    ["link", { rel: "canonical", href: url }],
+    ["link", { rel: "alternate", type: "text/markdown", href: markdown, title: "This page as Markdown" }],
+    ["meta", { property: "og:title", content: title }],
+    ["meta", { property: "og:description", content: description }],
+    ["meta", { property: "og:type", content: "article" }],
+    ["meta", { property: "og:url", content: url }],
+    ["meta", { property: "og:image", content: `${origin}/og.png` }],
+    ["meta", { name: "twitter:card", content: "summary_large_image" }],
+  ];
+
+  for (const [name, attrs] of tags) {
+    const tag = document.createElement(name);
+    for (const [key, value] of Object.entries(attrs)) tag.setAttribute(key, value);
+    head.append(tag);
+  }
+
+  const script = document.createElement("script");
+  script.setAttribute("type", "application/ld+json");
+  script.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    url,
+    description,
+    image: `${origin}/og.png`,
+    inLanguage: "en",
+    datePublished: published,
+    dateModified: today,
+    author: person,
+    publisher: person,
+    isPartOf: { "@type": "WebSite", name: practices.title, url: `${origin}/` },
+    ...ld,
+  });
+  head.append(script);
+
+  return `<!doctype html>\n${page.outerHTML}\n`;
+}
+
+function entryPage(entry) {
+  const category = practices.categories.find((category) => category.entries.some(({ slug }) => slug === entry.slug));
+  const { page, section } = cutDown(category.slug, "entry");
+  const article = section.querySelector(`article[id="${entry.slug}"]`);
+
+  for (const other of section.querySelectorAll("article.entry")) if (other !== article) other.remove();
+
+  /* The entry comes first, and its category follows as the way to the rest. */
+  section.classList.add("entry-page");
+  section.insertBefore(section.querySelector(".entries"), section.querySelector(".opener"));
+  heading(article.querySelector("h3"), "h1");
+
+  /* The category's list goes to the other entries' pages. */
+  for (const link of section.querySelectorAll(".entry-index a")) {
+    const slug = link.getAttribute("href").slice(1);
+    link.setAttribute("href", `/${slug}`);
+    if (slug === entry.slug) link.setAttribute("aria-current", "page");
+  }
+
+  return finish(page, {
+    title: `${entry.title} · good-css`,
+    description: entry.lede,
+    url: entry.page,
+    markdown: `/${entry.slug}.md`,
+    ld: {
+      "@type": "TechArticle",
+      headline: entry.title,
+      encoding: { "@type": "MediaObject", encodingFormat: "text/markdown", contentUrl: entry.markdown },
+    },
+  });
+}
+
+function categoryPage(category) {
+  const { page, section } = cutDown(category.slug, "category");
+  const url = `${origin}/${category.slug}`;
+  const titles = category.entries.map((entry) => entry.title);
+  const description = `${category.entries.length} modern CSS techniques for ${category.title.toLowerCase()}, each with a live specimen: ${titles.join(", ")}.`;
+
+  heading(section.querySelector(".opener h2"), "h1");
+
+  /* Under the page's h1 the entries' titles are h2, still links to their pages. */
+  for (const title of section.querySelectorAll("article.entry h3")) {
+    const h2 = document.createElement("h2");
+    h2.setAttribute("data-slot", "title");
+    h2.innerHTML = title.innerHTML;
+    title.replaceWith(h2);
+  }
+
+  return finish(page, {
+    title: `${category.title}: ${category.entries.length} modern CSS techniques · good-css`,
+    description,
+    url,
+    markdown: `/${category.slug}.md`,
+    ld: {
+      "@type": "CollectionPage",
+      name: category.title,
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: category.entries.length,
+        itemListElement: category.entries.map((entry, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: entry.title,
+          url: entry.page,
+        })),
+      },
+    },
+  });
+}
+
+for (const [index, category] of categories.entries()) {
+  await write(`${category.slug}/index.html`, categoryPage(category));
+  await write(
+    `${category.slug}.md`,
+    frontmatter({ title: category.title, description: `Modern CSS techniques for ${category.title.toLowerCase()}.`, canonical: `${origin}/${category.slug}.md`, updated: today }) +
+      raw(categorySections[index]).replace(/^## /, "# "),
+  );
+}
+
 for (const [index, entry] of entries.entries()) {
-  if (entry.specimen) await write(`specimen/${entry.slug}/index.html`, specimenPage(entry.slug));
+  if (demos[entry.slug]) await write(`frame/${entry.slug}/index.html`, specimenPage(entry.slug));
+  await write(`${entry.slug}/index.html`, entryPage(entry));
 
   await write(
-    `specimen/${entry.slug}.md`,
+    `${entry.slug}.md`,
     frontmatter({ title: entry.title, description: entry.lede, canonical: entry.markdown, updated: today }) +
       alone(entryMarkdown[index]),
   );
@@ -257,14 +445,13 @@ await write(
     list: { kilobytes: kilobytes(listMarkdown) },
   }),
 );
-await write("sitemap.xml", sitemap(sitemapUrls(entries), today));
+await write("sitemap.xml", sitemap(sitemapUrls(entries, categories), today));
 await write("robots.txt", robots);
 
-/* vercel.json names the pages in its rules. The build fails if a page in
-   site.js is missing from them. */
+/* vercel.json answers a request for any page with Markdown by one rule. */
 const routes = await readFile(join(root, "vercel.json"), "utf8");
 
-if (!routes.includes(`^/(${pages.join("|")})/?$`)) throw new Error("vercel.json does not route every page in deploy/site.js");
+if (!routes.includes("^/([^/.]+)/?$")) throw new Error("vercel.json does not answer every page with Markdown on request");
 
 /* The build fails if a Source line ever gets past the filter at the top. */
 for (const file of await readdir(dist, { recursive: true })) {
@@ -272,4 +459,4 @@ for (const file of await readdir(dist, { recursive: true })) {
   if (/Source: ?(\\?`|<code>)/.test(await readFile(join(dist, file), "utf8"))) throw new Error(`${file} holds a Source line`);
 }
 
-console.log(`Built ${entries.length} entries and ${entries.filter((entry) => entry.specimen).length} specimens for ${origin}`);
+console.log(`Built ${entries.length} entry pages and ${Object.keys(demos).length} specimens for ${origin}`);
