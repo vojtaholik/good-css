@@ -1477,17 +1477,6 @@ pre {
   gap: 1.125rem;
   max-inline-size: 56.25rem;
 
-  & :is(h1, h2) a {
-    color: inherit;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-      text-decoration-thickness: 0.05em;
-      text-underline-offset: 0.08em;
-    }
-  }
-
   /* An h1 on a category's own page. */
   & :is(h1, h2) {
     font-size: var(--text-opener);
@@ -1671,16 +1660,30 @@ pre {
   & code {
     font: inherit;
   }
+}
 
-  & a {
-    color: inherit;
-    text-decoration: none;
+/* The mark beside a title that links to its own page. It shows while the
+   title is under the pointer or the mark has focus, and stays faint on a
+   screen with no pointer that hovers. */
+.permalink {
+  margin-inline-start: 0.2em;
+  font-weight: 500;
+  color: var(--soft);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 150ms ease-out, color 150ms ease-out;
 
-    &:hover {
-      text-decoration: underline;
-      text-decoration-thickness: 0.06em;
-      text-underline-offset: 0.12em;
-    }
+  :is(h1, h2, h3):hover > &,
+  &:focus-visible {
+    opacity: 1;
+  }
+
+  &:hover {
+    color: var(--ink);
+  }
+
+  @media (hover: none) {
+    opacity: 0.5;
   }
 }
 

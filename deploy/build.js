@@ -241,7 +241,9 @@ function cutDown(sectionId, grows) {
 const heading = (node, tag) => {
   const replacement = document.createElement(tag);
   replacement.setAttribute("data-slot", "title");
-  replacement.innerHTML = node.querySelector("a")?.innerHTML ?? node.innerHTML;
+  /* The page's own title needs no link to itself. */
+  node.querySelector(".permalink")?.remove();
+  replacement.innerHTML = node.innerHTML;
   node.replaceWith(replacement);
 };
 

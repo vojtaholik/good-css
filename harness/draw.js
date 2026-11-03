@@ -41,6 +41,15 @@ function element(tag, className, html) {
    on a light band, a light panel on a dark one. */
 const tone = (index) => (index % 2 ? "dark" : "light");
 
+/* The link to a title's own page: a mark beside the title that shows while
+   the title is under the pointer or the mark has focus. */
+function permalink(href, title) {
+  const link = element("a", "permalink", "#");
+  link.href = href;
+  link.setAttribute("aria-label", `${title.replace(/<[^>]*>/g, "")} on its own page`);
+  return link;
+}
+
 function specimen(entry, demo, band) {
   const node = stamp("specimen");
   const url = `/frame/${entry.slug}${band === "dark" ? "?panel=light" : ""}`;
@@ -152,8 +161,8 @@ function entry(entry, band) {
   node.firstElementChild.id = entry.slug;
   slot(node, "ghost").textContent = pad(entry.number);
   slot(node, "number").textContent = pad(entry.number);
-  /* The title links to the entry's own page, the one a search finds. */
-  slot(node, "title").innerHTML = `<a href="/specimen/${entry.slug}">${entry.title}</a>`;
+  slot(node, "title").innerHTML = entry.title;
+  slot(node, "title").append(permalink(`/specimen/${entry.slug}`, entry.title));
   slot(node, "lede").innerHTML = entry.lede;
   slot(node, "specimen").replaceWith(demo ? specimen(entry, demo, band) : noSpecimen(entry));
   slot(node, "code-meta").textContent = codeMeta(entry.source);
@@ -189,11 +198,8 @@ function category(category, index) {
   slot(node, "number").textContent = pad(index + 1);
   slot(node, "of").textContent = `/ ${pad(categories.length)}`;
   slot(node, "count").textContent = plural(category.entries.length, "entry", "entries");
-  /* The title links to the category's own page. */
-  const title = element("a");
-  title.href = `/${category.slug}`;
-  title.textContent = category.title;
-  slot(node, "title").replaceChildren(title);
+  slot(node, "title").textContent = category.title;
+  slot(node, "title").append(permalink(`/${category.slug}`, category.title));
   slot(node, "art").innerHTML = drawing(category);
   /* The index fills its first column, then its second. */
   list.setAttribute("style", `--rows: ${Math.ceil(category.entries.length / 2)}`);
