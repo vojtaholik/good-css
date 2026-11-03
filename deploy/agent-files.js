@@ -67,9 +67,10 @@ ${categories.map((category) => `## ${category.title}\n\n${category.entries.map(e
 - [Privacy](${origin}/privacy.md): what the site does with a visit
 `;
 
-export const sitemapUrls = (entries) => [
+export const sitemapUrls = (entries, categories) => [
   `${origin}/`,
   ...pages.map((page) => `${origin}/${page}`),
+  ...categories.map((category) => `${origin}/${category.slug}`),
   ...entries.map((entry) => entry.page),
 ];
 

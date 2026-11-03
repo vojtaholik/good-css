@@ -1,9 +1,9 @@
-/* An entry's own page holds that entry alone, which is all a search engine
-   reads there. The first time a reader scrolls, touches, clicks or presses a
-   key, the rest of the index grows around the entry, and the entry stays
-   where it was on the screen. From then on the page is the index, scrolled
-   to that entry. A crawler does none of those things, so it never sees more
-   than the entry.
+/* A category's or an entry's own page holds that part of the index alone,
+   which is all a search engine reads there. The first time a reader scrolls,
+   touches, clicks or presses a key, the rest of the index grows around it,
+   and it stays where it was on the screen. From then on the page is the
+   index, scrolled to that part. A crawler does none of those things, so it
+   never sees more than the part.
 
    The index is fetched while the page is idle, so it is usually there by
    the time the reader moves. */
@@ -15,10 +15,9 @@ import { specimen } from "./viewport.js";
    grown page, far below the end of the page that has not grown yet. */
 history.scrollRestoration = "manual";
 
-const live = {
-  section: document.querySelector(".entry-page"),
-  article: document.querySelector(".entry-page article.entry"),
-};
+const live = { section: document.querySelector("[data-grows]") };
+live.article = live.section.dataset.grows === "entry" ? live.section.querySelector("article.entry") : null;
+live.anchor = live.article ?? live.section;
 
 let index;
 const load = () =>
@@ -47,28 +46,33 @@ function copyAttributes(from, to) {
   for (const { name, value } of from.attributes) to.setAttribute(name, value);
 }
 
-async function grow() {
-  const doc = await load();
-  const article = doc.getElementById(live.article.id);
-  const section = article.closest("section.category");
-  const categories = section.parentElement;
-  const main = categories.parentElement;
-  const top = live.article.getBoundingClientRect().top;
-
-  /* The entry's own node stays put, so its specimen does not load again. The
-     index is built around it: its neighbours in the category, the category's
-     opener, the other categories, and what comes before and after them. */
-  const entries = live.article.parentElement;
+/* An entry's page holds its category's opener after the entry. It gives way
+   to the index's, above the entries as on the index, and the entry gets its
+   neighbours in the category back. */
+function growEntry(section) {
+  const article = section.querySelector(`article[id="${live.article.id}"]`);
   const around = siblings(article);
-  /* The page's own ghost and opener give way to the index's, which sit
-     above the entries as they do on the index. */
+
   live.section.querySelector(":scope > .ghost")?.remove();
   live.section.querySelector(":scope > .opener").remove();
-  entries.before(...[...section.children].filter((child) => !child.contains(article)));
+  live.article.parentElement.before(...[...section.children].filter((child) => !child.contains(article)));
   live.article.before(...around.before);
   live.article.after(...around.after);
+}
+
+async function grow() {
+  const doc = await load();
+  const section = doc.getElementById(live.section.id);
+  const categories = section.parentElement;
+  const top = live.anchor.getBoundingClientRect().top;
+  const wired = new Set(document.querySelectorAll(".specimen .viewport"));
+
+  if (live.article) growEntry(section);
   copyAttributes(section, live.section);
 
+  /* The page's own nodes stay put, so its specimens do not load again. The
+     index is built around them: the other categories, and what comes before
+     and after them. */
   const liveCategories = live.section.parentElement;
   const sections = siblings(section);
   live.section.before(...sections.before);
@@ -81,15 +85,17 @@ async function grow() {
 
   /* The header gains the index's list of categories. Its other parts stay,
      with what the page already wired to them. */
+  /* Above the hero the header is light again, as on the index. */
+  document.querySelector(".site-header").classList.remove("band-dark");
   const mark = document.querySelector(".site-header .mark");
   mark.after(doc.querySelector(".site-header .current"), doc.getElementById("category-menu"));
   document.body.setAttribute("style", doc.body.getAttribute("style") ?? "");
 
   /* The entry goes back to where it was before anything grew above it. */
-  window.scrollBy({ top: live.article.getBoundingClientRect().top - top, behavior: "instant" });
+  window.scrollBy({ top: live.anchor.getBoundingClientRect().top - top, behavior: "instant" });
 
   for (const viewport of document.querySelectorAll(".specimen .viewport")) {
-    if (!live.article.contains(viewport)) specimen(viewport);
+    if (!wired.has(viewport)) specimen(viewport);
   }
 
   categoryMenu(document.getElementById("category-menu"));

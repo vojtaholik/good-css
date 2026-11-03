@@ -20,6 +20,12 @@
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
       "dest": "/$1.md"
     },
+    { "src": "^/(foundations|layout|spacing-and-shape|text-and-media|interaction|motion|show-and-hide|scroll-and-viewport)/?$", "headers": { "Vary": "Accept" }, "continue": true },
+    {
+      "src": "^/(foundations|layout|spacing-and-shape|text-and-media|interaction|motion|show-and-hide|scroll-and-viewport)/?$",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "dest": "/$1.md"
+    },
     { "src": "^/specimen/([^/.]+)/?$", "headers": { "Vary": "Accept" }, "continue": true },
     {
       "src": "^/specimen/([^/.]+)/?$",

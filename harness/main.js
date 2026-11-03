@@ -26,5 +26,5 @@ const draw = cards && carousel(cards);
    a page drawn just now needs it. */
 if (cards && empty) draw();
 
-/* An entry's own page grows into the index the first time it is used. */
-if (document.querySelector(".entry-page")) import("./expand.js");
+/* A category's or an entry's own page grows into the index the first time it is used. */
+if (document.querySelector("[data-grows]")) import("./expand.js");

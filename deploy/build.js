@@ -104,6 +104,7 @@ const entries = practices.entries.map((entry) => ({
 /* The same entries by category, in the order the page shows them. */
 const bySlug = Object.fromEntries(entries.map((entry) => [entry.slug, entry]));
 const categories = practices.categories.map((category) => ({
+  slug: category.slug,
   title: category.title,
   entries: category.entries.map((entry) => bySlug[entry.slug]),
 }));
@@ -199,9 +200,11 @@ const alone = (markdown) =>
     .replace(/^### /, "# ")
     .replace(/\]\(#([a-z0-9-]+)\)/g, (link, slug) => (bySlug[slug] ? `](${bySlug[slug].markdown})` : link));
 
-/* Each entry gets a page of its own, the one a search finds: the drawn index
-   cut down to the entry's category, with that entry alone under it. Its
-   specimen runs in a frame from /frame/<slug>, which search engines skip. */
+/* Each category and each entry gets a page of its own, the one a search
+   finds: the drawn index cut down to that category, or to that entry with its
+   category after it. expand.js grows it into the index the first time it is
+   used. A specimen runs in a frame from /frame/<slug>, which search engines
+   skip. */
 const homeHead = [
   'meta[name="description"]',
   'link[rel="canonical"]',
@@ -212,58 +215,52 @@ const homeHead = [
   'script[type="application/ld+json"]',
 ].join(", ");
 
-function entryPage(entry) {
+/* The drawn index with only `section` left in its main, marked for expand.js. */
+function cutDown(sectionId, grows) {
   const page = document.documentElement.cloneNode(true);
-  const find = (selector) => page.querySelector(selector);
-  const article = find(`article[id="${entry.slug}"]`);
-  const section = article.closest("section.category");
-  const categories = find('[data-slot="categories"]');
+  const section = page.querySelector(`section[id="${sectionId}"]`);
+  const categories = page.querySelector('[data-slot="categories"]');
 
-  for (const other of section.querySelectorAll("article.entry")) if (other !== article) other.remove();
-
-  /* The entry comes first, and its category follows as the way to the rest. */
-  section.classList.add("entry-page");
-  section.insertBefore(section.querySelector(".entries"), section.querySelector(".opener"));
+  section.setAttribute("data-grows", grows);
   categories.replaceChildren(section);
-  find("main").replaceChildren(categories);
+  page.querySelector("main").replaceChildren(categories);
 
-  /* The entry's title is the page's heading. */
-  const heading = article.querySelector("h3");
-  const h1 = document.createElement("h1");
-  h1.setAttribute("data-slot", "title");
-  h1.innerHTML = heading.querySelector("a").innerHTML;
-  heading.replaceWith(h1);
-
-  /* The category's list goes to the other entries' pages. */
-  for (const link of section.querySelectorAll(".entry-index a")) {
-    const slug = link.getAttribute("href").slice(1);
-    link.setAttribute("href", `/specimen/${slug}`);
-    if (slug === entry.slug) link.setAttribute("aria-current", "page");
-  }
+  /* The header takes the tone of the band under it, so a dark band reaches
+     the top of the window. */
+  if (section.classList.contains("band-dark")) page.querySelector(".site-header").classList.add("band-dark");
 
   /* The header's list of categories belongs to the index. */
-  find(".site-header .current")?.remove();
-  find("#category-menu")?.remove();
+  page.querySelector(".site-header .current")?.remove();
+  page.querySelector("#category-menu")?.remove();
 
+  return { page, section };
+}
+
+const heading = (node, tag) => {
+  const replacement = document.createElement(tag);
+  replacement.setAttribute("data-slot", "title");
+  replacement.innerHTML = node.querySelector("a")?.innerHTML ?? node.innerHTML;
+  node.replaceWith(replacement);
+};
+
+function finish(page, { title, description, url, markdown, ld }) {
   /* A link to a part of the index goes back to the index. */
   for (const link of page.querySelectorAll('a[href^="#"]')) {
     const id = link.getAttribute("href").slice(1);
     if (id && !page.querySelector(`[id="${id}"]`)) link.setAttribute("href", `/#${id}`);
   }
 
-  const head = find("head");
-  const url = entry.page;
-  const title = `${entry.title} · good-css`;
+  const head = page.querySelector("head");
 
   for (const tag of head.querySelectorAll(homeHead)) tag.remove();
   head.querySelector("title").textContent = title;
 
   const tags = [
-    ["meta", { name: "description", content: entry.lede }],
+    ["meta", { name: "description", content: description }],
     ["link", { rel: "canonical", href: url }],
-    ["link", { rel: "alternate", type: "text/markdown", href: `/specimen/${entry.slug}.md`, title: "This entry as Markdown" }],
+    ["link", { rel: "alternate", type: "text/markdown", href: markdown, title: "This page as Markdown" }],
     ["meta", { property: "og:title", content: title }],
-    ["meta", { property: "og:description", content: entry.lede }],
+    ["meta", { property: "og:description", content: description }],
     ["meta", { property: "og:type", content: "article" }],
     ["meta", { property: "og:url", content: url }],
     ["meta", { property: "og:image", content: `${origin}/og.png` }],
@@ -276,14 +273,12 @@ function entryPage(entry) {
     head.append(tag);
   }
 
-  const ld = document.createElement("script");
-  ld.setAttribute("type", "application/ld+json");
-  ld.textContent = JSON.stringify({
+  const script = document.createElement("script");
+  script.setAttribute("type", "application/ld+json");
+  script.textContent = JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "TechArticle",
-    headline: entry.title,
-    description: entry.lede,
     url,
+    description,
     image: `${origin}/og.png`,
     inLanguage: "en",
     datePublished: published,
@@ -291,11 +286,90 @@ function entryPage(entry) {
     author: person,
     publisher: person,
     isPartOf: { "@type": "WebSite", name: practices.title, url: `${origin}/` },
-    encoding: { "@type": "MediaObject", encodingFormat: "text/markdown", contentUrl: entry.markdown },
+    ...ld,
   });
-  head.append(ld);
+  head.append(script);
 
   return `<!doctype html>\n${page.outerHTML}\n`;
+}
+
+function entryPage(entry) {
+  const category = practices.categories.find((category) => category.entries.some(({ slug }) => slug === entry.slug));
+  const { page, section } = cutDown(category.slug, "entry");
+  const article = section.querySelector(`article[id="${entry.slug}"]`);
+
+  for (const other of section.querySelectorAll("article.entry")) if (other !== article) other.remove();
+
+  /* The entry comes first, and its category follows as the way to the rest. */
+  section.classList.add("entry-page");
+  section.insertBefore(section.querySelector(".entries"), section.querySelector(".opener"));
+  heading(article.querySelector("h3"), "h1");
+
+  /* The category's list goes to the other entries' pages. */
+  for (const link of section.querySelectorAll(".entry-index a")) {
+    const slug = link.getAttribute("href").slice(1);
+    link.setAttribute("href", `/specimen/${slug}`);
+    if (slug === entry.slug) link.setAttribute("aria-current", "page");
+  }
+
+  return finish(page, {
+    title: `${entry.title} · good-css`,
+    description: entry.lede,
+    url: entry.page,
+    markdown: `/specimen/${entry.slug}.md`,
+    ld: {
+      "@type": "TechArticle",
+      headline: entry.title,
+      encoding: { "@type": "MediaObject", encodingFormat: "text/markdown", contentUrl: entry.markdown },
+    },
+  });
+}
+
+function categoryPage(category) {
+  const { page, section } = cutDown(category.slug, "category");
+  const url = `${origin}/${category.slug}`;
+  const titles = category.entries.map((entry) => entry.title);
+  const description = `${category.entries.length} modern CSS techniques for ${category.title.toLowerCase()}, each with a live specimen: ${titles.join(", ")}.`;
+
+  heading(section.querySelector(".opener h2"), "h1");
+
+  /* Under the page's h1 the entries' titles are h2, still links to their pages. */
+  for (const title of section.querySelectorAll("article.entry h3")) {
+    const h2 = document.createElement("h2");
+    h2.setAttribute("data-slot", "title");
+    h2.innerHTML = title.innerHTML;
+    title.replaceWith(h2);
+  }
+
+  return finish(page, {
+    title: `${category.title}: ${category.entries.length} modern CSS techniques · good-css`,
+    description,
+    url,
+    markdown: `/${category.slug}.md`,
+    ld: {
+      "@type": "CollectionPage",
+      name: category.title,
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: category.entries.length,
+        itemListElement: category.entries.map((entry, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: entry.title,
+          url: entry.page,
+        })),
+      },
+    },
+  });
+}
+
+for (const [index, category] of categories.entries()) {
+  await write(`${category.slug}/index.html`, categoryPage(category));
+  await write(
+    `${category.slug}.md`,
+    frontmatter({ title: category.title, description: `Modern CSS techniques for ${category.title.toLowerCase()}.`, canonical: `${origin}/${category.slug}.md`, updated: today }) +
+      raw(categorySections[index]).replace(/^## /, "# "),
+  );
 }
 
 for (const [index, entry] of entries.entries()) {
@@ -360,7 +434,7 @@ await write(
     list: { kilobytes: kilobytes(listMarkdown) },
   }),
 );
-await write("sitemap.xml", sitemap(sitemapUrls(entries), today));
+await write("sitemap.xml", sitemap(sitemapUrls(entries, categories), today));
 await write("robots.txt", robots);
 
 /* vercel.json names the pages in its rules. The build fails if a page in
@@ -368,6 +442,8 @@ await write("robots.txt", robots);
 const routes = await readFile(join(root, "vercel.json"), "utf8");
 
 if (!routes.includes(`^/(${pages.join("|")})/?$`)) throw new Error("vercel.json does not route every page in deploy/site.js");
+if (!routes.includes(`^/(${categories.map((category) => category.slug).join("|")})/?$`))
+  throw new Error("vercel.json does not route every category of PRACTICES.md");
 
 /* The build fails if a Source line ever gets past the filter at the top. */
 for (const file of await readdir(dist, { recursive: true })) {

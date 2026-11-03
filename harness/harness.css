@@ -1460,7 +1460,8 @@ pre {
   gap: 1.125rem;
   max-inline-size: 56.25rem;
 
-  & h2 {
+  /* An h1 on a category's own page. */
+  & :is(h1, h2) {
     font-size: var(--text-opener);
     font-weight: 800;
     line-height: 0.96;
@@ -1632,7 +1633,7 @@ pre {
   }
 }
 
-.entry :is(h1, h3) {
+.entry :is(h1, h2, h3) {
   font-size: var(--text-title);
   font-weight: 800;
   line-height: 1.136;
