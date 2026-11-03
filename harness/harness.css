@@ -1477,6 +1477,17 @@ pre {
   gap: 1.125rem;
   max-inline-size: 56.25rem;
 
+  & :is(h1, h2) a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 0.05em;
+      text-underline-offset: 0.08em;
+    }
+  }
+
   /* An h1 on a category's own page. */
   & :is(h1, h2) {
     font-size: var(--text-opener);

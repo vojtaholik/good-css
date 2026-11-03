@@ -189,7 +189,11 @@ function category(category, index) {
   slot(node, "number").textContent = pad(index + 1);
   slot(node, "of").textContent = `/ ${pad(categories.length)}`;
   slot(node, "count").textContent = plural(category.entries.length, "entry", "entries");
-  slot(node, "title").textContent = category.title;
+  /* The title links to the category's own page. */
+  const title = element("a");
+  title.href = `/${category.slug}`;
+  title.textContent = category.title;
+  slot(node, "title").replaceChildren(title);
   slot(node, "art").innerHTML = drawing(category);
   /* The index fills its first column, then its second. */
   list.setAttribute("style", `--rows: ${Math.ceil(category.entries.length / 2)}`);
