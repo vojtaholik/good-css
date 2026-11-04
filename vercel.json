@@ -5,6 +5,8 @@
   "buildCommand": "bun run build",
   "outputDirectory": "dist",
   "routes": [
+    { "src": "^/specimen/([^/.]+)\\.md$", "status": 308, "headers": { "Location": "/$1.md" } },
+    { "src": "^/specimen/([^/.]+)/?$", "status": 308, "headers": { "Location": "/$1" } },
     {
       "src": "^/$",
       "headers": {
