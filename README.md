@@ -1,5 +1,7 @@
 # good-css
 
+[![skills.sh](https://skills.sh/b/vojtaholik/good-css)](https://skills.sh/vojtaholik/good-css)
+
 Opinionated modern CSS techniques, packaged as an agent skill. With it installed, a coding agent reaches for one declaration that adapts on its own before a set of breakpoints, and for a CSS feature before a script. Every technique is a set of properties and values, so it works in plain CSS, Tailwind, StyleX or anything else.
 
 - [PRACTICES.md](PRACTICES.md) is the list for people. Each entry says when to use it, shows the CSS, explains why it works and credits who it is borrowed from.
