@@ -34,6 +34,8 @@ ${categories.flatMap((category) => category.entries).length} techniques for mode
 
 Do not use it as a framework or a component library. It ships no package and no class names. The properties and values are the technique, and the names in the examples are illustrative. Write them in whatever the project already uses.
 
+For accessibility beyond the CSS, such as ARIA, keyboard support, focus management and forms, use [good-a11y](https://good-a11y.com/llms.txt), the sibling site.
+
 ## How to use it
 
 To write CSS, read the skill. It is the same list, cut down to what an agent needs while writing.
